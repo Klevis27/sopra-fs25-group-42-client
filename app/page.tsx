@@ -82,6 +82,13 @@ export default function Home() {
           >
             Go to login
           </Button>
+          <Button
+              type="primary"
+              variant="solid"
+              onClick={() => router.push("/register")}
+          >
+            Go to registration
+          </Button>
         </div>
       </main>
       <footer className={styles.footer}>
