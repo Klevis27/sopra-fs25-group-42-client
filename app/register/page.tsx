@@ -28,7 +28,7 @@ const Registration: React.FC = () => {
 
             // Store access and refresh token
             if (response.accessToken && response.id) {
-                setCookie("accessToken", response.accessToken, 1); // Set cookie for 7 days
+                setCookie("accessToken", response.accessToken, 1); // Set cookie for 1 days
                 setCookie("id", response.id, 1);
                 localStorage.setItem("id", response.id);
                 localStorage.setItem("accessToken", response.accessToken);
