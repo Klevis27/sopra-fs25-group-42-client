@@ -36,7 +36,7 @@ const columns: TableProps<User>["columns"] = [
     },
 ];
 
-const Profile: React.FC = () => {
+const UploadVault: React.FC = () => {
     const router = useRouter();
     const apiService = useApi();
     const [userTableObject, setUserTableObject] = useState<User[] | null>(null);
@@ -121,4 +121,4 @@ const Profile: React.FC = () => {
     );
 };
 
-export default Profile;
+export default UploadVault;

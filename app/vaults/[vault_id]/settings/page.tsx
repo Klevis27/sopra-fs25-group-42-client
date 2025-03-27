@@ -12,7 +12,7 @@ interface EditPageProps {
     birthday: Dayjs | null;
 }
 
-const Edit: React.FC = () => {
+const VaultSettings: React.FC = () => {
     const router = useRouter();
     const apiService = useApi();
     const [userTableObject, setUserTableObject] = useState<User[] | null>(null);
@@ -85,7 +85,7 @@ const Edit: React.FC = () => {
                     return;
                 }
                 if (id != slug) {
-                    router.push(`/users/${slug}`); // TODO Alert: No access to this users edit page
+                    router.push(`/users/${slug}`); // TODO Alert: No access to this profile edit page
                     return;
                 }
                 const response = await apiService.get<User>(`/users/${slug}`, accessToken);
@@ -174,12 +174,11 @@ const Edit: React.FC = () => {
                     </>
                 )}
             </Card>
-
         </div>
     );
 };
 
-export default Edit;
+export default VaultSettings;
 
 
 

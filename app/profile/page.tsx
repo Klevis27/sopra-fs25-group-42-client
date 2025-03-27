@@ -67,14 +67,14 @@ const Dashboard: React.FC = () => {
         }
         setUsers(response);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching profile:", error);
         router.push("/login");
       }
     };
     fetchUsers();
   }, [apiService, router]); // dependency apiService does not re-trigger the useEffect on every render because the hook uses memoization (check useApi.tsx in the hooks).
   // if the dependency array is left empty, the useEffect will trigger exactly once
-  // if the dependency array is left away, the useEffect will run on every state change. Since we do a state change to users in the useEffect, this results in an infinite loop.
+  // if the dependency array is left away, the useEffect will run on every state change. Since we do a state change to profile in the useEffect, this results in an infinite loop.
   // read more here: https://react.dev/reference/react/useEffect#specifying-reactive-dependencies
 
   return (
@@ -92,7 +92,7 @@ const Dashboard: React.FC = () => {
                     dataSource={users}
                     rowKey="id"
                     onRow={(row) => ({
-                      onClick: () => router.push(`/users/${row.id}`),
+                      onClick: () => router.push(`/profile/${row.id}`),
                       style: {cursor: "pointer"},
                     })}
                 />

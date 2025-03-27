@@ -23,5 +23,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/users/:path*"], // Protects all routes under /users
+    matcher: ["/profile/:path*", "/vaults/:path*"], // Protects all routes under /profile and /vaults
 };

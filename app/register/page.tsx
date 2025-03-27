@@ -34,7 +34,7 @@ const Registration: React.FC = () => {
                 localStorage.setItem("accessToken", response.accessToken);
             }
             // Navigate to the user overview
-            router.push("/users");
+            router.push("/vaults");
         } catch (error: unknown) {
             if (error instanceof Error) {
                 alert(`Username already taken`);
@@ -44,7 +44,7 @@ const Registration: React.FC = () => {
                 alert("An unknown error occurred.");
             }
             form.resetFields();
-            router.push("/registration");
+            router.push("/register");
         }
     };
 

@@ -35,7 +35,7 @@ const Login: React.FC = () => {
       }
 
       // Navigate to the user overview
-      router.push("/users");
+      router.push("/vaults");
     } catch (error) {
       if (error instanceof Error) {
         alert(`Invalid login credentials`);
@@ -72,7 +72,7 @@ const Login: React.FC = () => {
           >
             <Input placeholder="Enter password" />
           </Form.Item>
-          <Link href="/registration">Don&apos;t have an account? Register here!</Link>
+          <Link href="/register">Don&apos;t have an account? Register here!</Link>
           <Form.Item>
             <Button type="primary" htmlType="submit" className="login-button">
               Login
