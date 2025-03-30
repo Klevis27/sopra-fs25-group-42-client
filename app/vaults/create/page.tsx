@@ -2,7 +2,8 @@
 import '@ant-design/v5-patch-for-react-19';
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button, Card, Form, Input, Select, Typography, message } from "antd";
+import { Button, Card, Form, Input, Select, Typography } from "antd";
+import { App } from "antd";
 
 const { Title } = Typography;
 
@@ -18,6 +19,7 @@ const CreateVault: React.FC = () => {
   const initialName = searchParams.get("name") || "";
 
   const [form] = Form.useForm();
+  const { message } = App.useApp();
 
   const handleCreateVault = (values: { name: string; state: string }) => {
     // Simulate saving new vault (replace with API call later)
@@ -28,7 +30,15 @@ const CreateVault: React.FC = () => {
     };
 
     // Store in localStorage temporarily (just for demo purposes)
-    const existing = JSON.parse(localStorage.getItem("vaults") || "[]");
+    let existing: Vault[] = [];
+    try {
+      const stored = localStorage.getItem("vaults");
+      existing = stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      console.warn("Failed to parse vaults from localStorage:", e);
+      existing = [];
+    }
+
     localStorage.setItem("vaults", JSON.stringify([...existing, newVault]));
 
     message.success("Vault created successfully!");
