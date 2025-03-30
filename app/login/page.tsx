@@ -57,20 +57,26 @@ const Login: React.FC = () => {
             onFinish={handleLogin}
             layout="vertical"
         >
-          <h1>Login</h1>
+          <h1 className='centered-text'>Login</h1>
           <Form.Item
               name="username"
               label="Username"
               rules={[{ required: true, message: "Please input your username!" }]}
           >
-            <Input placeholder="Enter username" />
+            <Input
+            className='input' 
+            placeholder="Enter username" 
+            />
           </Form.Item>
           <Form.Item
               name="password"
               label="Password"
               rules={[{ required: true, message: "Please input your password!" }]}
           >
-            <Input placeholder="Enter password" />
+            <Input 
+            className='input'
+            placeholder="Enter password" 
+            />
           </Form.Item>
           <Link href="/register">Don&apos;t have an account? Register here!</Link>
           <Form.Item>
