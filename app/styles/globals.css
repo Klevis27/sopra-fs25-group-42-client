@@ -23,11 +23,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-header{
-  padding-top: 20px;
-  padding-left: 600px;
-  padding-right: 600px;
-}
 
 * {
   box-sizing: border-box;
@@ -51,7 +46,6 @@ a {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #c5eba2 !important;
 }
 
 .login-button {
@@ -68,8 +62,8 @@ a {
 }
 
 .input{
-  background-color: #FEFFC0 !important;
-  color: black;
+  background-color: #1A1A1A !important;
+  color: white;
 }
 
 .centered-text{

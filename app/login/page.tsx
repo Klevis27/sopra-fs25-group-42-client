@@ -51,54 +51,62 @@ const Login: React.FC = () => {
 
   return (
     <div className={styles.page}>
-      <header>
+
+      <header className={styles.loginHeader}>
         <div className={styles.logoWrapper}>
           <img
             src="/logo.png"
-            style={{ width: "100px", height: "auto" }}
-            alt="Logo">
+            style={{ width: "400px", height: "auto" }}
+          >
           </img>
         </div>
       </header>
+
       <main className={styles.main}>
         <title>Login</title>
-        <div className="login-container">
-          <Form
-            form={form}
-            name="login"
-            size="large"
-            variant="outlined"
-            onFinish={handleLogin}
-            layout="vertical"
-          >
-            <h1 className='centered-text'>Login</h1>
-            <Form.Item
-              name="username"
-              label="Username"
-              rules={[{ required: true, message: "Please input your username!" }]}
+        <div className={styles.loginWrapper}>
+          <div className="login-container">
+            <Form
+              form={form}
+              name="login"
+              size="large"
+              variant="outlined"
+              onFinish={handleLogin}
+              layout="vertical"
+              requiredMark={false}
             >
-              <Input
-                className='input'
-                placeholder="E.g: SoPra_Sucks_Hard"
-              />
-            </Form.Item>
-            <Form.Item
-              name="password"
-              label="Password"
-              rules={[{ required: true, message: "Please input your password!" }]}
-            >
-              <Input
-                className='input'
-                placeholder="E.g: Incompetence_Rules!"
-              />
-            </Form.Item>
-            <Link href="/register">Don't have an account yet? Register here!</Link>
-            <Form.Item>
-              <Button type="primary" htmlType="submit" className="login-button">
-                Login
-              </Button>
-            </Form.Item>
-          </Form>
+              <h1 className='centered-text'>Login</h1>
+              <Form.Item
+                name="username"
+                label={<span style={{ color: "black", fontWeight: "bold", fontSize: "16px" }}>Username</span>}
+                rules={[{ required: true, message: "Please input your username!" }]}
+              >
+                <Input
+                  className='input'
+                  placeholder="E.g: Marx420"
+                  style={{ color: "white" }}
+                />
+              </Form.Item>
+              <Form.Item
+                name="password"
+                label={<span style={{ color: "black", fontWeight: "bold", fontSize: "16px" }}>Password</span>}
+                rules={[{ required: true, message: "Please input your password!" }]}
+              >
+                <Input
+                  className='input'
+                  placeholder="E.g: 1917"
+                  style={{ color: "white" }}
+                />
+              </Form.Item>
+              <Link href="/register">Don't have an account yet? Register here!</Link>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" className="login-button"
+                style={{color: 'white', backgroundColor: 'black', fontSize: 20}}>
+                  Login
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
         </div>
 
 
@@ -109,3 +117,4 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+

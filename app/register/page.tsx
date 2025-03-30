@@ -52,17 +52,19 @@ const Registration: React.FC = () => {
     return (
 
         <div className={styles.page}>
-            <main className={styles.main}>
 
-                <header>
+            <header>
                 <div className={styles.logoWrapper}>
                     <img
                         src="/logo.png"
-                        style={{ width: "100px", height: "auto" }}
-                        alt="Logo">
+                        style={{ width: "400px", height: "auto" }}
+                    >
                     </img>
                 </div>
-                </header>
+            </header>
+
+            <main className={styles.registrationWrapper}>
+
                 <title>Registration</title>
                 <div className="login-container">
                     <Form
@@ -72,31 +74,33 @@ const Registration: React.FC = () => {
                         variant="outlined"
                         onFinish={handleRegistration}
                         layout="vertical"
+                        requiredMark={false}
                     >
                         <h1 className='centered-text'>Register</h1>
                         <Form.Item
                             name="username"
-                            label="Username"
+                            label={<span style={{ color: "black", fontWeight: "bold", fontSize: "16px" }}>Username</span>}
                             rules={[{ required: true, message: "Please input your username!" }]}
                         >
                             <Input
                                 className='input'
-                                placeholder="E.g: SoPra_Sucks_Hard"
+                                placeholder="E.g: Marx420"
                             />
                         </Form.Item>
                         <Form.Item
                             name="password"
-                            label="Password"
+                            label={<span style={{ color: "black", fontWeight: "bold", fontSize: "16px" }}>Password</span>}
                             rules={[{ required: true, message: "Please input your password!" }]}
                         >
                             <Input
                                 className='input'
-                                placeholder="E.g: Incompetence_Rules!"
+                                placeholder="E.g: 1917"
                             />
                         </Form.Item>
                         <Link href="/login">Already have an account? Login here!</Link>
                         <Form.Item>
-                            <Button type="primary" htmlType="submit" className="login-button">
+                            <Button type="primary" htmlType="submit" className="login-button"
+                            style={{color: 'white', backgroundColor: 'black', fontSize: 20}}>
                                 Register
                             </Button>
                         </Form.Item>
