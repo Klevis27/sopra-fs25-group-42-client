@@ -5,7 +5,9 @@ import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
 import { Button, Form, Input } from "antd";
 import Link from "next/link";
-import {setCookie} from "@/utils/cookies";
+import { setCookie } from "@/utils/cookies";
+import styles from "@/styles/page.module.css";
+
 
 interface LoginFormValues {
   username: string;
@@ -48,44 +50,61 @@ const Login: React.FC = () => {
   };
 
   return (
-      <div className="login-container">
-        <Form
+    <div className={styles.page}>
+      <header>
+        <div className={styles.logoWrapper}>
+          <img
+            src="/logo.png"
+            style={{ width: "100px", height: "auto" }}
+            alt="Logo">
+          </img>
+        </div>
+      </header>
+      <main className={styles.main}>
+        <title>Login</title>
+        <div className="login-container">
+          <Form
             form={form}
             name="login"
             size="large"
             variant="outlined"
             onFinish={handleLogin}
             layout="vertical"
-        >
-          <h1 className='centered-text'>Login</h1>
-          <Form.Item
+          >
+            <h1 className='centered-text'>Login</h1>
+            <Form.Item
               name="username"
               label="Username"
               rules={[{ required: true, message: "Please input your username!" }]}
-          >
-            <Input
-            className='input' 
-            placeholder="Enter username" 
-            />
-          </Form.Item>
-          <Form.Item
+            >
+              <Input
+                className='input'
+                placeholder="E.g: SoPra_Sucks_Hard"
+              />
+            </Form.Item>
+            <Form.Item
               name="password"
               label="Password"
               rules={[{ required: true, message: "Please input your password!" }]}
-          >
-            <Input 
-            className='input'
-            placeholder="Enter password" 
-            />
-          </Form.Item>
-          <Link href="/register">Don&apos;t have an account? Register here!</Link>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" className="login-button">
-              Login
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
+            >
+              <Input
+                className='input'
+                placeholder="E.g: Incompetence_Rules!"
+              />
+            </Form.Item>
+            <Link href="/register">Don't have an account yet? Register here!</Link>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" className="login-button">
+                Login
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+
+
+
+      </main>
+    </div>
   );
 };
 

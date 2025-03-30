@@ -1,11 +1,11 @@
 "use client"; // For components that need React hooks and browser APIs, SSR (server side rendering) has to be disabled. Read more here: https://nextjs.org/docs/pages/building-your-application/rendering/server-side-rendering
 import '@ant-design/v5-patch-for-react-19';
-import {useRouter} from "next/navigation";
-import {useApi} from "@/hooks/useApi";
-import {User} from "@/types/user";
-import {Button, Form, Input} from "antd";
+import { useRouter } from "next/navigation";
+import { useApi } from "@/hooks/useApi";
+import { User } from "@/types/user";
+import { Button, Form, Input } from "antd";
 import Link from "next/link";
-import {setCookie} from "@/utils/cookies";
+import { setCookie } from "@/utils/cookies";
 import styles from "@/styles/page.module.css";
 
 interface RegistrationFormValues {
@@ -50,49 +50,58 @@ const Registration: React.FC = () => {
     };
 
     return (
-        
+
         <div className={styles.page}>
             <main className={styles.main}>
+
+                <header>
+                <div className={styles.logoWrapper}>
+                    <img
+                        src="/logo.png"
+                        style={{ width: "100px", height: "auto" }}
+                        alt="Logo">
+                    </img>
+                </div>
+                </header>
                 <title>Registration</title>
-            <div className="login-container">
-                <Form
-                    form={form}
-                    name="signup"
-                    size="large"
-                    variant="outlined"
-                    onFinish={handleRegistration}
-                    layout="vertical"
-                >
-                    <h1 className='centered-text'>Register</h1>
-                    <Form.Item
-                        name="username"
-                        label="Username"
-                        rules={[{required: true, message: "Please input your username!"}]}
+                <div className="login-container">
+                    <Form
+                        form={form}
+                        name="signup"
+                        size="large"
+                        variant="outlined"
+                        onFinish={handleRegistration}
+                        layout="vertical"
                     >
-                        <Input 
-                        className='input'
-                        placeholder="E.g: SoPra_Sucks_Hard"
-                        />
-                    </Form.Item>
-                    <Form.Item 
-                        className='form-item'
-                        name="password"
-                        label="Password"
-                        rules={[{required: true, message: "Please input your password!"}]}
-                    >
-                        <Input 
-                        className='input'
-                        placeholder="E.g: Incompetence_Rules!"
-                        />
-                    </Form.Item>
-                    <Link href="/login">Already have an account? Login here!</Link>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit" className="login-button">
-                            Register
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </div>
+                        <h1 className='centered-text'>Register</h1>
+                        <Form.Item
+                            name="username"
+                            label="Username"
+                            rules={[{ required: true, message: "Please input your username!" }]}
+                        >
+                            <Input
+                                className='input'
+                                placeholder="E.g: SoPra_Sucks_Hard"
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="password"
+                            label="Password"
+                            rules={[{ required: true, message: "Please input your password!" }]}
+                        >
+                            <Input
+                                className='input'
+                                placeholder="E.g: Incompetence_Rules!"
+                            />
+                        </Form.Item>
+                        <Link href="/login">Already have an account? Login here!</Link>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit" className="login-button">
+                                Register
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </div>
 
 
 

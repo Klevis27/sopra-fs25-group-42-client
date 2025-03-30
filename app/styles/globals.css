@@ -23,6 +23,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+header{
+  padding-top: 20px;
+  padding-left: 600px;
+  padding-right: 600px;
+}
 
 * {
   box-sizing: border-box;
@@ -59,12 +64,15 @@ a {
   align-items: center;
   min-height: 100vh;
   background-color: #FEFFC0 !important;
+  color: black;
 }
 
 .input{
   background-color: #FEFFC0 !important;
+  color: black;
 }
 
 .centered-text{
   text-align: center;
+  color: black;
 }
