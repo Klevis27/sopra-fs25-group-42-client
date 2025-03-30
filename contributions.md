@@ -42,8 +42,8 @@ reason).
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **nfcolak** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-| **SvenVest** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **SvenVest** | 30.3.25  | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/2af0ad3d2efb72e435ec1bec1f38e8d4607a2deb)| a note editor page that accepts text | core feature |
+|                    | 30.3.25   | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/6690eada6dfcf86dc9176ec05bd09889d997a598)  | layout of the editor page | core funcionality |
 
 ---
 
