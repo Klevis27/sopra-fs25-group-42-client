@@ -3,7 +3,6 @@ import '@ant-design/v5-patch-for-react-19';
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Card, Input, Typography, List, Space, message } from "antd";
-import { clearLoginCookie } from "@/utils/cookies";
 
 const { Title } = Typography;
 
