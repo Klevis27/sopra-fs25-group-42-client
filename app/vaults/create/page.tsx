@@ -1,124 +1,101 @@
 "use client";
 import '@ant-design/v5-patch-for-react-19';
-import React, {useEffect, useState} from "react";
-import {useRouter, useParams} from "next/navigation";
-import {useApi} from "@/hooks/useApi";
-import {User} from "@/types/user";
-import {Button, Card, Table} from "antd";
-import type {TableProps} from "antd";
+// import React, { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Button, Card, Form, Input, Select, Typography } from "antd";
+import { App } from "antd";
+import { Suspense } from "react";
 
-// Columns for the antd table of User objects
-const columns: TableProps<User>["columns"] = [
-    {
-        title: "Id",
-        dataIndex: "id",
-        key: "id",
-    },
-    {
-        title: "Username",
-        dataIndex: "username",
-        key: "username",
-    },
-    {
-        title: "Creation Date",
-        dataIndex: "creationDate",
-        key: "creationDate",
-    },
-    {
-        title: "Status",
-        dataIndex: "status",
-        key: "status",
-    },
-    {
-        title: "Birthday",
-        dataIndex: "birthday",
-        key: "birthday",
-    },
-];
+const { Title } = Typography;
 
-const CreateVault: React.FC = () => {
-    const router = useRouter();
-    const apiService = useApi();
-    const [userTableObject, setUserTableObject] = useState<User[] | null>(null);
-    const params = useParams();
-    const slug = params.id;
-    const [editable, setEditable] = useState<boolean>(false);
-
-    const goToDashboard = (): void => {
-        router.push("/users");
-        return
-    }
-    const goToEdit = (): void => {
-        router.push(`/users/${slug}/edit`);
-        return
-    }
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const id = localStorage.getItem("id");
-                const accessToken = localStorage.getItem("accessToken");
-                if (!accessToken || !id) {
-                    router.push("/login");
-                    return;
-                }
-                if (id == slug){
-                    setEditable(true);
-                }
-                const response = await apiService.get<User>(`/users/${slug}`, accessToken);
-
-                // If no such user exists
-                if (response == null) {
-                    console.error("No such user exists");
-                    router.push("/users");
-                    return
-                }
-
-                if (!response.birthday) {
-                    response.birthday = "N/A";
-                }
-                setUserTableObject([response]);
-            } catch (error) {
-                // @ts-expect-error - No proper interface
-                if (error.status == 404) {
-                    console.error("User with this ID could not be found");
-                    alert("User with this ID could not be found");
-                }
-                // @ts-expect-error - No proper interface
-                console.error("Error", error.status);
-                router.push("/users");
-            }
-        };
-        fetchUser();
-    }, [apiService, router, slug]);
-
-    return (
-        <div className="card-container">
-            <Card
-                title={"Profile Page"}
-                loading={!userTableObject}
-                className="dashboard-container"
-            >
-                {userTableObject && (
-                    <>
-                        {/* antd Table: pass the columns and data, plus a rowKey for stable row identity */}
-                        <Table<User>
-                            columns={columns}
-                            dataSource={userTableObject}
-                            rowKey="id"
-                            pagination={false}
-                        />
-                        <br/>
-                        {editable && <><Button type="primary" onClick={goToEdit}> Edit </Button><br/><br/></>}
-                        <Button onClick={goToDashboard} type="primary">
-                            To the dashboard
-                        </Button>
-                    </>
-                )}
-            </Card>
-
-        </div>
-    );
+type Vault = {
+  id: string;
+  name: string;
+  state: string;
 };
 
-export default CreateVault;
+const CreateVault: React.FC = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialName = searchParams.get("name") || "";
+
+  const [form] = Form.useForm();
+  const { message } = App.useApp();
+
+  const handleCreateVault = (values: { name: string; state: string }) => {
+    // Simulate saving new vault (replace with API call later)
+    const newVault: Vault = {
+      id: String(Date.now()),
+      name: values.name,
+      state: values.state,
+    };
+
+    // Store in localStorage temporarily (just for demo purposes)
+    let existing: Vault[] = [];
+    try {
+      const stored = localStorage.getItem("vaults");
+      existing = stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      console.warn("Failed to parse vaults from localStorage:", e);
+      existing = [];
+    }
+
+    localStorage.setItem("vaults", JSON.stringify([...existing, newVault]));
+
+    message.success("Vault created successfully!");
+    router.push("/vaults");
+  };
+
+  return (
+    <div style={{ padding: "2rem", maxWidth: 500, margin: "0 auto" }}>
+      <Card>
+        <Title level={3}>Create a New Vault</Title>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleCreateVault}
+          initialValues={{ name: initialName, state: "Private" }}
+        >
+          <Form.Item
+            label="Vault Name"
+            name="name"
+            rules={[{ required: true, message: "Please enter a vault name" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Visibility"
+            name="state"
+            rules={[{ required: true, message: "Please select a state" }]}
+          >
+            <Select>
+              <Select.Option value="Private">Private</Select.Option>
+              <Select.Option value="Shared">Shared</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Create Vault
+            </Button>
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="default" block onClick={() => router.push("/vaults")}>
+              Cancel
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
+    </div>
+  );
+};
+
+const WrappedCreateVault = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <CreateVault />
+  </Suspense>
+);
+
+export default WrappedCreateVault;
