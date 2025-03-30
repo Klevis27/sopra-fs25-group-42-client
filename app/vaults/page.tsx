@@ -36,12 +36,13 @@ const Vaults: React.FC = () => {
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("id");
-    clearLoginCookie();
-    router.push("/login");
-  };
+  // commented out for future use
+  // const handleLogout = () => {
+  //   localStorage.removeItem("accessToken");
+  //   localStorage.removeItem("id");
+  //   clearLoginCookie();
+  //   router.push("/login");
+  // };
 
   const handleContinue = () => {
     if (!newVaultName.trim()) {
