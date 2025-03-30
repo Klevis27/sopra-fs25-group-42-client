@@ -32,15 +32,17 @@ reason).
 
 ## Contributions Week 1 - 24.03. to 30.04.
 
-| **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
-|--------------------| -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@githubUser1]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+| **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
+|--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
+| **Klevis27**       | 27.03.2025 | [[Link to Pull request 1]](https://github.com/Klevis27/sopra-fs25-group-42-server/pull/14) | Pull request to synchronize Server repo with my own from the individual task | It adds basic registration & login functionalities |
+|                    | 27.03.2025 | [[Link to Pull request 2]](https://github.com/Klevis27/sopra-fs25-group-42-client/pull/1) | Pull request to synchronize Server repo with my own from the individual task and suggesting a file/site structure for the application | Adds basic login/logout functionalities and gives us a file structure to work on |
+| **AntWarz** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-| **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+| **elifdenizi** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-| **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+| **nfcolak** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-| **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
+| **SvenVest** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 
 ---
