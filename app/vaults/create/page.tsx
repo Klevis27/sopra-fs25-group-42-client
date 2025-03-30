@@ -4,6 +4,7 @@ import '@ant-design/v5-patch-for-react-19';
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Card, Form, Input, Select, Typography } from "antd";
 import { App } from "antd";
+import { Suspense } from "react";
 
 const { Title } = Typography;
 
@@ -91,4 +92,10 @@ const CreateVault: React.FC = () => {
   );
 };
 
-export default CreateVault;
+const WrappedCreateVault = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <CreateVault />
+  </Suspense>
+);
+
+export default WrappedCreateVault;
