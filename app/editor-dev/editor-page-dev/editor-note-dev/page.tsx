@@ -13,7 +13,7 @@ export default function MarkdownEditor() {
 
     // Initialize syntax highlighting
     useEffect(() => {
-    //    hljs.highlightAll();
+        hljs.highlightAll();
     }, [markdown]);
 
     // Handle mouse move for split pane dragging
@@ -71,7 +71,7 @@ export default function MarkdownEditor() {
                 className="h-full overflow-auto bg-white"
                 style={{ flexBasis: `${100 - splitRatio}%` }}
             >
-                {/*<div className="p-4 prose max-w-none">
+                <div className="p-4 prose max-w-none">
                     <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         rehypePlugins={[rehypeRaw]}
@@ -92,7 +92,7 @@ export default function MarkdownEditor() {
                     >
                         {markdown}
                     </ReactMarkdown>
-                </div>*/}
+                </div>
             </div>
         </div>
     );
