@@ -1,12 +1,12 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FEFFC0 !important;
+  --foreground: #FEFFC0 !important;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #FEFFC0 !important;
+    --foreground: #FEFFC0 !important;
   }
 }
 
@@ -46,7 +46,7 @@ a {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: rgb(41, 44, 59);
+  background-color: #c5eba2 !important;
 }
 
 .login-button {
@@ -58,5 +58,13 @@ a {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: rgb(41, 44, 59);
+  background-color: #FEFFC0 !important;
+}
+
+.input{
+  background-color: #FEFFC0 !important;
+}
+
+.centered-text{
+  text-align: center;
 }
