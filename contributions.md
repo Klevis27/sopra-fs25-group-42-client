@@ -42,7 +42,7 @@ reason).
 | **elifdenizi** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
 |                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
 | **nfcolak** |29.03.2025|https://github.com/Klevis27/sopra-fs25-group-42-client/pull/2|Logos are uploaded |To enhance the visual design of the website we’re going to build|
-|                    |31.03.2025|https://github.com/Klevis27/sopra-fs25-group-42-client/pull/3|The landing page is completed, and some animations have been added.|This contribution is relevant because it improves the first impression and user engagement of the website.|
+|                    |29.03.2025|https://github.com/Klevis27/sopra-fs25-group-42-client/pull/3|The landing page is completed, and some animations have been added.|This contribution is relevant because it improves the first impression and user engagement of the website.|
 | **SvenVest** | 29.3.25  | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/2af0ad3d2efb72e435ec1bec1f38e8d4607a2deb)| a note editor page that accepts text | core feature |
 |                    | 30.3.25   | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/6690eada6dfcf86dc9176ec05bd09889d997a598)  | layout of the editor page | core funcionality |
 
