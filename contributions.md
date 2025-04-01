@@ -51,37 +51,104 @@ reason).
 
 ## Contributions Week 2 - 31.03. to 06.04.
 
-| **Student**        | **Date** | **Link to Commit** | **Description**                 | **Relevance**                       |
-| ------------------ | -------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **[@githubUser1]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-| **[@githubUser2]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-| **[@githubUser3]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
-| **[@githubUser4]** | [date]   | [Link to Commit 1] | [Brief description of the task] | [Why this contribution is relevant] |
-|                    | [date]   | [Link to Commit 2] | [Brief description of the task] | [Why this contribution is relevant] |
+| **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
+|--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
+| **Klevis27**       | 01.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
+|                    | 27.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
+| **AntWarz**        | 30.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
+| **elifdenizi**     | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
+| **nfcolak**        | 29.03.2025 |  |  |  |
+| **SvenVest**       | 29.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
 
 ---
 
 ## Contributions Week 3 - 07.04. to 13.04.
 
-_Continue with the same table format as above._
+| **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
+|--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
+| **Klevis27**       | 01.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
+|                    | 27.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
+| **AntWarz**        | 30.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
+| **elifdenizi**     | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
+| **nfcolak**        | 29.03.2025 |  |  |  |
+| **SvenVest**       | 29.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
 
 ---
 
 ## Contributions Week 4 - [Begin Date] to [End Date]
 
-_Continue with the same table format as above._
+| **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
+|--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
+| **Klevis27**       | 01.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
+|                    | 27.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
+| **AntWarz**        | 30.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
+| **elifdenizi**     | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
+| **nfcolak**        | 29.03.2025 |  |  |  |
+| **SvenVest**       | 29.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
 
 ---
 
 ## Contributions Week 5 - [Begin Date] to [End Date]
 
-_Continue with the same table format as above._
+| **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
+|--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
+| **Klevis27**       | 01.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
+|                    | 27.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
+| **AntWarz**        | 30.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
+| **elifdenizi**     | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
+| **nfcolak**        | 29.03.2025 |  |  |  |
+| **SvenVest**       | 29.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
 
 ---
 
 ## Contributions Week 6 - [Begin Date] to [End Date]
 
-_Continue with the same table format as above._
+| **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
+|--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
+| **Klevis27**       | 01.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
+|                    | 27.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
+| **AntWarz**        | 30.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
+| **elifdenizi**     | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
+| **nfcolak**        | 29.03.2025 |  |  |  |
+| **SvenVest**       | 29.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
+
+
+
+| **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
+|--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
+| **Klevis27**       | 01.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
+|                    | 27.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
+| **AntWarz**        | 30.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
+| **elifdenizi**     | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
+| **nfcolak**        | 29.03.2025 |  |  |  |
+| **SvenVest**       | 29.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
