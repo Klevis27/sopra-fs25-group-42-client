@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from 'react';
-//import ReactMarkdown from 'react-markdown';
-//import remarkGfm from 'remark-gfm';
-//import rehypeRaw from 'rehype-raw';
-//import 'highlight.js/styles/github.css';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import 'highlight.js/styles/github.css';
 //import hljs from 'highlight.js';
 
 export default function MarkdownEditor() {
