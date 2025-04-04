@@ -131,3 +131,9 @@ a.secondary {
   align-items: center;
   justify-content: center;
 }
+
+.graphWindowWrapper {
+  align-self: center;
+  right: 50;
+  position: absolute;
+}
