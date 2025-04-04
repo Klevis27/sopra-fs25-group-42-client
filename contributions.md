@@ -53,8 +53,8 @@ reason).
 
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **Klevis27**       | 01.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
-|                    | 27.03.2025 |  |  |  |
+| **Klevis27**       | 01.04.2025 | [Link to commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
+|                    | 04.04.2025 | [Link to Issue with two pull requests in it](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/16) | Implement basic Vault functionality in front- and backend | Core functionality |
 |                    | 30.03.2025 |  |  |  |
 | **AntWarz**        | 30.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
