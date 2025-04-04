@@ -4,6 +4,11 @@ import NoteGraph from "@/components/NoteGraph";
 import styles from "@/styles/page.module.css";
 import "@ant-design/v5-patch-for-react-19";
 import { Button, Form, Input, Select } from "antd";
+import {Note} from "@/types/note";
+import { ApiService } from "@/api/apiService";
+import { useApi } from "@/hooks/useApi";
+
+
 
 interface Node {
     id: string;
@@ -19,6 +24,17 @@ interface Link {
 
 
 const GraphPage: React.FC = () => {
+    const apiService = useApi();
+
+    const getAllNotes = async () => {
+        const response = await apiService.get<Note[]>("/vaults/1/notes")
+    
+        response.forEach(element => {
+            console.log(`Note id: ${element.id}, Note title: ${element.title}`)
+        });
+    }
+
+
     // Define the dummy graph data
     const note1 = { id: "Note1" };
     const note2 = { id: "Note2" };
@@ -151,6 +167,9 @@ const GraphPage: React.FC = () => {
                             </Button>
                         </Form.Item>
                     </Form>
+                    <Button type="primary" htmlType="submit" onClick={getAllNotes}>
+                        Get All Notes
+                    </Button>
                 </div>
             </div>
             <div className={styles.loginHeader}
