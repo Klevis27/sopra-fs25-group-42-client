@@ -31,7 +31,7 @@ const CreateVault: React.FC = () => {
                 name: values.name,
                 state: values.state,
             };
-            const response = await apiService.post<Vault>("/vault", vaultData, accessToken);
+            const response = await apiService.post<Vault>("/vaults", vaultData, accessToken);
 
             // Navigate to the notes overview of the newly created vault
             message.success("Vault created successfully!");
