@@ -42,9 +42,20 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ graphData }: NoteGraphProps) => {
             linkDirectionalParticles={2}
             linkDirectionalArrowLength={5}
             onNodeClick={(node) => alert(`Clicked on: ${node.id}`)}
-            width={600}
-            height={600}
-            backgroundColor="white"
+            width={1000}
+            height={1000}
+            backgroundColor="gray"
+            nodeCanvasObjectMode={() => 'after'}
+            nodeCanvasObject={(node, ctx, globalScale) => {
+                const label = String(node.id ?? "");
+                const fontSize = 12 / globalScale;
+                ctx.font = `${fontSize}px Sans-Serif`;
+                ctx.fillStyle = "black";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "top";
+                ctx.fillText(label, node.x!, node.y! + 5); // Draw label below node
+            }
+            }
         />
     );
 };
