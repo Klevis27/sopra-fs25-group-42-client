@@ -2,7 +2,8 @@
 import React, { useState } from "react";
 import NoteGraph from "@/components/NoteGraph";
 import styles from "@/styles/page.module.css";
-import { Button, Form, Input } from "antd";
+import "@ant-design/v5-patch-for-react-19";
+import { Button, Form, Input, Select } from "antd";
 
 interface Node {
     id: string;
@@ -35,25 +36,25 @@ const GraphPage: React.FC = () => {
             console.log(element)
         });
     };
-    
+
     const linkDummyNotes = (values: Link) => {
-        const sourceNote: Node = {id: values.source};
-        const targetNote: Node = {id: values.target};
-    
+        const sourceNote: Node = { id: values.source };
+        const targetNote: Node = { id: values.target };
+
         console.log(`Trying to link notes: ${sourceNote} and ${targetNote}`)
-    
+
         const sourceExists = dummyNotes.some(note => note.id === sourceNote.id);
         const targetExists = dummyNotes.some(note => note.id === targetNote.id);
-    
+
         if (sourceExists && targetExists) {
             console.log(`Found notes: ${sourceNote} and ${targetNote}`);
             const link: Link = { source: values.source, target: values.target };
             setDummyLinks((prevLinks) => [...prevLinks, link]);
 
-    
+
             dummyLinks.push(link);
         }
-    
+
     }
 
     const [form] = Form.useForm();
@@ -97,24 +98,51 @@ const GraphPage: React.FC = () => {
                         size="large"
                         variant="outlined"
                         layout="vertical"
-                        requiredMark={false}>
+                        requiredMark={false}
+                    >
 
                         <Form.Item
                             name="source"
                             label={<span style={{ color: "white", fontWeight: "bold", fontSize: "16px" }}>Source Note</span>}>
 
-                            <Input>
-
-                            </Input>
+                            <Select
+                                showSearch
+                                placeholder={<span style={{ color: "white", fontWeight: "bold", fontSize: "16px" }}>Source Note</span>}
+                                optionFilterProp="children"
+                                dropdownStyle={{
+                                    backgroundColor: '#1f1f1f', // Dark background for dropdown
+                                    color: 'white', // White text for contrast
+                                    borderColor: '#333', // Match the border color
+                                }}
+                            >
+                                {dummyNotes.map((note) => (
+                                    <Select.Option key={note.id} value={note.id}>
+                                        {note.id}
+                                    </Select.Option>
+                                ))}
+                            </Select>
                         </Form.Item>
 
                         <Form.Item
                             name="target"
-                            label={<span style={{ color: "white", fontWeight: "bold", fontSize: "16px" }}>Target Note</span>}>
+                            label={<span style={{ color: "white", fontWeight: "bold", fontSize: "16px" }}>Select Target Note</span>}>
 
-                            <Input>
-
-                            </Input>
+                            <Select
+                                showSearch
+                                placeholder={<span style={{ color: "white", fontWeight: "bold", fontSize: "16px" }}>Select Target Note</span>}
+                                optionFilterProp="children"
+                                dropdownStyle={{
+                                    backgroundColor: '#1f1f1f', // Dark background for dropdown
+                                    color: 'white', // White text for contrast
+                                    borderColor: '#333', // Match the border color
+                                }}
+                            >
+                                {dummyNotes.map((note) => (
+                                    <Select.Option key={note.id} value={note.id}>
+                                        {note.id}
+                                    </Select.Option>
+                                ))}
+                            </Select>
                         </Form.Item>
 
                         <Form.Item>
@@ -123,10 +151,6 @@ const GraphPage: React.FC = () => {
                             </Button>
                         </Form.Item>
                     </Form>
-                </div>
-
-                <div>
-
                 </div>
             </div>
             <div className={styles.loginHeader}
