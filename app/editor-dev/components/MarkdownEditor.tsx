@@ -1,19 +1,35 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, {Components} from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js";
-
+import {LinkParser} from "@/editor-dev/components/LinkParser";
 export default function MarkdownEditor() {
     const [markdown, setMarkdown] = useState("# Hello World\nStart writing here...");
-
+    const TEXT_CONTAINERS = [
+        'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+        'li', 'td', 'th', 'blockquote', 'code'
+    ];
     useEffect(() => {
         hljs.highlightAll();
     }, [markdown]);
 
+    const handleInternalLink = (pageTitle: string) => {
+        // Implement your navigation logic here
+        console.log("Internal link clicked:", pageTitle);
+        alert(`Navigating to: ${pageTitle}`);
+    };
+    const customComponents: Components = TEXT_CONTAINERS.reduce((acc, tag) => {
+        acc[tag] = ({ children }) => (
+            <LinkParser onInternalLinkClick={handleInternalLink}>
+                {children}
+            </LinkParser>
+        );
+        return acc;
+    }, {} as Components);
     return (
         <div className="w-1/2">
             {/* Editor Pane */}
@@ -56,7 +72,9 @@ export default function MarkdownEditor() {
                     <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         rehypePlugins={[rehypeRaw]}
+                        components={customComponents}
                     >
+
                         {markdown}
                     </ReactMarkdown>
                 </div>
