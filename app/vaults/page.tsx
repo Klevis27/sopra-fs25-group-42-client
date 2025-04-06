@@ -18,7 +18,6 @@ const Vaults: React.FC = () => {
   const [newVaultName, setNewVaultName] = useState("");
 
   useEffect(() => {
-    // Initialize hardcoded vaults and sync to localStorage
     const initialVaults: Vault[] = [
       { id: "1", name: "Project 42", state: "Private" },
       { id: "2", name: "SoPro Project", state: "Shared" },
@@ -35,26 +34,27 @@ const Vaults: React.FC = () => {
     }
   }, []);
 
-  // commented out for future use
-  // const handleLogout = () => {
-  //   localStorage.removeItem("accessToken");
-  //   localStorage.removeItem("id");
-  //   clearLoginCookie();
-  //   router.push("/login");
-  // };
-
   const handleContinue = () => {
     if (!newVaultName.trim()) {
       message.warning("Please enter a vault name.");
       return;
     }
-    const encodedName = encodeURIComponent(newVaultName.trim());
-    router.push(`/vaults/create?name=${encodedName}`);
+
+    const encodedName = newVaultName.trim();
+    const newVault: Vault = {
+      id: Date.now().toString(),
+      name: encodedName,
+      state: "Private",
+    };
+
+    const updatedVaults = [...vaults, newVault];
+    localStorage.setItem("vaults", JSON.stringify(updatedVaults));
+    setVaults(updatedVaults);
+    setNewVaultName("");
   };
 
   return (
     <div style={{ display: "flex", gap: "2rem", padding: "2rem" }}>
-      {/* Left Column: Vault List */}
       <Card style={{ flex: 1 }}>
         <Title level={3}>My Vaults</Title>
         <List
@@ -91,7 +91,6 @@ const Vaults: React.FC = () => {
         />
       </Card>
 
-      {/* Right Column: Create Vault */}
       <Card style={{ width: 300 }}>
         <Title level={4}>Create New Vault</Title>
         <Space direction="vertical" style={{ width: "100%" }}>

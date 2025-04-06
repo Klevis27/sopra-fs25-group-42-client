@@ -1,122 +1,125 @@
 "use client";
 import '@ant-design/v5-patch-for-react-19';
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Button, Card, Input, Typography, List, Space, message } from "antd";
 
 const { Title } = Typography;
 
-type Vault = {
+type Note = {
   id: string;
   name: string;
   state: string;
 };
 
-const Vaults: React.FC = () => {
+const Notes: React.FC = () => {
+  const params = useParams();
   const router = useRouter();
-  const [vaults, setVaults] = useState<Vault[]>([]);
-  const [newVaultName, setNewVaultName] = useState("");
+
+  const vaultIdRaw = params?.vault_id;
+  const vaultId = typeof vaultIdRaw === "string"
+    ? vaultIdRaw
+    : Array.isArray(vaultIdRaw)
+    ? vaultIdRaw[0]
+    : null;
+
+  if (!vaultId) {
+    throw new Error("Vault ID is missing or invalid.");
+  }
+
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [newNoteName, setNewNoteName] = useState("");
 
   useEffect(() => {
-    const initialVaults: Vault[] = [
-      { id: "1", name: "Project 42", state: "Private" },
-      { id: "2", name: "SoPro Project", state: "Shared" },
-      { id: "3", name: "sopra-fs25-group-42", state: "Private" },
-    ];
-
-    const existing = JSON.parse(localStorage.getItem("vaults") || "[]");
-
-    if (!existing.length) {
-      localStorage.setItem("vaults", JSON.stringify(initialVaults));
-      setVaults(initialVaults);
-    } else {
-      setVaults(existing);
-    }
-  }, []);
+    const raw = localStorage.getItem("notes");
+    const notesData: Record<string, Note[]> = raw ? JSON.parse(raw) : {};
+    const vaultNotes = notesData[vaultId] || [];
+    setNotes(vaultNotes);
+  }, [vaultId]);
 
   const handleContinue = () => {
-    if (!newVaultName.trim()) {
+    if (!newNoteName.trim()) {
       message.warning("Please enter a note name.");
       return;
     }
 
-    const encodedName = newVaultName.trim();
-    const newVault: Vault = {
-      id: Date.now().toString(), // benzersiz id
-      name: encodedName,
-      state: "Private", // varsayılan
+    const newNote: Note = {
+      id: Date.now().toString(),
+      name: newNoteName.trim(),
+      state: "Private",
     };
 
-    const updatedVaults = [...vaults, newVault];
-    localStorage.setItem("vaults", JSON.stringify(updatedVaults));
-    setVaults(updatedVaults);
-    setNewVaultName(""); // inputu sıfırla
+    const updatedVaultNotes = [...notes, newNote];
+    const raw = localStorage.getItem("notes");
+    const notesData: Record<string, Note[]> = raw ? JSON.parse(raw) : {};
+    notesData[vaultId] = updatedVaultNotes;
 
-    router.push(`/vaults/${newVault.id}/notes`);
+    localStorage.setItem("notes", JSON.stringify(notesData));
+    setNotes(updatedVaultNotes);
+    setNewNoteName("");
   };
 
-  const handleRemoveVault = (id: string) => {
-    const updatedVaults = vaults.filter((vault) => vault.id !== id);
-    setVaults(updatedVaults);
-    localStorage.setItem("vaults", JSON.stringify(updatedVaults));
+  const handleRemoveNote = (id: string) => {
+    const updatedVaultNotes = notes.filter((note) => note.id !== id);
+    const raw = localStorage.getItem("notes");
+    const notesData: Record<string, Note[]> = raw ? JSON.parse(raw) : {};
+    notesData[vaultId] = updatedVaultNotes;
+
+    localStorage.setItem("notes", JSON.stringify(notesData));
+    setNotes(updatedVaultNotes);
   };
 
   return (
-    <div style={{ display: "flex", gap: "2rem", padding: "2rem" }}>
-      {/* Left Column: Vault List */}
-      <Card style={{ flex: 1 }}>
-        <Title level={3}>My Notes</Title>
-        <List
-          bordered
-          dataSource={vaults}
-          renderItem={(vault) => (
-            <List.Item>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
-                  alignItems: "center",
-                }}
-              >
-                <span style={{ fontWeight: 500 }}>{vault.name}</span>
-                <Space>
-                  <Button
-                    size="small"
-                    onClick={() => router.push(`/vaults/${vault.id}/notes`)}
-                  >
-                    Go to Editor Page
-                  </Button>
-                  <Button
-                    size="small"
-                    danger
-                    onClick={() => handleRemoveVault(vault.id)}
-                  >
-                    Delete
-                  </Button>
-                </Space>
-              </div>
-            </List.Item>
-          )}
-        />
-      </Card>
+    <div style={{ display: "flex", flexDirection: "column", gap: "2rem", padding: "2rem" }}>
+      <Button onClick={() => router.push("/vaults")} style={{ width: "fit-content" }}>
+        ← Back to Vaults
+      </Button>
 
-      {/* Right Column: Create Notes */}
-      <Card style={{ width: 300 }}>
-        <Title level={4}>Create New Notes</Title>
-        <Space direction="vertical" style={{ width: "100%" }}>
-          <Input
-            placeholder="New Note Name"
-            value={newVaultName}
-            onChange={(e) => setNewVaultName(e.target.value)}
+      <div style={{ display: "flex", gap: "2rem" }}>
+        <Card style={{ flex: 1 }}>
+          <Title level={3}>My Notes</Title>
+          <List
+            bordered
+            dataSource={notes}
+            renderItem={(note) => (
+              <List.Item>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    alignItems: "center",
+                  }}
+                >
+                  <span style={{ fontWeight: 500 }}>{note.name}</span>
+                  <Space>
+                    <Button size="small">Go to Editor Page</Button>
+                    <Button size="small" danger onClick={() => handleRemoveNote(note.id)}>
+                      Delete
+                    </Button>
+                  </Space>
+                </div>
+              </List.Item>
+            )}
           />
-          <Button type="primary" block onClick={handleContinue}>
-            Continue
-          </Button>
-        </Space>
-      </Card>
+        </Card>
+
+        <Card style={{ width: 300 }}>
+          <Title level={4}>Create New Notes</Title>
+          <Space direction="vertical" style={{ width: "100%" }}>
+            <Input
+              placeholder="New Note Name"
+              value={newNoteName}
+              onChange={(e) => setNewNoteName(e.target.value)}
+            />
+            <Button type="primary" block onClick={handleContinue}>
+              Continue
+            </Button>
+          </Space>
+        </Card>
+      </div>
     </div>
   );
 };
 
-export default Vaults;
+export default Notes;
