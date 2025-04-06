@@ -1,101 +1,153 @@
 "use client";
 import '@ant-design/v5-patch-for-react-19';
-// import React, { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Button, Card, Form, Input, Select, Typography } from "antd";
-import { App } from "antd";
-import { Suspense } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button, Card, Input, Typography, List, Space, message } from "antd";
 
 const { Title } = Typography;
 
-type Vault = {
+type Note = {
   id: string;
   name: string;
   state: string;
 };
 
-const CreateVault: React.FC = () => {
+const Vaults: React.FC = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const initialName = searchParams.get("name") || "";
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [newNoteName, setNewNoteName] = useState("");
 
-  const [form] = Form.useForm();
-  const { message } = App.useApp();
-
-  const handleCreateVault = (values: { name: string; state: string }) => {
-    // Simulate saving new vault (replace with API call later)
-    const newVault: Vault = {
-      id: String(Date.now()),
-      name: values.name,
-      state: values.state,
+  // 1. Sayfa açıldığında notları API'den çekiyoruz.
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const res = await fetch("/api/notes", { method: "GET" });
+        if (!res.ok) {
+          throw new Error("Failed to fetch notes");
+        }
+        const data: Note[] = await res.json();
+        setNotes(data);
+      } catch (error: any) {
+        console.error(error);
+        message.error("Could not load notes.");
+      }
     };
 
-    // Store in localStorage temporarily (just for demo purposes)
-    let existing: Vault[] = [];
-    try {
-      const stored = localStorage.getItem("vaults");
-      existing = stored ? JSON.parse(stored) : [];
-    } catch (e) {
-      console.warn("Failed to parse vaults from localStorage:", e);
-      existing = [];
+    fetchNotes();
+  }, []);
+
+  // 2. Yeni not eklemek için API'ye POST isteği atıyoruz.
+  const handleContinue = async () => {
+    if (!newNoteName.trim()) {
+      message.warning("Please enter a note name.");
+      return;
     }
 
-    localStorage.setItem("vaults", JSON.stringify([...existing, newVault]));
+    try {
+      const res = await fetch("/api/notes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: newNoteName.trim(),
+          state: "Private", // state gibi ek alanlar da gönderebilirsiniz
+        }),
+      });
 
-    message.success("Vault created successfully!");
-    router.push("/vaults");
+      if (!res.ok) {
+        throw new Error("Failed to create note");
+      }
+
+      // Backend'den dönen yeni not bilgisini al
+      const createdNote: Note = await res.json();
+
+      // State'i güncelle (listeyi yeniden oluştur)
+      setNotes((prev) => [...prev, createdNote]);
+
+      // Input temizle
+      setNewNoteName("");
+
+      // Dilersen user’ı başka sayfaya yönlendirebilirsin
+      router.push(`/vaults/create?name=${encodeURIComponent(createdNote.name)}`);
+    } catch (error: any) {
+      console.error(error);
+      message.error("Failed to create note. Please try again.");
+    }
+  };
+
+  // 3. Notu silmek için API'ye DELETE isteği atıyoruz.
+  const handleRemoveNote = async (id: string) => {
+    try {
+      const res = await fetch(`/api/notes/${id}`, { method: "DELETE" });
+      if (!res.ok) {
+        throw new Error("Failed to delete note");
+      }
+
+      // Silinen not başarıyla kaldırıldıysa, frontend’de de listeden çıkaralım
+      setNotes((prev) => prev.filter((note) => note.id !== id));
+    } catch (error: any) {
+      console.error(error);
+      message.error("Could not delete the note. Please try again.");
+    }
   };
 
   return (
-    <div style={{ padding: "2rem", maxWidth: 500, margin: "0 auto" }}>
-      <Card>
-        <Title level={3}>Create a New Vault</Title>
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleCreateVault}
-          initialValues={{ name: initialName, state: "Private" }}
-        >
-          <Form.Item
-            label="Vault Name"
-            name="name"
-            rules={[{ required: true, message: "Please enter a vault name" }]}
-          >
-            <Input />
-          </Form.Item>
+    <div style={{ display: "flex", gap: "2rem", padding: "2rem" }}>
+      {/* Left Column: Notes List */}
+      <Card style={{ flex: 1 }}>
+        <Title level={3}>My Notes</Title>
+        <List
+          bordered
+          dataSource={notes}
+          renderItem={(note) => (
+            <List.Item>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                  alignItems: "center",
+                }}
+              >
+                <span style={{ fontWeight: 500 }}>{note.name}</span>
+                <Space>
+                  <Button
+                    size="small"
+                    onClick={() => router.push(`/vaults/${note.id}/notes`)}
+                  >
+                    Go to Editor Page
+                  </Button>
+                  <Button
+                    size="small"
+                    danger
+                    onClick={() => handleRemoveNote(note.id)}
+                  >
+                    Delete
+                  </Button>
+                </Space>
+              </div>
+            </List.Item>
+          )}
+        />
+      </Card>
 
-          <Form.Item
-            label="Visibility"
-            name="state"
-            rules={[{ required: true, message: "Please select a state" }]}
-          >
-            <Select>
-              <Select.Option value="Private">Private</Select.Option>
-              <Select.Option value="Shared">Shared</Select.Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              Create Vault
-            </Button>
-          </Form.Item>
-
-          <Form.Item>
-            <Button type="default" block onClick={() => router.push("/vaults")}>
-              Cancel
-            </Button>
-          </Form.Item>
-        </Form>
+      {/* Right Column: Create Notes */}
+      <Card style={{ width: 300 }}>
+        <Title level={4}>Create New Notes</Title>
+        <Space direction="vertical" style={{ width: "100%" }}>
+          <Input
+            placeholder="New Note Name"
+            value={newNoteName}
+            onChange={(e) => setNewNoteName(e.target.value)}
+          />
+          <Button type="primary" block onClick={handleContinue}>
+            Continue
+          </Button>
+        </Space>
       </Card>
     </div>
   );
 };
 
-const WrappedCreateVault = () => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <CreateVault />
-  </Suspense>
-);
-
-export default WrappedCreateVault;
+export default Vaults;

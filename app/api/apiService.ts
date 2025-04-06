@@ -1,6 +1,6 @@
 import { getCookie } from "@/utils/cookies";
-import {getApiDomain} from "@/utils/domain";
-import {ApplicationError} from "@/types/error";
+import { getApiDomain } from "@/utils/domain";
+import { ApplicationError } from "@/types/error";
 
 export class ApiService {
   private baseURL: string;
@@ -16,34 +16,46 @@ export class ApiService {
 
   private async processResponse<T>(res: Response, errorMessage: string): Promise<T> {
     if (!res.ok) {
-      let errorDetail = res.statusText;
+      let errorDetail = "";
+
       try {
-        const errorInfo = await res.json();
-        if (errorInfo?.message) {
-          errorDetail = errorInfo.message;
+        const contentType = res.headers.get("Content-Type") || "";
+        if (contentType.includes("application/json")) {
+          const errorInfo = await res.json();
+          if (errorInfo?.message) {
+            errorDetail = errorInfo.message;
+          } else {
+            errorDetail = JSON.stringify(errorInfo);
+          }
         } else {
-          errorDetail = JSON.stringify(errorInfo);
+          errorDetail = await res.text();
         }
       } catch {
-        // If parsing fails, keep using res.statusText
+        errorDetail = res.statusText || "No message available";
       }
+
+      if (!errorDetail) {
+        errorDetail = res.statusText || "No message available";
+      }
+
       const detailedMessage = `${errorMessage} (${res.status}: ${errorDetail})`;
       const error: ApplicationError = new Error(detailedMessage) as ApplicationError;
       error.info = JSON.stringify(
-          { status: res.status, statusText: res.statusText },
-          null,
-          2,
+        { status: res.status, statusText: res.statusText },
+        null,
+        2
       );
       error.status = res.status;
       throw error;
     }
+
     return res.headers.get("Content-Type")?.includes("application/json")
-        ? await res.json() as Promise<T>
-        : Promise.resolve(res as T);
+      ? await res.json() as Promise<T>
+      : Promise.resolve(res as T);
   }
 
   private getAuthHeaders(token?: string) {
-    const accessToken = token || getCookie("accessToken");  // Default to cookie if token not passed
+    const accessToken = token || getCookie("accessToken");
     const headers: HeadersInit = {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
@@ -60,7 +72,7 @@ export class ApiService {
       method: "GET",
       headers: this.getAuthHeaders(token),
     });
-    return this.processResponse<T>(res, "An error occurred while fetching the data.\n");
+    return this.processResponse<T>(res, "An error occurred while fetching the data.");
   }
 
   public async post<T>(endpoint: string, data: unknown, token?: string): Promise<T> {
@@ -70,7 +82,7 @@ export class ApiService {
       headers: this.getAuthHeaders(token),
       body: JSON.stringify(data),
     });
-    return this.processResponse<T>(res, "An error occurred while posting the data.\n");
+    return this.processResponse<T>(res, "An error occurred while posting the data.");
   }
 
   public async put<T>(endpoint: string, data: unknown, token?: string): Promise<T> {
@@ -80,7 +92,7 @@ export class ApiService {
       headers: this.getAuthHeaders(token),
       body: JSON.stringify(data),
     });
-    return this.processResponse<T>(res, "An error occurred while updating the data.\n");
+    return this.processResponse<T>(res, "An error occurred while updating the data.");
   }
 
   public async delete<T>(endpoint: string, token?: string): Promise<T> {
@@ -89,6 +101,6 @@ export class ApiService {
       method: "DELETE",
       headers: this.getAuthHeaders(token),
     });
-    return this.processResponse<T>(res, "An error occurred while deleting the data.\n");
+    return this.processResponse<T>(res, "An error occurred while deleting the data.");
   }
 }
