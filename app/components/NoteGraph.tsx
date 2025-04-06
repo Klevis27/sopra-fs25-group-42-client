@@ -1,6 +1,9 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { NoteLink } from "@/types/noteLink";
+import { Note } from "@/types/note";
+import { useApi } from "@/hooks/useApi";
 
 // Dynamically import ForceGraph2D with SSR disabled
 const ForceGraph2D = dynamic(
@@ -10,6 +13,7 @@ const ForceGraph2D = dynamic(
 
 interface Node {
     id: string;
+    title: string;
 }
 
 interface Link {
@@ -26,15 +30,93 @@ interface NoteGraphProps {
     graphData: GraphData;
 }
 
-const note1: Node = { id: "Note1" };
-const note2: Node = { id: "Note2" };
-const link1: Link = { source: "Note1", target: "Note2" };
-const link2: Link = { source: "Note2", target: "Note1" };
-let notes = [note1, note2]
-let links = [link1, link2]
-const data: GraphData = { nodes: notes, links: links }
 
 const NoteGraph: React.FC<NoteGraphProps> = ({ graphData }: NoteGraphProps) => {
+
+    const apiService = useApi();
+        const [dummyNotes, setDummyNotes] = useState<Node[]>([]);
+        const [dummyLinks, setDummyLinks] = useState<Link[]>([]);
+        const [tempLinks, setTempLinks] = useState<Link[]>([]);
+    
+        let existsLink = false;
+    
+        useEffect(() => {
+            if (tempLinks.length > 0) {
+              const link = tempLinks[0];
+              const exists = dummyLinks.some(
+                (l) => l.source === link.source && l.target === link.target
+              );
+              if (exists) {
+                console.log("Link exists");
+                existsLink = true;
+              } else {
+                existsLink = false;
+              }
+            }
+          }, [tempLinks, dummyLinks]);
+    
+        const getAllNotes = async () => {
+            const response = await apiService.get<Note[]>("/vaults/1/notes")
+    
+            dummyNotes.forEach(element => {
+                console.log(`Note: ${element}`)
+            });
+    
+            for (const element of response) {
+                if (element.id != null && element.title != null) {
+                    const note: Node = { id: element.id, title: element.title };
+    
+                    const noteExists = dummyNotes.some(n => n.id === note.id);
+    
+                    if (noteExists) {
+                        console.log(`Note: ${note.title} is already in the list`);
+                        continue;
+                    }
+                    setDummyNotes((prevNotes) => [...prevNotes, note]);
+                }
+                console.log(`Note id: ${element.id}, Note title: ${element.title}`);
+            };
+            
+            getAllLinks();
+        }
+    
+    
+    
+    
+        const getAllLinks = async () => {
+            const response = await apiService.get<NoteLink[]>("/vaults/1/note_links");
+            setDummyLinks(() => []);
+    
+            response.forEach(element => {
+    
+                const sourceNoteId = element.sourceNoteId;
+                const targetNoteId = element.targetNoteId;
+    
+    
+    
+                const sourceExists = dummyNotes.some(note => note.id === sourceNoteId);
+                const targetExists = dummyNotes.some(note => note.id === targetNoteId);
+    
+                const sourceInArray = dummyLinks.some(l => l.source === element.sourceNoteId);
+    
+    
+                if (!sourceExists || !targetExists) {
+                    return;
+                }
+    
+                if (existsLink){
+                    return;
+                }
+    
+                if (element.sourceNoteId != null && element.targetNoteId != null) {
+                    const link: Link = { source: element.sourceNoteId, target: element.targetNoteId }
+    
+    
+                    setDummyLinks((prevLinks) => [...prevLinks, link]);            }
+                console.log(`Source Note: ${element.sourceNoteId}, Target Note: ${element.targetNoteId}`)
+            });
+        }
+                
     return (
         <ForceGraph2D
             graphData={graphData}
@@ -42,12 +124,12 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ graphData }: NoteGraphProps) => {
             linkDirectionalParticles={2}
             linkDirectionalArrowLength={5}
             onNodeClick={(node) => alert(`Clicked on: ${node.id}`)}
-            width={1000}
-            height={1000}
+            width={500}
+            height={500}
             backgroundColor="gray"
             nodeCanvasObjectMode={() => 'after'}
             nodeCanvasObject={(node, ctx, globalScale) => {
-                const label = String(node.id ?? "");
+                const label = String((node as Node).title ?? "");
                 const fontSize = 12 / globalScale;
                 ctx.font = `${fontSize}px Sans-Serif`;
                 ctx.fillStyle = "black";

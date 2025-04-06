@@ -1,10 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NoteGraph from "@/components/NoteGraph";
 import styles from "@/styles/page.module.css";
 import "@ant-design/v5-patch-for-react-19";
 import { Button, Form, Input, Select } from "antd";
-import {Note} from "@/types/note";
+import { Note } from "@/types/note";
+import { NoteLink } from "@/types/noteLink";
 import { ApiService } from "@/api/apiService";
 import { useApi } from "@/hooks/useApi";
 
@@ -12,6 +13,7 @@ import { useApi } from "@/hooks/useApi";
 
 interface Node {
     id: string;
+    title: string;
 }
 
 interface Link {
@@ -25,56 +27,88 @@ interface Link {
 
 const GraphPage: React.FC = () => {
     const apiService = useApi();
+    const [dummyNotes, setDummyNotes] = useState<Node[]>([]);
+    const [dummyLinks, setDummyLinks] = useState<Link[]>([]);
+    const [tempLinks, setTempLinks] = useState<Link[]>([]);
+
+    let existsLink = false;
+
+    useEffect(() => {
+        if (tempLinks.length > 0) {
+          const link = tempLinks[0];
+          const exists = dummyLinks.some(
+            (l) => l.source === link.source && l.target === link.target
+          );
+          if (exists) {
+            console.log("Link exists");
+            existsLink = true;
+          } else {
+            existsLink = false;
+          }
+        }
+      }, [tempLinks, dummyLinks]);
 
     const getAllNotes = async () => {
         const response = await apiService.get<Note[]>("/vaults/1/notes")
-    
-        response.forEach(element => {
-            console.log(`Note id: ${element.id}, Note title: ${element.title}`)
-        });
-    }
 
-
-    // Define the dummy graph data
-    const note1 = { id: "Note1" };
-    const note2 = { id: "Note2" };
-    const link1 = { source: "Note1", target: "Note2" };
-    const link2 = { source: "Note2", target: "Note1" };
-
-    const [dummyNotes, setDummyNotes] = useState<Node[]>([]);
-    const [dummyLinks, setDummyLinks] = useState<Link[]>([]);
-
-    const createNewDummyNote = (value: Node) => {
-        const note: Node = { id: value.id };
-        setDummyNotes((prevNotes) => [...prevNotes, note]);
-        console.log("Added note:", note);
         dummyNotes.forEach(element => {
-            console.log(element)
+            console.log(`Note: ${element}`)
         });
-    };
 
-    const linkDummyNotes = (values: Link) => {
-        const sourceNote: Node = { id: values.source };
-        const targetNote: Node = { id: values.target };
+        for (const element of response) {
+            if (element.id != null && element.title != null) {
+                const note: Node = { id: element.id, title: element.title };
 
-        console.log(`Trying to link notes: ${sourceNote} and ${targetNote}`)
+                const noteExists = dummyNotes.some(n => n.id === note.id);
 
-        const sourceExists = dummyNotes.some(note => note.id === sourceNote.id);
-        const targetExists = dummyNotes.some(note => note.id === targetNote.id);
-
-        if (sourceExists && targetExists) {
-            console.log(`Found notes: ${sourceNote} and ${targetNote}`);
-            const link: Link = { source: values.source, target: values.target };
-            setDummyLinks((prevLinks) => [...prevLinks, link]);
-
-
-            dummyLinks.push(link);
-        }
-
+                if (noteExists) {
+                    console.log(`Note: ${note.title} is already in the list`);
+                    continue;
+                }
+                setDummyNotes((prevNotes) => [...prevNotes, note]);
+            }
+            console.log(`Note id: ${element.id}, Note title: ${element.title}`);
+        };
+        
+        getAllLinks();
     }
 
-    const [form] = Form.useForm();
-    const [linkForm] = Form.useForm();
+
+
+
+    const getAllLinks = async () => {
+        const response = await apiService.get<NoteLink[]>("/vaults/1/note_links");
+        setDummyLinks(() => []);
+
+        response.forEach(element => {
+
+            const sourceNoteId = element.sourceNoteId;
+            const targetNoteId = element.targetNoteId;
+
+
+
+            const sourceExists = dummyNotes.some(note => note.id === sourceNoteId);
+            const targetExists = dummyNotes.some(note => note.id === targetNoteId);
+
+            const sourceInArray = dummyLinks.some(l => l.source === element.sourceNoteId);
+
+
+            if (!sourceExists || !targetExists) {
+                return;
+            }
+
+            if (existsLink){
+                return;
+            }
+
+            if (element.sourceNoteId != null && element.targetNoteId != null) {
+                const link: Link = { source: element.sourceNoteId, target: element.targetNoteId }
+
+
+                setDummyLinks((prevLinks) => [...prevLinks, link]);            }
+            console.log(`Source Note: ${element.sourceNoteId}, Target Note: ${element.targetNoteId}`)
+        });
+    }
 
     const graphData = {
         nodes: dummyNotes,
@@ -86,89 +120,11 @@ const GraphPage: React.FC = () => {
             <div
                 className={styles.dummyNoteForm}>
                 <div className="login-container">
-                    <Form
-                        form={form}
-                        onFinish={createNewDummyNote}
-                        size="large"
-                        variant="outlined"
-                        layout="vertical"
-                        requiredMark={false}>
-                        <Form.Item
-                            name="id"
-                            label={<span style={{ color: "white", fontWeight: "bold", fontSize: "16px" }}>Enter Note Name</span>}>
-
-                            <Input>
-
-                            </Input>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                                Add Note
-                            </Button>
-                        </Form.Item>
-                    </Form>
-
-                    <Form
-                        form={linkForm}
-                        onFinish={linkDummyNotes}
-                        size="large"
-                        variant="outlined"
-                        layout="vertical"
-                        requiredMark={false}
-                    >
-
-                        <Form.Item
-                            name="source"
-                            label={<span style={{ color: "white", fontWeight: "bold", fontSize: "16px" }}>Source Note</span>}>
-
-                            <Select
-                                showSearch
-                                placeholder={<span style={{ color: "white", fontWeight: "bold", fontSize: "16px" }}>Source Note</span>}
-                                optionFilterProp="children"
-                                dropdownStyle={{
-                                    backgroundColor: '#1f1f1f', // Dark background for dropdown
-                                    color: 'white', // White text for contrast
-                                    borderColor: '#333', // Match the border color
-                                }}
-                            >
-                                {dummyNotes.map((note) => (
-                                    <Select.Option key={note.id} value={note.id}>
-                                        {note.id}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-
-                        <Form.Item
-                            name="target"
-                            label={<span style={{ color: "white", fontWeight: "bold", fontSize: "16px" }}>Select Target Note</span>}>
-
-                            <Select
-                                showSearch
-                                placeholder={<span style={{ color: "white", fontWeight: "bold", fontSize: "16px" }}>Select Target Note</span>}
-                                optionFilterProp="children"
-                                dropdownStyle={{
-                                    backgroundColor: '#1f1f1f', // Dark background for dropdown
-                                    color: 'white', // White text for contrast
-                                    borderColor: '#333', // Match the border color
-                                }}
-                            >
-                                {dummyNotes.map((note) => (
-                                    <Select.Option key={note.id} value={note.id}>
-                                        {note.id}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                                Link Notes
-                            </Button>
-                        </Form.Item>
-                    </Form>
                     <Button type="primary" htmlType="submit" onClick={getAllNotes}>
                         Get All Notes
+                    </Button>
+                    <Button type="primary" htmlType="submit" onClick={getAllLinks}>
+                        Get All Links
                     </Button>
                 </div>
             </div>
