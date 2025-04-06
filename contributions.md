@@ -58,8 +58,8 @@ reason).
 |                    | 30.03.2025 |  |  |  |
 | **AntWarz**        | 30.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
-| **elifdenizi**     | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
+| **elifdenizi**     | 06.04.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/3a5c8148e85665ca40cac5d0e112b1a98c729ec6) | create chat-demo page and integrate chatbox component | Core functionality |
+|                    | 06.04.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/bd9d13eb114a77361d68ca30297e7ffa53b6f56e) | Add ChatBox component with real-time Firebase integration | External API |
 |                    | 29.03.2025 |  |  |  |
 | **nfcolak**        | 29.03.2025 |  |  |  |
 | **SvenVest**       | 29.03.2025 |  |  |  |
