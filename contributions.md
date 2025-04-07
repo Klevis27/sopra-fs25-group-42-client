@@ -56,9 +56,8 @@ reason).
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **Klevis27**       | 01.04.2025 | [Link to commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
 |                    | 04.04.2025 | [Link to Issue with two pull requests in it](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/16) | Implement basic Vault functionality in front- and backend | Core functionality |
-|                    | 30.03.2025 |  |  |  |
-| **AntWarz**        | 30.03.2025 |  |  |  |
-||04.04.2025|[Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/e1b9df810d2e5e0c78006f5ed568f21c88265671)|Basics of graph visualization setup|Need to start somewhere|
+|                    | 30.03.2025 |  |  |  |       
+|**AntWarz**|04.04.2025|[Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/e1b9df810d2e5e0c78006f5ed568f21c88265671)|Basics of graph visualization setup|Need to start somewhere|
 ||04.04.2025|[Link to Commit 4](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/2e28f27519dd51c6225d4264486c61fb966efa0a)|Can create dummy notes and link them now|To test out visualization without the depending on the db|
 ||04.04.2025|[Link to Commit 5](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/dab99878548dec7ff2d1499bd4a014e421989f6f)|Small improvements|Improvements are important!|
 ||04.04.2025|[Link to Commit 6](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/8ae51f93ddbb102ae2856e0d0151c4cf6e60b9ac)|Further further improvements|Further further improvements are also important!|
