@@ -58,7 +58,6 @@ reason).
 |                    | 04.04.2025 | [Link to Issue with two pull requests in it](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/16) | Implement basic Vault functionality in front- and backend | Core functionality |
 |                    | 30.03.2025 |  |  |  |
 | **AntWarz**        | 30.03.2025 |  |  |  |
-
 ||04.04.2025|[Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/e1b9df810d2e5e0c78006f5ed568f21c88265671)|Basics of graph visualization setup|Need to start somewhere|
 ||04.04.2025|[Link to Commit 4](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/2e28f27519dd51c6225d4264486c61fb966efa0a)|Can create dummy notes and link them now|To test out visualization without the depending on the db|
 ||04.04.2025|[Link to Commit 5](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/dab99878548dec7ff2d1499bd4a014e421989f6f)|Small improvements|Improvements are important!|
