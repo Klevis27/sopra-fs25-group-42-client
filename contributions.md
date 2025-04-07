@@ -39,7 +39,6 @@ reason).
 |                    | 30.03.2025 | [[Link to Issue]](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/4) | Issue about persistent remote production database and local dev database | You should know why this is important. Also there's hella commits to this one |
 | **AntWarz** | 30.03.2025   | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/0291a997494ed92baad4910fec15062ba3877230) | Syled registration page | So the registration page fits the theme of the landing page |
 |                    | 30.03.2025   | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/f5c6c1f6b85f25df012cd0e2dcaf723fc73a075f) | Styled login page | So the login page fits the theme of the landing and registration page |
-
 | **elifdenizi** | [29.03.2025]   | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/60c2662e32638d1b225874f6fa670aab3b55a0e0) | Implement /vaults page. Add "create new vault part" and add button to create single vault. Display existing vaults. | Core function |
 |                    | [29.03.2025]   | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/14bddf6139fa8bc9d347855d5f7aa9589b377010) | Implement /vaults/create page in the frontend | User create new vault and select the features of the vaults from this page. |
 |                    | [29.03.2025]   | [Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/b55bb7ee3cf2ed00fa8eb5d5707f8d3e9626d664) | Implement /vaults/[vault_id]/settings page in the frontend. | User can update the name and visibility of the vaults from the repository page by clickin on the settings button. |
@@ -56,8 +55,7 @@ reason).
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **Klevis27**       | 01.04.2025 | [Link to commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
 |                    | 04.04.2025 | [Link to Issue with two pull requests in it](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/16) | Implement basic Vault functionality in front- and backend | Core functionality |
-|                    | 30.03.2025 |  |  |  |       
-|                    | 30.03.2025 |  |  |  |   
+|                    | 30.03.2025 |  |  |  |        
 |**AntWarz**|04.04.2025|[Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/e1b9df810d2e5e0c78006f5ed568f21c88265671)|Basics of graph visualization setup|Need to start somewhere|
 ||04.04.2025|[Link to Commit 4](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/2e28f27519dd51c6225d4264486c61fb966efa0a)|Can create dummy notes and link them now|To test out visualization without the depending on the db|
 ||04.04.2025|[Link to Commit 5](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/dab99878548dec7ff2d1499bd4a014e421989f6f)|Small improvements|Improvements are important!|
