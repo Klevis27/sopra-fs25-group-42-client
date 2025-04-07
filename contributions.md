@@ -62,8 +62,8 @@ reason).
 |                    | 06.04.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/bd9d13eb114a77361d68ca30297e7ffa53b6f56e) | Add ChatBox component with real-time Firebase integration | External API |
 |                    | 29.03.2025 |  |  |  |
 | **nfcolak**        | 29.03.2025 |  |  |  |
-| **SvenVest**       | 29.03.2025 |  |  |  |
-|                    | 30.03.2025 |  |  |  |
+| **SvenVest**       | 29.03.2025 |https://github.com/Klevis27/sopra-fs25-group-42-client/commit/2c20fa7b1351d556430476f471ea2f504ad40eda| slidbar for ui and pretty md. prview mode |so we have can use max screenspace  |
+|                    | 30.03.2025 |https://github.com/Klevis27/sopra-fs25-group-42-client/commit/8a5ddcccd291c94fc6a16bff04af33e60a4dabf4| Link ([...]) Parser in editor, as sepaerate comp | links are centrale for organacing |
 
 ---
 
@@ -80,8 +80,8 @@ reason).
 |                    | 29.03.2025 |  |  |  |
 |                    | 29.03.2025 |  |  |  |
 | **nfcolak**        | 29.03.2025 |  |  |  |
-| **SvenVest**       | 29.03.2025 |https://github.com/Klevis27/sopra-fs25-group-42-client/commit/2c20fa7b1351d556430476f471ea2f504ad40eda| slidbar for ui and pretty md. prview mode |so we have can use max screenspace  |
-|                    | 30.03.2025 |https://github.com/Klevis27/sopra-fs25-group-42-client/commit/8a5ddcccd291c94fc6a16bff04af33e60a4dabf4| Link ([...]) Parser in editor, as sepaerate comp | links are centrale for organacing |
+| **SvenVest**       | 29.03.2025 | |   |
+|                    | 30.03.2025 | | |
 
 ---
 
