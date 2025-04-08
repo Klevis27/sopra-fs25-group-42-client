@@ -1,5 +1,4 @@
-// types/note.ts
-export type Note = {
-    id: number;
-    title: string;
-  };
+export interface Note {
+  id: string | null;
+  title: string | null;
+}
