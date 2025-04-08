@@ -5,10 +5,9 @@ import { NoteLink } from "@/types/noteLink";
 import { Note } from "@/types/note";
 import { useApi } from "@/hooks/useApi";
 
-// Dynamically import ForceGraph2D with SSR disabled
 const ForceGraph2D = dynamic(
     () => import("react-force-graph-2d"),
-    { ssr: false } // Disable SSR
+    { ssr: false } 
 );
 
 interface Node {
@@ -34,31 +33,27 @@ interface NoteGraphProps {
 const NoteGraph: React.FC<NoteGraphProps> = ({ graphData }: NoteGraphProps) => {
 
     const apiService = useApi();
-        const [dummyNotes, setDummyNotes] = useState<Node[]>([]);
-        const [dummyLinks, setDummyLinks] = useState<Link[]>([]);
-        const [tempLinks, setTempLinks] = useState<Link[]>([]);
+        const [notesArray, setNotes] = useState<Node[]>([]);
+        const [linksArray, setLinks] = useState<Link[]>([]);
     
         let existsLink = false;
     
-        useEffect(() => {
-            if (tempLinks.length > 0) {
-              const link = tempLinks[0];
-              const exists = dummyLinks.some(
-                (l) => l.source === link.source && l.target === link.target
-              );
-              if (exists) {
-                console.log("Link exists");
-                existsLink = true;
-              } else {
-                existsLink = false;
-              }
+          useEffect(() => {
+            getAllNotes();
+          }, []);
+
+          useEffect(() => {
+            if (notesArray.length > 0) {
+              getAllLinks();
             }
-          }, [tempLinks, dummyLinks]);
+          }, [notesArray]);
     
         const getAllNotes = async () => {
+            //TODO: Right now the vault_id is hardcoded to be 1, because 
+            //this is just the component which I didn't implement for any specific URL
             const response = await apiService.get<Note[]>("/vaults/1/notes")
     
-            dummyNotes.forEach(element => {
+            notesArray.forEach(element => {
                 console.log(`Note: ${element}`)
             });
     
@@ -66,38 +61,30 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ graphData }: NoteGraphProps) => {
                 if (element.id != null && element.title != null) {
                     const note: Node = { id: element.id, title: element.title };
     
-                    const noteExists = dummyNotes.some(n => n.id === note.id);
+                    const noteExists = notesArray.some(n => n.id === note.id);
     
                     if (noteExists) {
                         console.log(`Note: ${note.title} is already in the list`);
                         continue;
                     }
-                    setDummyNotes((prevNotes) => [...prevNotes, note]);
+                    setNotes((prevNotes) => [...prevNotes, note]);
                 }
-                console.log(`Note id: ${element.id}, Note title: ${element.title}`);
             };
             
-            getAllLinks();
         }
-    
-    
     
     
         const getAllLinks = async () => {
             const response = await apiService.get<NoteLink[]>("/vaults/1/note_links");
-            setDummyLinks(() => []);
+            setLinks(() => []);
     
             response.forEach(element => {
     
                 const sourceNoteId = element.sourceNoteId;
                 const targetNoteId = element.targetNoteId;
     
-    
-    
-                const sourceExists = dummyNotes.some(note => note.id === sourceNoteId);
-                const targetExists = dummyNotes.some(note => note.id === targetNoteId);
-    
-                const sourceInArray = dummyLinks.some(l => l.source === element.sourceNoteId);
+                const sourceExists = notesArray.some(note => note.id === sourceNoteId);
+                const targetExists = notesArray.some(note => note.id === targetNoteId);
     
     
                 if (!sourceExists || !targetExists) {
@@ -112,17 +99,19 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ graphData }: NoteGraphProps) => {
                     const link: Link = { source: element.sourceNoteId, target: element.targetNoteId }
     
     
-                    setDummyLinks((prevLinks) => [...prevLinks, link]);            }
-                console.log(`Source Note: ${element.sourceNoteId}, Target Note: ${element.targetNoteId}`)
+                    setLinks((prevLinks) => [...prevLinks, link]);            }
             });
         }
                 
     return (
         <ForceGraph2D
-            graphData={graphData}
+            graphData={{
+                nodes: notesArray,
+                links: linksArray
+            }}
             nodeAutoColorBy="id"
             linkDirectionalParticles={2}
-            linkDirectionalArrowLength={5}
+            linkDirectionalArrowLength={2}
             onNodeClick={(node) => alert(`Clicked on: ${node.id}`)}
             width={500}
             height={500}
@@ -135,7 +124,7 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ graphData }: NoteGraphProps) => {
                 ctx.fillStyle = "black";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "top";
-                ctx.fillText(label, node.x!, node.y! + 5); // Draw label below node
+                ctx.fillText(label, node.x!, node.y! + 5); 
             }
             }
         />
