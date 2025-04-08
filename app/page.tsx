@@ -93,9 +93,6 @@ export default function Home() {
           <Button type="primary" onClick={() => router.push("/register")}>
             Go to registration
           </Button>
-          <Button type="primary" onClick={() => router.push("/graph")}>
-            Go to Node Graph
-          </Button>
         </div>
       </main>
 
