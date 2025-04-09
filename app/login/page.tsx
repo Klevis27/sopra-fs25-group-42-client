@@ -5,7 +5,9 @@ import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
 import { Button, Form, Input } from "antd";
 import Link from "next/link";
-import {setCookie} from "@/utils/cookies";
+import { setCookie } from "@/utils/cookies";
+import styles from "@/styles/page.module.css";
+
 
 interface LoginFormValues {
   username: string;
@@ -48,39 +50,71 @@ const Login: React.FC = () => {
   };
 
   return (
-      <div className="login-container">
-        <Form
-            form={form}
-            name="login"
-            size="large"
-            variant="outlined"
-            onFinish={handleLogin}
-            layout="vertical"
-        >
-          <h1>Login</h1>
-          <Form.Item
-              name="username"
-              label="Username"
-              rules={[{ required: true, message: "Please input your username!" }]}
+    <div className={styles.page}>
+
+      <header className={styles.loginHeader}>
+        <div className={styles.logoWrapper}>
+          <img
+            src="/logo.png"
+            style={{ width: "400px", height: "auto" }}
           >
-            <Input placeholder="Enter username" />
-          </Form.Item>
-          <Form.Item
-              name="password"
-              label="Password"
-              rules={[{ required: true, message: "Please input your password!" }]}
-          >
-            <Input placeholder="Enter password" />
-          </Form.Item>
-          <Link href="/register">Don&apos;t have an account? Register here!</Link>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" className="login-button">
-              Login
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
+          </img>
+        </div>
+      </header>
+
+      <main className={styles.main}>
+        <title>Login</title>
+        <div className={styles.loginWrapper}>
+          <div className="login-container">
+            <Form
+              form={form}
+              name="login"
+              size="large"
+              variant="outlined"
+              onFinish={handleLogin}
+              layout="vertical"
+              requiredMark={false}
+            >
+              <h1 className='centered-text'>Login</h1>
+              <Form.Item
+                name="username"
+                label={<span style={{ color: "black", fontWeight: "bold", fontSize: "16px" }}>Username</span>}
+                rules={[{ required: true, message: "Please input your username!" }]}
+              >
+                <Input
+                  className='input'
+                  placeholder="E.g: Marx420"
+                  style={{ color: "white" }}
+                />
+              </Form.Item>
+              <Form.Item
+                name="password"
+                label={<span style={{ color: "black", fontWeight: "bold", fontSize: "16px" }}>Password</span>}
+                rules={[{ required: true, message: "Please input your password!" }]}
+              >
+                <Input
+                  className='input'
+                  placeholder="E.g: 1917"
+                  style={{ color: "white" }}
+                />
+              </Form.Item>
+              <Link href="/register">Don't have an account yet? Register here!</Link>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" className="login-button"
+                style={{color: 'white', backgroundColor: 'black', fontSize: 20}}>
+                  Login
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+        </div>
+
+
+
+      </main>
+    </div>
   );
 };
 
 export default Login;
+
