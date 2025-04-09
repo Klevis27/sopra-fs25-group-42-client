@@ -1,23 +1,25 @@
 "use client";
 import '@ant-design/v5-patch-for-react-19';
 import {useApi} from "@/hooks/useApi";
-import {useRouter, useSearchParams} from "next/navigation";
+import {useParams, useRouter, useSearchParams} from "next/navigation";
 import {Button, Card, Form, Input, Typography} from "antd";
 import {App} from "antd";
 import {Suspense} from "react";
-import {Vault} from "@/types/vault";
+import {Note} from "@/types/note";
 
 const {Title} = Typography;
 
-const CreateVault: React.FC = () => {
+const CreateNote: React.FC = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const initialName = searchParams.get("name") || "";
     const apiService = useApi();
     const [form] = Form.useForm();
     const {message} = App.useApp();
+    const params = useParams();
+    const vaultId = params.vault_id as string;
 
-    const handleCreateVault = async (values: { name: string }) => {
+    const handleCreateNote = async (values: { name: string }) => {
         const id = localStorage.getItem("id");
         const accessToken = localStorage.getItem("accessToken");
         if (!accessToken || !id) {
@@ -26,17 +28,17 @@ const CreateVault: React.FC = () => {
         }
         try {
             // Call the API service and let it handle JSON serialization and error handling
-            const vaultData = {
-                name: values.name,
+            const noteData = {
+                title: values.name,
             };
-            const response = await apiService.post<Vault>("/vaults", vaultData, accessToken);
+            const response = await apiService.post<{ message : string, note : Note }>(`/vaults/${vaultId}/notes`, noteData, accessToken);
 
             // Navigate to the notes overview of the newly created vault
-            message.success("Vault created successfully!");
-            router.push(`/vaults/${response.id}/notes`);
+            message.success("Note created successfully!");
+            router.push(`/vaults/${vaultId}/notes/${response.note.id}`);
         } catch (error: unknown) {
             if (error instanceof Error) {
-                alert(`Vault name already taken`);
+                alert(`Note name already taken`);
             } else {
                 // Handle unknown error
                 console.error("An unknown error occurred during creation of vault.");
@@ -50,11 +52,11 @@ const CreateVault: React.FC = () => {
     return (
         <div style={{padding: "2rem", maxWidth: 500, margin: "0 auto"}}>
             <Card>
-                <Title level={3}>Create a New Vault</Title>
+                <Title level={3}>Create a New Note</Title>
                 <Form
                     form={form}
                     layout="vertical"
-                    onFinish={handleCreateVault}
+                    onFinish={handleCreateNote}
                     initialValues={{name: initialName}}
                 >
                     <Form.Item
@@ -67,7 +69,7 @@ const CreateVault: React.FC = () => {
 
                     <Form.Item>
                         <Button type="primary" htmlType="submit" block>
-                            Create Vault
+                            Create Note
                         </Button>
                     </Form.Item>
 
@@ -82,10 +84,10 @@ const CreateVault: React.FC = () => {
     );
 };
 
-const WrappedCreateVault = () => (
+const WrappedCreateNote = () => (
     <Suspense fallback={<div>Loading...</div>}>
-        <CreateVault/>
+        <CreateNote/>
     </Suspense>
 );
 
-export default WrappedCreateVault;
+export default WrappedCreateNote;
