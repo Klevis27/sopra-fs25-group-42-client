@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ConfigProvider, theme } from "antd";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { App } from "antd";
+
 import "@/styles/globals.css";
 
 const geistSans = Geist({
@@ -56,11 +58,18 @@ export default function RootLayout({
                 labelColor: "#fff",
                 algorithm: theme.defaultAlgorithm, // specify a specifc algorithm instead of true/false
               },
+              Message: {
+                colorText: "#fff", // make message text readable on dark background
+                colorBgElevated: "#1f1f1f", // dark popup background
+              },
               Card: {},
             },
           }}
         >
-          <AntdRegistry>{children}</AntdRegistry>
+          <AntdRegistry>
+            <App>{children}</App>
+          </AntdRegistry>
+
         </ConfigProvider>
       </body>
     </html>

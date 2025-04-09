@@ -2,58 +2,20 @@
 import '@ant-design/v5-patch-for-react-19';
 import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
+import {Button, Card, Input, Typography, List, Space, message} from "antd";
+import {Vault} from "@/types/vault";
 import {useApi} from "@/hooks/useApi";
-import {User} from "@/types/user";
-import {Button, Card, Table} from "antd";
-import type {TableProps} from "antd";
-import {clearLoginCookie} from "@/utils/cookies";
 
-const columns: TableProps<User>["columns"] = [
-    {
-        title: "Id",
-        dataIndex: "id",
-        key: "id",
-    },
-    {
-        title: "Username",
-        dataIndex: "username",
-        key: "username",
-    },
-    {
-        title: "Status",
-        dataIndex: "status",
-        key: "status",
-    },
-];
+const {Title} = Typography;
 
 const Vaults: React.FC = () => {
     const router = useRouter();
+    const [vaults, setVaults] = useState<Vault[]>([]);
+    const [newVaultName, setNewVaultName] = useState("");
     const apiService = useApi();
-    const [users, setUsers] = useState<User[] | null>(null);
-
-    const handleLogout = async (): Promise<void> => {
-        const accessToken = localStorage.getItem("accessToken");
-        const id = localStorage.getItem("id");
-        if (!accessToken || !id) {
-            router.push("/login");
-            return;
-        }
-        try {
-            const userData = {
-                id: id,
-            };
-            await apiService.post("/logout", userData, accessToken);
-            localStorage.removeItem("id");
-            localStorage.removeItem("accessToken");
-            clearLoginCookie();
-            router.push("/login");
-        } catch (error) {
-            console.error("Logout failed", error);
-        }
-    };
 
     useEffect(() => {
-        const fetchUsers = async () => {
+        const fetchNotes = async () => {
             try {
                 const id = localStorage.getItem("id");
                 const accessToken = localStorage.getItem("accessToken");
@@ -61,47 +23,105 @@ const Vaults: React.FC = () => {
                     router.push("/login");
                     return;
                 }
-                const response = await apiService.get<User[]>("/users", accessToken);
-                if (response[0] == null) {
-                    router.push("/login");
+
+                // API Call
+                const response = await apiService.get<Vault[]>(`/vaults`, accessToken);
+
+                // If no such user exists
+                if (response == null) {
+                    console.error("No such vaults exist");
+                    alert("No such vaults exist!");
+                    return
                 }
-                setUsers(response);
+
+                // Set Vaults
+                setVaults(response)
             } catch (error) {
-                console.error("Error fetching profile:", error);
-                router.push("/login");
+                // @ts-expect-error - No proper interface
+                if (error.status == 404) {
+                    console.error("Could not find vaults!");
+                    alert("Vaults not found.");
+                }
+                // @ts-expect-error - No proper interface
+                console.error("Error", error.status);
+                alert("Unknown error occurred.");
             }
         };
-        fetchUsers();
-    }, [apiService, router]); // dependency apiService does not re-trigger the useEffect on every render because the hook uses memoization (check useApi.tsx in the hooks).
-    // if the dependency array is left empty, the useEffect will trigger exactly once
-    // if the dependency array is left away, the useEffect will run on every state change. Since we do a state change to profile in the useEffect, this results in an infinite loop.
-    // read more here: https://react.dev/reference/react/useEffect#specifying-reactive-dependencies
+        fetchNotes();
+    }, [apiService, router]);
+
+    // commented out for future use
+    // const handleLogout = () => {
+    //   localStorage.removeItem("accessToken");
+    //   localStorage.removeItem("id");
+    //   clearLoginCookie();
+    //   router.push("/login");
+    // };
+
+    const handleContinueToCreation = () => {
+        if (!newVaultName.trim()) {
+            message.warning("Please enter a vault name.");
+            return;
+        }
+        const encodedName = encodeURIComponent(newVaultName.trim());
+        router.push(`/vaults/create?name=${encodedName}`);
+    };
 
     return (
-        <div className="card-container">
-            <Card
-                title="All vaults: [TBD]"
-                loading={!users}
-                className="dashboard-container"
-            >
-                {users && (
-                    <>
-                        {/* antd Table: pass the columns and data, plus a rowKey for stable row identity */}
-                        <Table<User>
-                            columns={columns}
-                            dataSource={users}
-                            rowKey="id"
-                            onRow={(row) => ({
-                                onClick: () => router.push(`/profile/${row.id}`),
-                                style: {cursor: "pointer"},
-                            })}
+        <div className="m-12">
+            <div className={"flex flex-wrap gap-[2rem] p-[2rem]"}>
+                {/* Left Column: Vault List */}
+                <Card style={{flex: 1}}>
+                    <Title level={3}>My Vaults</Title>
+                    <List
+                        bordered
+                        dataSource={vaults}
+                        renderItem={(vault) => (
+                            <List.Item>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        width: "100%",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <span style={{fontWeight: 500}}>{vault.name}</span>
+                                    <Space>
+                                        <Button
+                                            size="small"
+                                            onClick={() => router.push(`/vaults/${vault.id}/notes`)}
+                                        >
+                                            Notes
+                                        </Button>
+                                        <Button
+                                            size="small"
+                                            onClick={() => router.push(`/vaults/${vault.id}/settings`)}
+                                        >
+                                            Settings
+                                        </Button>
+                                    </Space>
+                                </div>
+                            </List.Item>
+                        )}
+                    />
+                </Card>
+
+                {/* Right Column: Create Vault */}
+                <Card style={{width: 300}}>
+                    <Title level={4}>Create New Vault</Title>
+                    <Space direction="vertical" style={{width: "100%"}}>
+                        <Input
+                            placeholder="Vault Name"
+                            value={newVaultName}
+                            onChange={(e) => setNewVaultName(e.target.value)}
                         />
-                        <Button onClick={handleLogout} type="primary">
-                            Logout
+                        <Button type="primary" block onClick={handleContinueToCreation}>
+                            Continue
                         </Button>
-                    </>
-                )}
-            </Card>
+                    </Space>
+                </Card>
+            </div>
         </div>
     );
 };
