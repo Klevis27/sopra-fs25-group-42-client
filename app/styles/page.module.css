@@ -99,3 +99,52 @@ a.secondary {
 .footer img {
   flex-shrink: 0;
 }
+
+
+
+.loginWrapper {
+  width: 550px; 
+  height: 100vh;
+  background: #A0BF84;
+  padding: 20px;
+  position: absolute;
+  left: 50; 
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginHeader{
+  padding-top: 20px;
+  padding-left: 600px;
+  padding-right: 600px;
+}
+
+.registrationWrapper {
+  width: 550px; 
+  height: 100vh;
+  background: #A0BF84;
+  padding: 20px;
+  position: absolute;
+  right: 50; 
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.graphWindowWrapper {
+  position: absolute;
+  top: 50%;
+  left: 75%;
+  transform: translate(-50%, -50%);
+}
+
+
+.dummyNoteForm {
+  width: 550px; 
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
