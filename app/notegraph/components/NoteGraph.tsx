@@ -30,79 +30,72 @@ interface NoteGraphProps {
 }
 
 
-const NoteGraph: React.FC<NoteGraphProps> = ({ graphData }: NoteGraphProps) => {
+const NoteGraph: React.FC<NoteGraphProps> = ({ }: NoteGraphProps) => {
 
     const apiService = useApi();
         const [notesArray, setNotes] = useState<Node[]>([]);
         const [linksArray, setLinks] = useState<Link[]>([]);
     
-        let existsLink = false;
-    
-          useEffect(() => {
-            getAllNotes();
-          }, []);
+        const existsLink = false;
 
-          useEffect(() => {
-            if (notesArray.length > 0) {
-              getAllLinks();
-            }
-          }, [notesArray]);
-    
-        const getAllNotes = async () => {
-            //TODO: Right now the vault_id is hardcoded to be 1, because 
-            //this is just the component which I didn't implement for any specific URL
-            const response = await apiService.get<Note[]>("/vaults/1/notes")
-    
-            notesArray.forEach(element => {
-                console.log(`Note: ${element}`)
-            });
-    
-            for (const element of response) {
-                if (element.id != null && element.title != null) {
-                    const note: Node = { id: element.id, title: element.title };
-    
-                    const noteExists = notesArray.some(n => n.id === note.id);
-    
-                    if (noteExists) {
-                        console.log(`Note: ${note.title} is already in the list`);
-                        continue;
+        useEffect(() => {
+            const getAllLinks = async () => {
+                const response = await apiService.get<NoteLink[]>("/vaults/1/note_links");
+                setLinks(() => []);
+
+                response.forEach(element => {
+
+                    const sourceNoteId = element.sourceNoteId;
+                    const targetNoteId = element.targetNoteId;
+
+                    const sourceExists = notesArray.some(note => note.id === sourceNoteId);
+                    const targetExists = notesArray.some(note => note.id === targetNoteId);
+
+
+                    if (!sourceExists || !targetExists) {
+                        return;
                     }
-                    setNotes((prevNotes) => [...prevNotes, note]);
+
+                    if (existsLink){
+                        return;
+                    }
+
+                    if (element.sourceNoteId != null && element.targetNoteId != null) {
+                        const link: Link = { source: element.sourceNoteId, target: element.targetNoteId }
+
+
+                        setLinks((prevLinks) => [...prevLinks, link]);            }
+                });
+            }
+            if (notesArray.length > 0) {
+                getAllLinks();
+            }
+        }, [notesArray, apiService, existsLink]);
+
+        useEffect(() => {
+            const getAllNotes = async () => {
+                //TODO: Right now the vault_id is hardcoded to be 1, because
+                //this is just the component which I didn't implement for any specific URL
+                const response = await apiService.get<Note[]>("/vaults/1/notes")
+                notesArray.forEach(element => {
+                    console.log(`Note: ${element}`)
+                });
+                for (const element of response) {
+                    if (element.id != null && element.title != null) {
+                        const note: Node = { id: element.id, title: element.title };
+
+                        const noteExists = notesArray.some(n => n.id === note.id);
+
+                        if (noteExists) {
+                            console.log(`Note: ${note.title} is already in the list`);
+                            continue;
+                        }
+                        setNotes((prevNotes) => [...prevNotes, note]);
+                    }
                 }
-            };
-            
-        }
-    
-    
-        const getAllLinks = async () => {
-            const response = await apiService.get<NoteLink[]>("/vaults/1/note_links");
-            setLinks(() => []);
-    
-            response.forEach(element => {
-    
-                const sourceNoteId = element.sourceNoteId;
-                const targetNoteId = element.targetNoteId;
-    
-                const sourceExists = notesArray.some(note => note.id === sourceNoteId);
-                const targetExists = notesArray.some(note => note.id === targetNoteId);
-    
-    
-                if (!sourceExists || !targetExists) {
-                    return;
-                }
-    
-                if (existsLink){
-                    return;
-                }
-    
-                if (element.sourceNoteId != null && element.targetNoteId != null) {
-                    const link: Link = { source: element.sourceNoteId, target: element.targetNoteId }
-    
-    
-                    setLinks((prevLinks) => [...prevLinks, link]);            }
-            });
-        }
-                
+            }
+            getAllNotes();
+        }, [apiService, notesArray]);
     return (
         <ForceGraph2D
             graphData={{

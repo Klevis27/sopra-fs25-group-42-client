@@ -7,6 +7,7 @@ import { Button, Form, Input } from "antd";
 import Link from "next/link";
 import { setCookie } from "@/utils/cookies";
 import styles from "@/styles/page.module.css";
+import Image from "next/image";
 
 interface RegistrationFormValues {
     username: string;
@@ -55,11 +56,11 @@ const Registration: React.FC = () => {
 
             <header>
                 <div className={styles.logoWrapper}>
-                    <img
+                    <Image
                         src="/logo.png"
+                        alt="NMD Logo"
                         style={{ width: "400px", height: "auto" }}
-                    >
-                    </img>
+                    />
                 </div>
             </header>
 

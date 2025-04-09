@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Button } from "antd";
 import { useState } from "react";
 import Image from "next/image";
@@ -8,8 +7,6 @@ import MarkdownEditor from "../../editor-dev/components/MarkdownEditor";
 import Sidebar from "@/editor-dev/components/Sidebar";
 
 export default function Home() {
-    const router = useRouter();
-    const [noteContent, setNoteContent] = useState("");
     const [showSettings, setShowSettings] = useState(false);
     const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
     const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);

@@ -7,6 +7,7 @@ import { Button, Form, Input } from "antd";
 import Link from "next/link";
 import { setCookie } from "@/utils/cookies";
 import styles from "@/styles/page.module.css";
+import Image from "next/image";
 
 
 interface LoginFormValues {
@@ -54,11 +55,11 @@ const Login: React.FC = () => {
 
       <header className={styles.loginHeader}>
         <div className={styles.logoWrapper}>
-          <img
-            src="/logo.png"
-            style={{ width: "400px", height: "auto" }}
-          >
-          </img>
+          <Image
+              src="/logo.png"
+              style={{width: "400px", height: "auto"}}
+              alt={""}
+          />
         </div>
       </header>
 
@@ -98,7 +99,7 @@ const Login: React.FC = () => {
                   style={{ color: "white" }}
                 />
               </Form.Item>
-              <Link href="/register">Don't have an account yet? Register here!</Link>
+              <Link href="/register">Don&apos;t have an account yet? Register here!</Link>
               <Form.Item>
                 <Button type="primary" htmlType="submit" className="login-button"
                 style={{color: 'white', backgroundColor: 'black', fontSize: 20}}>

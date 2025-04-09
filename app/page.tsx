@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "antd";
 import { BookOutlined, CodeOutlined, GlobalOutlined } from "@ant-design/icons";
 import styles from "@/styles/page.module.css";
+import Image from "next/image";
 
 export default function Home() {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function Home() {
             marginBottom: "0px", // Removed the space between the logo and text
           }}
         >
-          <img
+          <Image
             src="/text.png"
             alt="NMD Text"
             style={{ width: "500px", height: "auto" }} // Set NMD to 500px width
@@ -28,7 +29,7 @@ export default function Home() {
 
         {/* Spinning logo */}
         <div className={styles.logoWrapper}>
-          <img
+          <Image
             className={styles.logo}
             src="/logo.png"
             alt="Logo"

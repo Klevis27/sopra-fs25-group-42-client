@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import 'highlight.js/styles/github.css';
-//import hljs from 'highlight.js';
+import hljs from "highlight.js";
 
 export default function MarkdownEditor() {
     const [markdown, setMarkdown] = useState('# Hello World\nStart writing here...');
@@ -16,24 +16,23 @@ export default function MarkdownEditor() {
         hljs.highlightAll();
     }, [markdown]);
 
-    // Handle mouse move for split pane dragging
-    const handleMouseMove = (e: MouseEvent) => {
-        if (!isDragging) return;
-        const container = document.getElementById('editor-container');
-        if (!container) return;
-
-        const containerRect = container.getBoundingClientRect();
-        const newRatio = ((e.clientX - containerRect.left) / containerRect.width) * 100;
-        setSplitRatio(Math.min(Math.max(newRatio, 25), 75)); // Keep between 25-75%
-    };
-
-    // Handle mouse up to stop dragging
-    const handleMouseUp = () => {
-        setIsDragging(false);
-    };
-
     // Add event listeners for dragging
     useEffect(() => {
+        // Handle mouse move for split pane dragging
+        const handleMouseMove = (e: MouseEvent) => {
+            if (!isDragging) return;
+            const container = document.getElementById('editor-container');
+            if (!container) return;
+
+            const containerRect = container.getBoundingClientRect();
+            const newRatio = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+            setSplitRatio(Math.min(Math.max(newRatio, 25), 75)); // Keep between 25-75%
+        };
+
+        // Handle mouse up to stop dragging
+        const handleMouseUp = () => {
+            setIsDragging(false);
+        };
         document.addEventListener('mousemove', handleMouseMove);
         document.addEventListener('mouseup', handleMouseUp);
         return () => {
@@ -76,7 +75,7 @@ export default function MarkdownEditor() {
                         remarkPlugins={[remarkGfm]}
                         rehypePlugins={[rehypeRaw]}
                         components={{
-                            code({ node, className, children, ...props }) {
+                            code({ className, children, ...props }) {
                                 const match = /language-(\w+)/.exec(className || '');
                                 return match ? (
                                     <code className={className} {...props}>
