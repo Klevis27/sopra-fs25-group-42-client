@@ -21,6 +21,8 @@ export default function Home() {
           }}
         >
           <Image
+            width={500}
+            height={500}
             src="/text.png"
             alt="NMD Text"
             style={{ width: "500px", height: "auto" }} // Set NMD to 500px width
@@ -30,6 +32,8 @@ export default function Home() {
         {/* Spinning logo */}
         <div className={styles.logoWrapper}>
           <Image
+            width={500}
+            height={500}
             className={styles.logo}
             src="/logo.png"
             alt="Logo"

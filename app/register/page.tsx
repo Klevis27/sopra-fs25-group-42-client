@@ -57,6 +57,8 @@ const Registration: React.FC = () => {
             <header>
                 <div className={styles.logoWrapper}>
                     <Image
+                        width={500}
+                        height={500}
                         src="/logo.png"
                         alt="NMD Logo"
                         style={{ width: "400px", height: "auto" }}

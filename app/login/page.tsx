@@ -56,6 +56,8 @@ const Login: React.FC = () => {
       <header className={styles.loginHeader}>
         <div className={styles.logoWrapper}>
           <Image
+              width={500}
+              height={500}
               src="/logo.png"
               style={{width: "400px", height: "auto"}}
               alt={""}
