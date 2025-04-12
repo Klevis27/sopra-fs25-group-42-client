@@ -82,6 +82,7 @@ reason).
 | **AntWarz**        | 11.04.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/a2ad9ff519019df9ed4a4566f040a6c3df8a69b7) | Test written for LOGIN with valid input | Why wouldn't it be important? |
 |                    | 12.04.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/7d0a417067c0375c80e181ecff232d93d10dc678) | Test for User login with invalid input | Needs to be tested for valid and invalid inputs |
 |                    | 12.04.2025 | [Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/160bb528383850a4d3e664fc40134b5f089d41c8) | Test for Dashboard with valid and invalid inputs | Needs to be tested for valid and invalid inputs |
+|                    | 12.04.2025 | [Link to Commit 4](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/02b05cb4c05c3822ae6e2ac743d0606458f87cf4) | Tests valid/invalid for LOGOUT | Needs to be tested for valid and invalid inputs |
 | **elifdenizi**     | 29.03.2025 |  |  |  |
 |                    | 29.03.2025 |  |  |  |
 |                    | 29.03.2025 |  |  |  |
