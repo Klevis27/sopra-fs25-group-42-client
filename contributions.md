@@ -79,8 +79,9 @@ reason).
 | **Klevis27**       | 01.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
 |                    | 27.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
-| **AntWarz**        | 11.04.2025 | [Link to Commit](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/a2ad9ff519019df9ed4a4566f040a6c3df8a69b7) | Test written for LOGIN with valid input | Why wouldn't it be important? |
-|                    | 30.03.2025 |  |  |  |
+| **AntWarz**        | 11.04.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/a2ad9ff519019df9ed4a4566f040a6c3df8a69b7) | Test written for LOGIN with valid input | Why wouldn't it be important? |
+|                    | 12.04.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/7d0a417067c0375c80e181ecff232d93d10dc678) | Test for User login with invalid input | Needs to be tested for valid and invalid inputs |
+|                    | 12.04.2025 | [Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/160bb528383850a4d3e664fc40134b5f089d41c8) | Test for Dashboard with valid and invalid inputs | Needs to be tested for valid and invalid inputs |
 | **elifdenizi**     | 29.03.2025 |  |  |  |
 |                    | 29.03.2025 |  |  |  |
 |                    | 29.03.2025 |  |  |  |
