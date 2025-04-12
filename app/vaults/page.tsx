@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { Button, Card, Input, Typography, List, Space, message } from "antd";
 
 const { Title } = Typography;
+const BASE_URL = "http://localhost:8080";
 
 type Vault = {
-  id: string;
+  id: number;
   name: string;
-  state: string;
 };
 
 const Vaults: React.FC = () => {
@@ -17,40 +17,63 @@ const Vaults: React.FC = () => {
   const [vaults, setVaults] = useState<Vault[]>([]);
   const [newVaultName, setNewVaultName] = useState("");
 
-  useEffect(() => {
-    const initialVaults: Vault[] = [
-      { id: "1", name: "Project 42", state: "Private" },
-      { id: "2", name: "SoPro Project", state: "Shared" },
-      { id: "3", name: "sopra-fs25-group-42", state: "Private" },
-    ];
+  const fetchVaults = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
-    const existing = JSON.parse(localStorage.getItem("vaults") || "[]");
+    try {
+      const res = await fetch(`${BASE_URL}/vaults`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Failed to fetch vaults");
 
-    if (!existing.length) {
-      localStorage.setItem("vaults", JSON.stringify(initialVaults));
-      setVaults(initialVaults);
-    } else {
-      setVaults(existing);
+      const data = await res.json();
+      setVaults(data);
+    } catch {
+      message.error("Failed to load vaults.");
     }
+  };
+
+  useEffect(() => {
+    fetchVaults();
   }, []);
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (!newVaultName.trim()) {
       message.warning("Please enter a vault name.");
       return;
     }
 
-    const encodedName = newVaultName.trim();
-    const newVault: Vault = {
-      id: Date.now().toString(),
-      name: encodedName,
-      state: "Private",
-    };
+    const token = localStorage.getItem("token");
+    if (!token) {
+      message.error("You must be logged in.");
+      return;
+    }
 
-    const updatedVaults = [...vaults, newVault];
-    localStorage.setItem("vaults", JSON.stringify(updatedVaults));
-    setVaults(updatedVaults);
-    setNewVaultName("");
+    try {
+      const res = await fetch(`${BASE_URL}/vaults`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: newVaultName.trim(),
+          state: "Private",
+        }),
+      });
+
+      if (res.ok) {
+        message.success("Vault created!");
+        setNewVaultName("");
+        fetchVaults();
+      } else {
+        const err = await res.json();
+        message.error(err?.Error || "Could not create vault.");
+      }
+    } catch {
+      message.error("Could not create vault.");
+    }
   };
 
   return (

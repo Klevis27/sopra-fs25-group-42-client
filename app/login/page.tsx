@@ -1,11 +1,11 @@
-"use client"; // For components that need React hooks and browser APIs, SSR (server side rendering) has to be disabled. Read more here: https://nextjs.org/docs/pages/building-your-application/rendering/server-side-rendering
+"use client"; // For components that need React hooks and browser APIs, SSR has to be disabled.
 import '@ant-design/v5-patch-for-react-19';
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
 import { Button, Form, Input } from "antd";
 import Link from "next/link";
-import {setCookie} from "@/utils/cookies";
+import { setCookie } from "@/utils/cookies";
 
 interface LoginFormValues {
   username: string;
@@ -26,21 +26,24 @@ const Login: React.FC = () => {
 
       const response = await apiService.post<User>("/login", userData);
 
-      // Store access and refresh token
+      // Store tokens and IDs
       if (response.accessToken && response.id) {
-        setCookie("accessToken", response.accessToken, 1); // Set cookie for 7 days
-        setCookie("id", response.id, 1);
+        // LocalStorage ile tutarlılık sağla
+        localStorage.setItem("token", response.accessToken);
         localStorage.setItem("id", response.id);
-        localStorage.setItem("accessToken", response.accessToken);
+
+        // Cookie olarak da istersen kullan
+        setCookie("token", response.accessToken, 1);
+        setCookie("id", response.id, 1);
       }
 
-      // Navigate to the user overview
+      // Redirect to vaults page
       router.push("/vaults");
     } catch (error) {
       if (error instanceof Error) {
-        alert(`Invalid login credentials`);
+        alert("Invalid login credentials");
       } else {
-        console.error("An unknown error occurred during login.");
+        console.error("Unknown login error", error);
       }
       form.resetFields();
       router.push("/login");
@@ -48,38 +51,42 @@ const Login: React.FC = () => {
   };
 
   return (
-      <div className="login-container">
-        <Form
-            form={form}
-            name="login"
-            size="large"
-            variant="outlined"
-            onFinish={handleLogin}
-            layout="vertical"
+    <div className="login-container">
+      <Form
+        form={form}
+        name="login"
+        size="large"
+        variant="outlined"
+        onFinish={handleLogin}
+        layout="vertical"
+      >
+        <h1>Login</h1>
+
+        <Form.Item
+          name="username"
+          label="Username"
+          rules={[{ required: true, message: "Please input your username!" }]}
         >
-          <h1>Login</h1>
-          <Form.Item
-              name="username"
-              label="Username"
-              rules={[{ required: true, message: "Please input your username!" }]}
-          >
-            <Input placeholder="Enter username" />
-          </Form.Item>
-          <Form.Item
-              name="password"
-              label="Password"
-              rules={[{ required: true, message: "Please input your password!" }]}
-          >
-            <Input placeholder="Enter password" />
-          </Form.Item>
-          <Link href="/register">Don&apos;t have an account? Register here!</Link>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" className="login-button">
-              Login
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
+          <Input placeholder="Enter username" />
+        </Form.Item>
+
+        <Form.Item
+          name="password"
+          label="Password"
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <Input.Password placeholder="Enter password" />
+        </Form.Item>
+
+        <Link href="/register">Don&apos;t have an account? Register here!</Link>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" className="login-button">
+            Login
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };
 

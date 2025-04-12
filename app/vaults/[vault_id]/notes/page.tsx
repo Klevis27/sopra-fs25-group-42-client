@@ -1,125 +1,138 @@
-"use client";
-import '@ant-design/v5-patch-for-react-19';
-import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { Button, Card, Input, Typography, List, Space, message } from "antd";
+'use client';
+
+import React, { useState, useEffect, useCallback } from 'react';
+import { Button, Input, Card, Typography, Space, App } from 'antd';
+import axios from '../../../lib/axios';
+import { useParams } from 'next/navigation';
 
 const { Title } = Typography;
 
 type Note = {
-  id: string;
-  name: string;
-  state: string;
+  id: number;
+  title: string;
 };
 
-const Notes: React.FC = () => {
-  const params = useParams();
-  const router = useRouter();
-
-  const vaultIdRaw = params?.vault_id;
-  const vaultId = typeof vaultIdRaw === "string"
-    ? vaultIdRaw
-    : Array.isArray(vaultIdRaw)
-    ? vaultIdRaw[0]
-    : null;
-
-  if (!vaultId) {
-    throw new Error("Vault ID is missing or invalid.");
-  }
-
+export default function NotesPage() {
+  const [notesName, setNotesName] = useState('');
   const [notes, setNotes] = useState<Note[]>([]);
-  const [newNoteName, setNewNoteName] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const { message } = App.useApp();
+  const params = useParams();
+  const vaultId = params?.vault_id as string;
+
+  const fetchNotes = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`/vaults/${vaultId}/notes`);
+      setNotes(response.data);
+    } catch (error) {
+      message.error('Failed to fetch notes');
+      console.error('Error fetching notes:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [vaultId, message]);
+
+  const handleCreateNotes = async () => {
+    if (!notesName.trim()) return;
+
+    try {
+      setLoading(true);
+      await axios.post(`/vaults/${vaultId}/notes`, {
+        title: notesName.trim(),
+      });
+
+      message.success('Note created successfully');
+      setNotesName('');
+      fetchNotes();
+    } catch (error) {
+      message.error('Failed to create note');
+      console.error('Error creating note:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteNote = async (noteId: number) => {
+    try {
+      setLoading(true);
+      await axios.delete(`/notes/${noteId}`);
+
+      message.success('Note deleted successfully');
+      fetchNotes();
+    } catch (error) {
+      message.error('Failed to delete note');
+      console.error('Error deleting note:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const raw = localStorage.getItem("notes");
-    const notesData: Record<string, Note[]> = raw ? JSON.parse(raw) : {};
-    const vaultNotes = notesData[vaultId] || [];
-    setNotes(vaultNotes);
-  }, [vaultId]);
-
-  const handleContinue = () => {
-    if (!newNoteName.trim()) {
-      message.warning("Please enter a note name.");
-      return;
-    }
-
-    const newNote: Note = {
-      id: Date.now().toString(),
-      name: newNoteName.trim(),
-      state: "Private",
-    };
-
-    const updatedVaultNotes = [...notes, newNote];
-    const raw = localStorage.getItem("notes");
-    const notesData: Record<string, Note[]> = raw ? JSON.parse(raw) : {};
-    notesData[vaultId] = updatedVaultNotes;
-
-    localStorage.setItem("notes", JSON.stringify(notesData));
-    setNotes(updatedVaultNotes);
-    setNewNoteName("");
-  };
-
-  const handleRemoveNote = (id: string) => {
-    const updatedVaultNotes = notes.filter((note) => note.id !== id);
-    const raw = localStorage.getItem("notes");
-    const notesData: Record<string, Note[]> = raw ? JSON.parse(raw) : {};
-    notesData[vaultId] = updatedVaultNotes;
-
-    localStorage.setItem("notes", JSON.stringify(notesData));
-    setNotes(updatedVaultNotes);
-  };
+    fetchNotes();
+  }, [fetchNotes]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "2rem", padding: "2rem" }}>
-      <Button onClick={() => router.push("/vaults")} style={{ width: "fit-content" }}>
-        ← Back to Vaults
-      </Button>
-
-      <div style={{ display: "flex", gap: "2rem" }}>
-        <Card style={{ flex: 1 }}>
-          <Title level={3}>My Notes</Title>
-          <List
-            bordered
-            dataSource={notes}
-            renderItem={(note) => (
-              <List.Item>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: "100%",
-                    alignItems: "center",
-                  }}
+    <div style={{ display: 'flex', padding: '24px', backgroundColor: '#0f1014', minHeight: '100vh', color: 'white', gap: '24px' }}>
+      <div style={{ flex: 7, backgroundColor: '#1c1d22', padding: '16px', borderRadius: '6px' }}>
+        <Title level={3} style={{ color: 'white', marginBottom: '24px' }}>My Notes</Title>
+        <Space direction="vertical" style={{ width: '100%' }}>
+          {notes.map((note) => (
+            <Card
+              key={note.id}
+              style={{
+                backgroundColor: '#25262b',
+                borderColor: '#373a40',
+                marginBottom: '12px',
+              }}
+              styles={{
+                body: {
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: '16px',
+                  color: 'white',
+                },
+              }}
+            >
+              <span style={{ fontSize: '16px' }}>{note.title}</span>
+              <Space>
+                <Button type="primary" size="middle">View</Button>
+                <Button size="middle">Edit</Button>
+                <Button
+                  danger
+                  size="middle"
+                  onClick={() => handleDeleteNote(note.id)}
+                  loading={loading}
                 >
-                  <span style={{ fontWeight: 500 }}>{note.name}</span>
-                  <Space>
-                    <Button size="small">Go to Editor Page</Button>
-                    <Button size="small" danger onClick={() => handleRemoveNote(note.id)}>
-                      Delete
-                    </Button>
-                  </Space>
-                </div>
-              </List.Item>
-            )}
-          />
-        </Card>
+                  Delete
+                </Button>
+              </Space>
+            </Card>
+          ))}
+        </Space>
+      </div>
 
-        <Card style={{ width: 300 }}>
-          <Title level={4}>Create New Notes</Title>
-          <Space direction="vertical" style={{ width: "100%" }}>
-            <Input
-              placeholder="New Note Name"
-              value={newNoteName}
-              onChange={(e) => setNewNoteName(e.target.value)}
-            />
-            <Button type="primary" block onClick={handleContinue}>
-              Continue
-            </Button>
-          </Space>
-        </Card>
+      <div style={{ flex: 3, backgroundColor: '#1c1d22', padding: '24px', borderRadius: '6px', height: 'fit-content' }}>
+        <Title level={4} style={{ color: 'white', marginBottom: '16px' }}>Create New Note</Title>
+        <Input
+          placeholder="Notes Name"
+          value={notesName}
+          onChange={(e) => setNotesName(e.target.value)}
+          style={{ marginBottom: '16px' }}
+        />
+        <Button
+          type="primary"
+          block
+          onClick={handleCreateNotes}
+          disabled={!notesName.trim() || loading}
+          size="large"
+          loading={loading}
+        >
+          Create
+        </Button>
       </div>
     </div>
   );
-};
-
-export default Notes;
+}

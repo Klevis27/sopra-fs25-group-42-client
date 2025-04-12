@@ -62,3 +62,28 @@ a {
   min-height: 100vh;
   background-color: rgb(41, 44, 59);
 }
+
+/* Ant Design Select dark mode support */
+@media (prefers-color-scheme: dark) {
+  .ant-select-dropdown {
+    background-color: #1f1f1f !important;
+  }
+
+  .ant-select-item-option-content {
+    color: #ffffff !important;
+  }
+
+  .ant-select-item-option-active {
+    background-color: #333333 !important;
+  }
+
+  .ant-select-selector {
+    background-color: #1f1f1f !important;
+    color: #ffffff !important;
+    border-color: #444444 !important;
+  }
+
+  .ant-select-arrow {
+    color: #ffffff !important;
+  }
+}

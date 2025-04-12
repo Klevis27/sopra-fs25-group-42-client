@@ -62,6 +62,13 @@ export default function RootLayout({
                 colorText: "#fff", // make message text readable on dark background
                 colorBgElevated: "#1f1f1f", // dark popup background
               },
+              Select: {
+                colorText: "#fff", // make options visible in dark mode
+                colorBgContainer: "#1a1a1a", // dark dropdown background
+                colorBorder: "#444", // subtle border
+                colorTextPlaceholder: "#888", // placeholder color
+                optionSelectedColor: "#000", // selected option text color
+              },
               Card: {},
             },
           }}
@@ -69,7 +76,6 @@ export default function RootLayout({
           <AntdRegistry>
             <App>{children}</App>
           </AntdRegistry>
-
         </ConfigProvider>
       </body>
     </html>
