@@ -83,8 +83,8 @@ reason).
 |                    | 12.04.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/7d0a417067c0375c80e181ecff232d93d10dc678) | Test for User login with invalid input | Needs to be tested for valid and invalid inputs |
 |                    | 12.04.2025 | [Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/160bb528383850a4d3e664fc40134b5f089d41c8) | Test for Dashboard with valid and invalid inputs | Needs to be tested for valid and invalid inputs |
 |                    | 12.04.2025 | [Link to Commit 4](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/02b05cb4c05c3822ae6e2ac743d0606458f87cf4) | Tests valid/invalid for LOGOUT | Needs to be tested for valid and invalid inputs |
-| **elifdenizi**     | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
+| **elifdenizi**     | 12.04.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/485bc2eeffbe7e3cfd51fe1ca4bb3bdac616badf) | Implementation of the note permission backend part. | Core feature |
+|                    | 12.04.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/35488590dfe0cf1c3739feb60cd200a424b81e88) | Implementation of the send invitation feature to notes setting page. | UI |
 |                    | 29.03.2025 |  |  |  |
 | **nfcolak**        | 29.03.2025 |  |  |  |
 | **SvenVest**       | 29.03.2025 | |   |
