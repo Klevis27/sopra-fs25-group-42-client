@@ -23,6 +23,8 @@ export default function Home() {
           <Image
             src="/text.png"
             alt="NMD Text"
+            width={100}
+            height={100}
             style={{ width: "500px", height: "auto" }} // Set NMD to 500px width
           />
         </div>
@@ -33,6 +35,8 @@ export default function Home() {
             className={styles.logo}
             src="/logo.png"
             alt="Logo"
+            width={0}
+            height={0}
           />
         </div>
 
