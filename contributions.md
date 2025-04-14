@@ -54,8 +54,7 @@ reason).
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **Klevis27**       | 01.04.2025 | [Link to commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
-|                    | 04.04.2025 | [Link to Issue with two pull requests in it](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/16) | Implement basic Vault functionality in front- and backend | Core functionality |
-|                    | 30.03.2025 |  |  |  |        
+|                    | 04.04.2025 | [Link to Issue with two pull requests in it](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/16) | Implement basic Vault functionality in front- and backend | Core functionality | 
 |**AntWarz**|04.04.2025|[Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/e1b9df810d2e5e0c78006f5ed568f21c88265671)|Basics of graph visualization setup|Need to start somewhere|
 ||04.04.2025|[Link to Commit 4](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/2e28f27519dd51c6225d4264486c61fb966efa0a)|Can create dummy notes and link them now|To test out visualization without the depending on the db|
 ||04.04.2025|[Link to Commit 5](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/dab99878548dec7ff2d1499bd4a014e421989f6f)|Small improvements|Improvements are important!|
@@ -76,8 +75,7 @@ reason).
 
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **Klevis27**       | 01.04.2025 | [Link to Pull request 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
-|                    | 09.04.2025 | [Link to Pull request 2](https://github.com/Klevis27/sopra-fs25-group-42-server/pull/27) [Link to Pull request 3](https://github.com/Klevis27/sopra-fs25-group-42-client/pull/13) | Pull request for central functionality | Had to clean up certain things to make it work |
+| **Klevis27**       | 09.04.2025 | [Link to Pull request 2](https://github.com/Klevis27/sopra-fs25-group-42-server/pull/27) [Link to Pull request 3](https://github.com/Klevis27/sopra-fs25-group-42-client/pull/13) | Pull request for central functionality | Had to clean up certain things to make it work |
 |                    | 30.03.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/ba908fc9ae41fea3ce883b2fac5a77067c898f2b) | Hotfixes to make the app work again | Hotfixing on a friday! |
 | **AntWarz**        | 11.04.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/a2ad9ff519019df9ed4a4566f040a6c3df8a69b7) | Test written for LOGIN with valid input | Why wouldn't it be important? |
 |                    | 12.04.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/7d0a417067c0375c80e181ecff232d93d10dc678) | Test for User login with invalid input | Needs to be tested for valid and invalid inputs |
