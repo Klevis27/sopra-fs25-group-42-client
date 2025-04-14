@@ -76,7 +76,7 @@ reason).
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **Klevis27**       | 09.04.2025 | [Link to Pull request 2](https://github.com/Klevis27/sopra-fs25-group-42-server/pull/27) [Link to Pull request 3](https://github.com/Klevis27/sopra-fs25-group-42-client/pull/13) | Pull request for central functionality | Had to clean up certain things to make it work |
-|                    | 30.03.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/ba908fc9ae41fea3ce883b2fac5a77067c898f2b) | Hotfixes to make the app work again | Hotfixing on a friday! |
+|                    | 11.04.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/ba908fc9ae41fea3ce883b2fac5a77067c898f2b) | Hotfixes to make the app work again | Hotfixing on a friday! |
 | **AntWarz**        | 11.04.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/a2ad9ff519019df9ed4a4566f040a6c3df8a69b7) | Test written for LOGIN with valid input | Why wouldn't it be important? |
 |                    | 12.04.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/7d0a417067c0375c80e181ecff232d93d10dc678) | Test for User login with invalid input | Needs to be tested for valid and invalid inputs |
 |                    | 12.04.2025 | [Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/160bb528383850a4d3e664fc40134b5f089d41c8) | Test for Dashboard with valid and invalid inputs | Needs to be tested for valid and invalid inputs |
