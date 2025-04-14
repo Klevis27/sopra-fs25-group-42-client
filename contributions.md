@@ -87,8 +87,8 @@ reason).
 |                    | 12.04.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/35488590dfe0cf1c3739feb60cd200a424b81e88) | Implementation of the send invitation feature to notes setting page. | UI |
 |                    | 29.03.2025 |  |  |  |
 | **nfcolak**        | 29.03.2025 |  |  |  |
-| **SvenVest**       | 29.03.2025 | |   |
-|                    | 30.03.2025 | | |
+| **SvenVest**       | 29.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-client/commit/e1aefeff6688407a55aeb24d724049d8eddbd4ed|Yjs intergation in editor  |
+|                    | 30.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-client/commit/18f8de40b0818104636b433729ece0db23a7f884|Websoket change |
 
 ---
 
