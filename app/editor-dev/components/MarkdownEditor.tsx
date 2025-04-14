@@ -4,7 +4,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import * as Y from "yjs";
-import { WebrtcProvider } from "y-webrtc"; // P2P provider (no server needed)
+import { WebsocketProvider } from "y-websocket";
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js";
 import { LinkParser } from "@/editor-dev/components/LinkParser";
@@ -13,44 +13,75 @@ import { LinkParser } from "@/editor-dev/components/LinkParser";
 const ydoc = new Y.Doc();
 const ytext = ydoc.getText("markdown");
 
-// Set up WebRTC provider
-const provider = new WebrtcProvider("markdown-room", ydoc);
+// WebSocket provider configuration
+const provider = new WebsocketProvider(
+    "ws://localhost:1234", // dummi addres
+    "markdown-room",
+    ydoc
+);
 
-const useYjs = () => {
+const useCollaborativeEditor = () => {
     const [content, setContent] = useState(ytext.toString());
+    const [users, setUsers] = useState<Array<{ name: string; color: string }>>([]);
+    const [isConnected, setIsConnected] = useState(false);
 
+    // Content synchronization
     useEffect(() => {
-        const updateContent = () => setContent(ytext.toString());
-        ytext.observe(updateContent);
+        const handleContentUpdate = () => setContent(ytext.toString());
+        ytext.observe(handleContentUpdate);
 
-        return () => ytext.unobserve(updateContent);
+        return () => ytext.unobserve(handleContentUpdate);
     }, []);
 
-    const bindEditor = useCallback((element: HTMLTextAreaElement | null) => {
-        if (!element) return;
+    // Connection status and awareness
+    useEffect(() => {
+        provider.on("status", (event: { status: string }) => {
+            setIsConnected(event.status === "connected");
+        });
 
-        // Sync textarea with Yjs
-        const observer = new MutationObserver(() => {
-            if (element.value !== ytext.toString()) {
-                ytext.delete(0, ytext.length);
-                ytext.insert(0, element.value);
+        const handleAwarenessUpdate = () => {
+            const states = Array.from(provider.awareness.getStates().values());
+            setUsers(states.filter(s => s.user).map(s => s.user));
+        };
+
+        provider.awareness.on("change", handleAwarenessUpdate);
+        provider.awareness.setLocalState({
+            user: {
+                name: `User ${Math.floor(Math.random() * 1000)}`,
+                color: `#${Math.floor(Math.random()*16777215).toString(16)}`
             }
         });
 
-        observer.observe(element, { childList: true, characterData: true });
-
-        // Initial sync
-        element.value = ytext.toString();
-
-        return () => observer.disconnect();
+        return () => {
+            provider.awareness.off("change", handleAwarenessUpdate);
+            provider.off("status");
+        };
     }, []);
 
-    return { content, bindEditor };
+    // Textarea binding
+    const bindEditor = useCallback((element: HTMLTextAreaElement | null) => {
+        if (!element) return;
+
+        const updateYjs = (value: string) => {
+            ytext.delete(0, ytext.length);
+            ytext.insert(0, value);
+        };
+
+        const handleInput = (e: Event) => {
+            updateYjs((e.target as HTMLTextAreaElement).value);
+        };
+
+        element.value = ytext.toString();
+        element.addEventListener("input", handleInput);
+
+        return () => element.removeEventListener("input", handleInput);
+    }, []);
+
+    return { content, bindEditor, users, isConnected };
 };
 
 export default function CollaborativeMarkdownEditor() {
-    const { content, bindEditor } = useYjs();
-    const [localValue, setLocalValue] = useState(content);
+    const { content, bindEditor, users, isConnected } = useCollaborativeEditor();
 
     useEffect(() => {
         hljs.highlightAll();
@@ -58,7 +89,7 @@ export default function CollaborativeMarkdownEditor() {
 
     const handleInternalLink = (pageTitle: string) => {
         console.log("Internal link clicked:", pageTitle);
-        alert(`Navigating to: ${pageTitle}`);
+        // Implement navigation logic here
     };
 
     const TEXT_CONTAINERS = [
@@ -77,18 +108,27 @@ export default function CollaborativeMarkdownEditor() {
 
     return (
         <div className="w-full flex h-screen">
+            {/* Connection Status */}
+            <div className="absolute top-4 right-4 flex items-center gap-2">
+                <div className={`w-3 h-3 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"}`} />
+                <div className="flex -space-x-2">
+                    {users.map((user, i) => (
+                        <div
+                            key={i}
+                            className="w-4 h-4 rounded-full border-2 border-white"
+                            style={{ backgroundColor: user.color }}
+                            title={user.name}
+                        />
+                    ))}
+                </div>
+            </div>
+
             {/* Editor Pane */}
             <div className="w-1/2 p-4 border-r border-gray-200">
                 <div className="h-full bg-white rounded-lg shadow-sm">
           <textarea
               ref={bindEditor}
-              value={localValue}
-              onChange={(e) => {
-                  setLocalValue(e.target.value);
-                  ytext.delete(0, ytext.length);
-                  ytext.insert(0, e.target.value);
-              }}
-              className="w-full h-full p-4 resize-none focus:outline-none"
+              className="w-full h-full p-4 resize-none focus:outline-none font-mono"
               placeholder="Collaborate in real-time..."
           />
                 </div>
