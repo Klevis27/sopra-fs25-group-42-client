@@ -83,8 +83,8 @@ reason).
 |                    | 12.04.2025 | [Link to Commit 4](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/02b05cb4c05c3822ae6e2ac743d0606458f87cf4) | Tests valid/invalid for LOGOUT | Needs to be tested for valid and invalid inputs |
 | **elifdenizi**     | 12.04.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/485bc2eeffbe7e3cfd51fe1ca4bb3bdac616badf) | Implementation of the note permission backend part. | Core feature |
 |                    | 12.04.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/35488590dfe0cf1c3739feb60cd200a424b81e88) | Implementation of the send invitation feature to notes setting page. | UI |
-|                    | 29.03.2025 |  |  |  |
-| **nfcolak**        | 29.03.2025 |  |  |  |
+|  **nfcolak**       | 12.04.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/7e0b796afbe0ad85489df98081a89ceff8692d0d)| Update on Vault Controller, NoteController. Adding User Roles functionalites in SettingsController| UserRole Logic |
+|                    | 12.04.2025 |[Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/7e0b796afbe0ad85489df98081a89ceff8692d0d) |Update on frontend of the settings page.  |UI|
 | **SvenVest**       | 29.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-client/commit/e1aefeff6688407a55aeb24d724049d8eddbd4ed|Yjs intergation in editor  |
 |                    | 30.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-client/commit/18f8de40b0818104636b433729ece0db23a7f884|Websoket change |
 
