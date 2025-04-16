@@ -85,6 +85,7 @@ reason).
 |                    | 12.04.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/35488590dfe0cf1c3739feb60cd200a424b81e88) | Implementation of the send invitation feature to notes setting page. | UI |
 |  **nfcolak**       | 12.04.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/7e0b796afbe0ad85489df98081a89ceff8692d0d)| Update on Vault Controller, NoteController. Adding User Roles functionalites in SettingsController| UserRole Logic |
 |                    | 12.04.2025 |[Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/9b075f38527529f09756ba29f0a5fe8b733a0afd) |Update on frontend of the notes.page  |UI|
+|                    | 12.04.2025 |[Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/01412f6c5991aa92e472f1b65dabdec439284744) |Delete and POST added to the notecontroller.java |Main functionalities of notes page.|
 | **SvenVest**       | 29.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-client/commit/e1aefeff6688407a55aeb24d724049d8eddbd4ed|Yjs intergation in editor  |
 |                    | 30.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-client/commit/18f8de40b0818104636b433729ece0db23a7f884|Websoket change |
 
@@ -101,8 +102,8 @@ reason).
 |                    | 30.03.2025 |  |  |  |
 | **elifdenizi**     | 29.03.2025 |  |  |  |
 |                    | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
 | **nfcolak**        | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
 | **SvenVest**       | 29.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
 
