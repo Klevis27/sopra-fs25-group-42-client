@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import {useState, useEffect, useCallback, PropsWithChildren} from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -7,7 +7,7 @@ import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js";
-import { LinkParser } from "@/editor-dev/components/LinkParser";
+import { LinkParser } from "@/components/LinkParser";
 
 // Create shared Yjs document
 const ydoc = new Y.Doc();
@@ -54,6 +54,7 @@ const useCollaborativeEditor = () => {
 
         return () => {
             provider.awareness.off("change", handleAwarenessUpdate);
+            // @ts-expect-error: Need a buildable version rn
             provider.off("status");
         };
     }, []);
@@ -99,7 +100,7 @@ export default function CollaborativeMarkdownEditor() {
 
     const customComponents = TEXT_CONTAINERS.reduce((acc, tag) => ({
         ...acc,
-        [tag]: ({ children, ...props }) => (
+        [tag]: ({ children } : PropsWithChildren<object>) => (
             <LinkParser onInternalLinkClick={handleInternalLink}>
                 {children}
             </LinkParser>

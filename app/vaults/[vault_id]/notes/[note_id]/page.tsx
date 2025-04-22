@@ -3,8 +3,8 @@
 import { Button } from "antd";
 import { useState } from "react";
 import Image from "next/image";
-import MarkdownEditor from "../../../../editor-dev/components/MarkdownEditor";
-import Sidebar from "@/editor-dev/components/Sidebar";
+import MarkdownEditor from "@/components/MarkdownEditor"
+import Sidebar from "@/components/Sidebar";
 
 export default function Home() {
     const [showSettings, setShowSettings] = useState(false);
