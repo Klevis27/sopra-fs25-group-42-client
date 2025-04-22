@@ -19,7 +19,6 @@ export default function Editor() {
                     <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "black" }}>YOUR VAULT</span>
                     <a href={"/vaults"} className={"ml-3"}>Back to vaults</a>
                 </div>
-
                 <button style={{ padding: "8px 12px", background: "#007bff", color: "white", borderRadius: "4px", border: "none" }}>Extract as PDF</button>
             </header>
 

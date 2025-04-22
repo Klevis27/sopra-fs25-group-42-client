@@ -106,8 +106,6 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ }: NoteGraphProps) => {
             linkDirectionalParticles={2}
             linkDirectionalArrowLength={2}
             onNodeClick={(node) => alert(`Clicked on: ${node.id}`)}
-            width={500}
-            height={500}
             backgroundColor="gray"
             nodeCanvasObjectMode={() => 'after'}
             nodeCanvasObject={(node, ctx, globalScale) => {
