@@ -100,7 +100,7 @@ export default function CollaborativeMarkdownEditor() {
     return (
         <div className="w-full flex h-screen">
             {/* Connection Status */}
-            <div className="absolute top-4 left-1/2 flex items-center gap-2">
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 flex items-center gap-2">
                 <div className={`w-3 h-3 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"}`} />
                 <div className="flex -space-x-2">
                     {users.map((user, i) => (
