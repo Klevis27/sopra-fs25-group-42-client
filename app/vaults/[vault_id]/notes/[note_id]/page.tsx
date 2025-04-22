@@ -5,6 +5,8 @@ import { useState } from "react";
 import Image from "next/image";
 import MarkdownEditor from "../../../../editor-dev/components/MarkdownEditor";
 import Sidebar from "@/editor-dev/components/Sidebar";
+import NoteGraph from "@/notegraph/components/NoteGraph";
+import { useApi } from "@/hooks/useApi";
 
 export default function Home() {
     const [showSettings, setShowSettings] = useState(false);
@@ -61,8 +63,8 @@ export default function Home() {
                 {/* Right Sidebar */}
                 {isRightSidebarOpen && (
                     <Sidebar isOpen={isRightSidebarOpen} onClose={() => setIsRightSidebarOpen(false)} position="right">
-                        <div style={{ width: "100%", height: "300px", border: "1px solid #ddd", borderRadius: "8px", background: "#e9ecef", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                            <Image src="/graph-mock.png" alt="Graph View" width={250} height={200} />
+                        <div style={{ width: "100%", height: "30%", border: "1px solid #ddd", borderRadius: "8px", background: "#e9ecef", display: "flex", alignItems: "center", justifyContent: "center", overflow:"hidden" }}>
+                            <NoteGraph/>
                         </div>
                         <div style={{ textAlign: "center", padding: "16px" }}>
                             <Button type="primary" onClick={() => setShowSettings(!showSettings)}>Settings</Button>
