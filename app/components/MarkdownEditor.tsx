@@ -1,5 +1,5 @@
 "use client";
-import {useState, useEffect, useCallback, PropsWithChildren} from "react";
+import { useState, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -48,7 +48,7 @@ const useCollaborativeEditor = () => {
         provider.awareness.setLocalState({
             user: {
                 name: `User ${Math.floor(Math.random() * 1000)}`,
-                color: `#${Math.floor(Math.random()*16777215).toString(16)}`
+                color: `#${Math.floor(Math.random() * 16777215).toString(16)}`
             }
         });
 
