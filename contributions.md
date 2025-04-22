@@ -54,8 +54,7 @@ reason).
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **Klevis27**       | 01.04.2025 | [Link to commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
-|                    | 04.04.2025 | [Link to Issue with two pull requests in it](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/16) | Implement basic Vault functionality in front- and backend | Core functionality |
-|                    | 30.03.2025 |  |  |  |        
+|                    | 04.04.2025 | [Link to Issue with two pull requests in it](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/16) | Implement basic Vault functionality in front- and backend | Core functionality | 
 |**AntWarz**|04.04.2025|[Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/e1b9df810d2e5e0c78006f5ed568f21c88265671)|Basics of graph visualization setup|Need to start somewhere|
 ||04.04.2025|[Link to Commit 4](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/2e28f27519dd51c6225d4264486c61fb966efa0a)|Can create dummy notes and link them now|To test out visualization without the depending on the db|
 ||04.04.2025|[Link to Commit 5](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/dab99878548dec7ff2d1499bd4a014e421989f6f)|Small improvements|Improvements are important!|
@@ -76,17 +75,19 @@ reason).
 
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **Klevis27**       | 01.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
-|                    | 27.03.2025 |  |  |  |
-|                    | 30.03.2025 |  |  |  |
-| **AntWarz**        | 30.03.2025 |  |  |  |
-|                    | 30.03.2025 |  |  |  |
-| **elifdenizi**     | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
-| **nfcolak**        | 29.03.2025 |  |  |  |
-| **SvenVest**       | 29.03.2025 | |   |
-|                    | 30.03.2025 | | |
+| **Klevis27**       | 09.04.2025 | [Link to Pull request 2](https://github.com/Klevis27/sopra-fs25-group-42-server/pull/27) [Link to Pull request 3](https://github.com/Klevis27/sopra-fs25-group-42-client/pull/13) | Pull request for central functionality | Had to clean up certain things to make it work |
+|                    | 11.04.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/ba908fc9ae41fea3ce883b2fac5a77067c898f2b) | Hotfixes to make the app work again | Hotfixing on a friday! |
+| **AntWarz**        | 11.04.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/a2ad9ff519019df9ed4a4566f040a6c3df8a69b7) | Test written for LOGIN with valid input | Why wouldn't it be important? |
+|                    | 12.04.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/7d0a417067c0375c80e181ecff232d93d10dc678) | Test for User login with invalid input | Needs to be tested for valid and invalid inputs |
+|                    | 12.04.2025 | [Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/160bb528383850a4d3e664fc40134b5f089d41c8) | Test for Dashboard with valid and invalid inputs | Needs to be tested for valid and invalid inputs |
+|                    | 12.04.2025 | [Link to Commit 4](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/02b05cb4c05c3822ae6e2ac743d0606458f87cf4) | Tests valid/invalid for LOGOUT | Needs to be tested for valid and invalid inputs |
+| **elifdenizi**     | 12.04.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/485bc2eeffbe7e3cfd51fe1ca4bb3bdac616badf) | Implementation of the note permission backend part. | Core feature |
+|                    | 12.04.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/35488590dfe0cf1c3739feb60cd200a424b81e88) | Implementation of the send invitation feature to notes setting page. | UI |
+|  **nfcolak**       | 12.04.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/7e0b796afbe0ad85489df98081a89ceff8692d0d)| Update on Vault Controller, NoteController. Adding User Roles functionalites in SettingsController| UserRole Logic |
+|                    | 12.04.2025 |[Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/9b075f38527529f09756ba29f0a5fe8b733a0afd) |Update on frontend of the notes.page  |UI|
+|                    | 12.04.2025 |[Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/01412f6c5991aa92e472f1b65dabdec439284744) |Delete and POST added to the notecontroller.java |Main functionalities of notes page.|
+| **SvenVest**       | 29.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-client/commit/e1aefeff6688407a55aeb24d724049d8eddbd4ed|Yjs intergation in editor  |
+|                    | 30.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-client/commit/18f8de40b0818104636b433729ece0db23a7f884|Websoket change |
 
 ---
 
@@ -101,8 +102,8 @@ reason).
 |                    | 30.03.2025 |  |  |  |
 | **elifdenizi**     | 29.03.2025 |  |  |  |
 |                    | 29.03.2025 |  |  |  |
+| **nfcolak**        | 15.04.2025 |[Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/a4dbe9153d22c5fa7975230054cb60ec79b68b76)|Setting page desing and conflicts resolution|UI and fix|
 |                    | 29.03.2025 |  |  |  |
-| **nfcolak**        | 29.03.2025 |  |  |  |
 | **SvenVest**       | 29.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
 

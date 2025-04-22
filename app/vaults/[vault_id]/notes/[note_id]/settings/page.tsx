@@ -1,185 +1,100 @@
 "use client";
-import '@ant-design/v5-patch-for-react-19';
-import React, {useEffect, useState} from "react";
-import {useRouter, useParams} from "next/navigation";
-import {useApi} from "@/hooks/useApi";
-import {User} from "@/types/user";
-import {Button, Card, Form, DatePicker, Input, ConfigProvider} from "antd";
-import dayjs, {Dayjs} from "dayjs";
 
-interface EditPageProps {
-    username: string | null;
-    birthday: Dayjs | null;
-}
+import "@ant-design/v5-patch-for-react-19";
+import React, { useState } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { useApi } from "@/hooks/useApi";
+import { Button, Card, Form, Input, message } from "antd";
 
-const VaultSettings: React.FC = () => {
-    const router = useRouter();
-    const apiService = useApi();
-    const [userTableObject, setUserTableObject] = useState<User[] | null>(null);
-    const [form] = Form.useForm();
-    const params = useParams();
-    const slug = params.id;
+const NoteSettings: React.FC = () => {
+  const router = useRouter();
+  const apiService = useApi();
+  const params = useParams();
+  const noteId = params.note_id as string;
+  const vaultId = params.vault_id as string;
 
-    const goToProfile = (): void => {
-        router.push(`/users/${slug}`);
-        return
-    }
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
 
-    const handleEdit = async (values: EditPageProps) => {
-        try {
-            // Check session
-            const id = localStorage.getItem("id");
-            const accessToken = localStorage.getItem("accessToken");
-            if (!accessToken || !id) {
-                router.push("/login");
-                return;
-            }
+  const handleSendInvitation = async (values: { username: string }) => {
+    setLoading(true);
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        message.error("You must be logged in.");
+        router.push("/login");
+        return;
+      }
 
-            // Prepare Date
-            let birthday = values.birthday ? dayjs(values.birthday).format("YYYY-MM-DD") : null;
+      await apiService.post(
+        `/notes/${noteId}/invite`,
+        { username: values.username },
+        accessToken
+      );
 
-            // Did username change?
-            let username = values.username;
-            if (userTableObject && username == userTableObject[0].username) {
-                username = null
-            }
+      message.success(`Invitation sent to ${values.username}!`);
+      form.resetFields();
+    } catch (error: unknown) {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "status" in error &&
+        typeof (error as { status: unknown }).status === "number"
+      ) {
+        const status = (error as { status: number }).status;
 
-            // Did birthday change?
-            if (userTableObject && birthday == userTableObject[0].birthday) {
-                birthday = null;
-            }
-
-            // Did either change?
-            if (!username && !birthday) {
-                router.push(`/users/${slug}`); // TODO Alert: No Changes
-                return;
-            }
-
-            // Set data if something changed
-            const userData = {
-                id: slug,
-                username: username,
-                birthday: birthday,
-            };
-
-            // Call the API service and let it handle JSON serialization and error handling
-            await apiService.put<User>(`/users/${slug}`, userData, accessToken);
-            router.push(`/users/${slug}`);
-
-        } catch (error) {
-            if (error instanceof Error) {
-                alert(`Something went wrong during registration:\n${error.message}`);
-            } else {
-                console.error("An unknown error occurred during login.");
-            }
+        if (status === 409) {
+          message.warning("User already has permission to this note.");
+        } else if (status === 404) {
+          message.error("User not found.");
+        } else {
+          message.error("Something went wrong.");
         }
-    };
+      } else {
+        message.error("Unexpected error occurred.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const id = localStorage.getItem("id");
-                const accessToken = localStorage.getItem("accessToken");
-                if (!accessToken || !id) {
-                    router.push("/login");
-                    return;
-                }
-                if (id != slug) {
-                    router.push(`/users/${slug}`); // TODO Alert: No access to this profile edit page
-                    return;
-                }
-                const response = await apiService.get<User>(`/users/${slug}`, accessToken);
+  return (
+    <div className="card-container">
+      <Card
+        title={`Vault Settings (Vault ID: ${vaultId})`}
+        className="dashboard-container"
+      >
+        <Form
+          form={form}
+          name="invite"
+          onFinish={handleSendInvitation}
+          layout="vertical"
+          size="large"
+        >
+          <Form.Item
+            name="username"
+            label="Invite user by username"
+            rules={[{ required: true, message: "Please enter a username." }]}
+          >
+            <Input placeholder="Enter username (e.g. edi)" />
+          </Form.Item>
 
-                // Prepare for DatePicker
-                if (response.birthday) {
-                    response.birthday = dayjs(response.birthday, "YYYY-MM-DD");
-                } else {
-                    response.birthday = null;
-                }
+          <Form.Item>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              Send Invitation
+            </Button>
+          </Form.Item>
+        </Form>
 
-                setUserTableObject([response]);
-
-                form.setFieldsValue({
-                    username: response.username,
-                    birthday: response.birthday, // :(
-                });
-            } catch (error) {
-                // @ts-expect-error - No proper interface
-                if (error.status == 404) {
-                    console.error("User with this ID could not be found");
-                    alert("User with this ID could not be found");
-                }
-                // @ts-expect-error - No proper interface
-                console.error("Error", error.status);
-                router.push(`/users/${slug}`);
-            }
-        };
-        fetchUser();
-    }, [apiService, router, slug, form]);
-
-    return (
-        <div className="card-container">
-
-            <Card
-                title="Edit Profile"
-                loading={!userTableObject}
-                className="dashboard-container"
-            >
-                {userTableObject && (
-                    <>
-                        <Form
-                            form={form}
-                            name="signup"
-                            size="large"
-                            variant="outlined"
-                            onFinish={handleEdit}
-                            layout="vertical">
-                            <Form.Item
-                                name="username"
-                                label="Username"
-                                initialValue={userTableObject[0].username}
-                            >
-                                <Input placeholder="Enter username"/>
-                            </Form.Item>
-                            <Form.Item
-                                name="birthday"
-                                label="Birthday (YYYY-MM-DD)"
-                                initialValue={userTableObject[0].birthday} // Cannot figure this one out for the life of me
-                            >
-                                <ConfigProvider
-                                    theme={{
-                                        token: {
-                                            colorTextPlaceholder: "#777",
-                                            colorBgElevated: "#777",
-                                        },
-                                    }}
-                                >
-                                    <DatePicker
-                                        onChange={(date) => form.setFieldsValue({ birthday: date })}
-                                    />
-                                </ConfigProvider>
-                            </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit" className="login-button">
-                                    save
-                                </Button>
-                            </Form.Item>
-                        </Form>
-
-                        <Button onClick={goToProfile} type="primary" style={{
-                            backgroundColor: 'red',
-                        }}>
-                            Cancel
-                        </Button>
-                    </>
-                )}
-            </Card>
-        </div>
-    );
+        <Button
+          type="default"
+          onClick={() => router.push(`/vaults/${vaultId}/notes/${noteId}`)}
+        >
+          Back to Note
+        </Button>
+      </Card>
+    </div>
+  );
 };
 
-export default VaultSettings;
-
-
-
-
+export default NoteSettings;
