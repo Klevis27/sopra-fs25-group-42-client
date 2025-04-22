@@ -5,11 +5,32 @@ import { useState } from "react";
 import Image from "next/image";
 import MarkdownEditor from "@/components/MarkdownEditor"
 import Sidebar from "@/components/Sidebar";
+import {Note} from "@/types/note";
+import { useApi } from "@/hooks/useApi";
 
 export default function Editor() {
     const [showSettings, setShowSettings] = useState(false);
     const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
     const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
+    const [noteTitles, setNoteTitles] = useState<string[]>([]);
+
+    const apiService = useApi(); // Make sure this hook is working
+
+    useEffect(() => {
+        const getAllNotes = async () => {
+            try {
+                const response = await apiService.get<Note[]>("/vaults/1/notes");
+                const titles = response
+                    .filter(note => note.title != null)
+                    .map(note => note.title!);
+                setNoteTitles(titles);
+            } catch (error) {
+                console.error("Failed to fetch notes:", error);
+            }
+        };
+
+        getAllNotes();
+    }, [apiService]);
 
     return (
         <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
@@ -23,16 +44,16 @@ export default function Editor() {
             </header>
 
             {/* Main Layout */}
-            <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+            <div style={{ display: "flex", flex: 1, overflow: "hidden", font:"black" }}>
                 {/* Left Sidebar */}
                 {isLeftSidebarOpen && (
                     <Sidebar isOpen={isLeftSidebarOpen} onClose={() => setIsLeftSidebarOpen(false)} position="left">
-                        <h2>Project Navigator</h2>
+                        <h2>All Notes</h2>
+
                         <ul>
-                            <li>▶ Main</li>
-                            <li>▶ Topic2</li>
-                            <li>▶ Topic3</li>
-                            <li>▶ Topic4</li>
+                            {noteTitles.map((title, index) => (
+                                <li key={index}>▶ {title}</li>
+                            ))}
                         </ul>
                         <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "16px" }}>Status: Read Only</p>
                     </Sidebar>
