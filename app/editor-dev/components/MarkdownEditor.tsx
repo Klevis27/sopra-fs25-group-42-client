@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
+import { TextAreaBinding } from "y-textarea";
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js";
 import { LinkParser } from "@/editor-dev/components/LinkParser";
@@ -13,12 +14,8 @@ import { LinkParser } from "@/editor-dev/components/LinkParser";
 const ydoc = new Y.Doc();
 const ytext = ydoc.getText("markdown");
 
-// WebSocket provider configuration
-const provider = new WebsocketProvider(
-    "ws://localhost:1234", // dummi addres
-    "markdown-room",
-    ydoc
-);
+// WebSocket provider setup (dummy address)
+const provider = new WebsocketProvider("ws://localhost:1234", "markdown-room", ydoc);
 
 const useCollaborativeEditor = () => {
     const [content, setContent] = useState(ytext.toString());
@@ -27,54 +24,41 @@ const useCollaborativeEditor = () => {
 
     // Content synchronization
     useEffect(() => {
-        const handleContentUpdate = () => setContent(ytext.toString());
-        ytext.observe(handleContentUpdate);
-
-        return () => ytext.unobserve(handleContentUpdate);
+        const handleUpdate = () => setContent(ytext.toString());
+        ytext.observe(handleUpdate);
+        return () => ytext.unobserve(handleUpdate);
     }, []);
 
-    // Connection status and awareness
+    // Connection and awareness state
     useEffect(() => {
         provider.on("status", (event: { status: string }) => {
             setIsConnected(event.status === "connected");
         });
 
-        const handleAwarenessUpdate = () => {
+        const handleAwareness = () => {
             const states = Array.from(provider.awareness.getStates().values());
             setUsers(states.filter(s => s.user).map(s => s.user));
         };
 
-        provider.awareness.on("change", handleAwarenessUpdate);
+        provider.awareness.on("change", handleAwareness);
         provider.awareness.setLocalState({
             user: {
                 name: `User ${Math.floor(Math.random() * 1000)}`,
-                color: `#${Math.floor(Math.random()*16777215).toString(16)}`
+                color: `#${Math.floor(Math.random() * 16777215).toString(16)}`
             }
         });
 
         return () => {
-            provider.awareness.off("change", handleAwarenessUpdate);
+            provider.awareness.off("change", handleAwareness);
             provider.off("status");
         };
     }, []);
 
-    // Textarea binding
+    // Bind textarea using y-textarea
     const bindEditor = useCallback((element: HTMLTextAreaElement | null) => {
         if (!element) return;
-
-        const updateYjs = (value: string) => {
-            ytext.delete(0, ytext.length);
-            ytext.insert(0, value);
-        };
-
-        const handleInput = (e: Event) => {
-            updateYjs((e.target as HTMLTextAreaElement).value);
-        };
-
-        element.value = ytext.toString();
-        element.addEventListener("input", handleInput);
-
-        return () => element.removeEventListener("input", handleInput);
+        const binding = new TextAreaBinding(ytext, element);
+        return () => binding.destroy();
     }, []);
 
     return { content, bindEditor, users, isConnected };
@@ -89,7 +73,6 @@ export default function CollaborativeMarkdownEditor() {
 
     const handleInternalLink = (pageTitle: string) => {
         console.log("Internal link clicked:", pageTitle);
-        // Implement navigation logic here
     };
 
     const TEXT_CONTAINERS = [
@@ -123,7 +106,7 @@ export default function CollaborativeMarkdownEditor() {
                 </div>
             </div>
 
-            {/* Editor Pane */}
+            {/* Editor */}
             <div className="w-1/2 p-4 border-r border-gray-200">
                 <div className="h-full bg-white rounded-lg shadow-sm">
           <textarea
@@ -134,7 +117,7 @@ export default function CollaborativeMarkdownEditor() {
                 </div>
             </div>
 
-            {/* Preview Pane */}
+            {/* Preview */}
             <div className="w-1/2 p-4">
                 <div className="h-full bg-white rounded-lg shadow-sm overflow-auto">
                     <div className="p-4 prose max-w-none">
