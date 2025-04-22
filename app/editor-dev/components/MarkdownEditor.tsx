@@ -75,24 +75,32 @@ export default function CollaborativeMarkdownEditor() {
         console.log("Internal link clicked:", pageTitle);
     };
 
-    const TEXT_CONTAINERS = [
-        'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-        'li', 'td', 'th', 'blockquote', 'code'
-    ] as const;
+    const safeWrapWithLinkParser = (ComponentTag: string) => {
+        return ({ children, ...props }: any) => (
+            <ComponentTag {...props}>
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
+            </ComponentTag>
+        );
+    };
 
-    const customComponents = TEXT_CONTAINERS.reduce((acc, tag) => ({
-        ...acc,
-        [tag]: ({ children, ...props }) => (
-            <LinkParser onInternalLinkClick={handleInternalLink}>
-                {children}
-            </LinkParser>
-        )
-    }), {});
+    const customComponents = {
+        p: safeWrapWithLinkParser("p"),
+        h1: safeWrapWithLinkParser("h1"),
+        h2: safeWrapWithLinkParser("h2"),
+        h3: safeWrapWithLinkParser("h3"),
+        li: safeWrapWithLinkParser("li"),
+        blockquote: safeWrapWithLinkParser("blockquote"),
+        td: safeWrapWithLinkParser("td"),
+        th: safeWrapWithLinkParser("th"),
+        // don't wrap code blocks to avoid breaking syntax highlight
+    };
 
     return (
         <div className="w-full flex h-screen">
             {/* Connection Status */}
-            <div className="absolute top-4 right-4 flex items-center gap-2">
+            <div className="absolute top-4 left-1/2 flex items-center gap-2">
                 <div className={`w-3 h-3 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"}`} />
                 <div className="flex -space-x-2">
                     {users.map((user, i) => (

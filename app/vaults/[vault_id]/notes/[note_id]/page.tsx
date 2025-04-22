@@ -13,6 +13,7 @@ export default function Home() {
     const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
     const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
     const [noteTitles, setNoteTitles] = useState<string[]>([]);
+    const [currentNoteTitle, setCurrentNoteTitle] = useState<string>("ACTIVE NOTE");
 
     const apiService = useApi(); // Make sure this hook is working
 
@@ -45,11 +46,22 @@ export default function Home() {
                 {/* Left Sidebar */}
                 {isLeftSidebarOpen && (
                     <Sidebar isOpen={isLeftSidebarOpen} onClose={() => setIsLeftSidebarOpen(false)} position="left">
-                        <h2>All Notes</h2>
+                        <h2>Notes</h2>
 
                         <ul>
                             {noteTitles.map((title, index) => (
-                                <li key={index}>▶ {title}</li>
+                                <li
+                                    key={index}
+                                    onClick={() => setCurrentNoteTitle(title)} // Set current note
+                                    style={{
+                                        cursor: "pointer",
+                                        padding: "4px 0",
+                                        color: title === currentNoteTitle ? "#007bff" : "black",
+                                        fontWeight: title === currentNoteTitle ? "bold" : "normal",
+                                    }}
+                                >
+                                    - {title}
+                                </li>
                             ))}
                         </ul>
 
@@ -72,7 +84,7 @@ export default function Home() {
                     }}
                 >
                     <h1 style={{ fontSize: "1.5rem", fontWeight: "bold", textAlign: "center", marginBottom: "16px", color: "black" }}>
-                        ACTIVE NOTE
+                        {currentNoteTitle}
                     </h1>
                     <div style={{height:"90%", fontSize: "1.5rem", color: "black" }}>
                         <MarkdownEditor/>
