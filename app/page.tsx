@@ -9,36 +9,36 @@ import Image from "next/image";
 export default function Home() {
     const router = useRouter();
 
-    return (
-        <div className={styles.page}>
-            <main className={styles.main}>
-                {/* text.png - Set the NMD text width to 500px and reset marginBottom to zero */}
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        marginBottom: "0px", // Removed the space between the logo and text
-                    }}
-                >
-                    <Image
-                        src="/text.png"
-                        alt="NMD Text"
-                        width="100"
-                        height="100"
-                        style={{width: "500px", height: "auto"}} // Set NMD to 500px width
-                    />
-                </div>
+  return (
+    <div className={styles.page}>
+      <main className={styles.main}>
+        {/* text.png - Set the NMD text width to 500px and reset marginBottom to zero */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "0px", // Removed the space between the logo and text
+          }}
+        >
+          <Image
+            src="/text.png"
+            alt="NMD Text"
+            width={100}
+            height={100}
+            style={{ width: "500px", height: "auto" }} // Set NMD to 500px width
+          />
+        </div>
 
-                {/* Spinning logo */}
-                <div className={styles.logoWrapper}>
-                    <Image
-                        width="100"
-                        height="100"
-                        className={styles.logo}
-                        src="/logo.png"
-                        alt="Logo"
-                    />
-                </div>
+        {/* Spinning logo */}
+        <div className={styles.logoWrapper}>
+          <Image
+            className={styles.logo}
+            src="/logo.png"
+            alt="Logo"
+            width={0}
+            height={0}
+          />
+        </div>
 
                 {/* Promotional Text */}
                 <div
