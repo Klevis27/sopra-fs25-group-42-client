@@ -6,7 +6,7 @@ import Image from "next/image";
 import MarkdownEditor from "@/components/MarkdownEditor"
 import Sidebar from "@/components/Sidebar";
 
-export default function Home() {
+export default function Editor() {
     const [showSettings, setShowSettings] = useState(false);
     const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
     const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
@@ -15,7 +15,11 @@ export default function Home() {
         <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
             {/* Header */}
             <header style={{ background: "#f8f9fa", padding: "16px", borderBottom: "1px solid #ddd", display: "flex", justifyContent: "space-between" }}>
-                <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "black" }}>YOUR VAULT</span>
+                <div>
+                    <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "black" }}>YOUR VAULT</span>
+                    <a href={"/vaults"} className={"ml-3"}>Back to vaults</a>
+                </div>
+
                 <button style={{ padding: "8px 12px", background: "#007bff", color: "white", borderRadius: "4px", border: "none" }}>Extract as PDF</button>
             </header>
 

@@ -28,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} bg-cyan-950`}>
         <ConfigProvider
           theme={{
             algorithm: theme.defaultAlgorithm,
@@ -50,7 +50,7 @@ export default function RootLayout({
                 controlHeight: 38,
               },
               Input: {
-                colorBorder: "gray", // color boarder selected is not overridden but instead is set by primary color in line 35
+                colorBorder: "gray", // color border selected is not overridden but instead is set by primary color in line 35
                 colorTextPlaceholder: "#888888",
                 algorithm: false, // disable algorithm (line 32)
               },
