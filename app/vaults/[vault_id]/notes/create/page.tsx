@@ -41,7 +41,7 @@ const CreateNote: React.FC = () => {
                 alert(`Note name already taken`);
             } else {
                 // Handle unknown error
-                console.error("An unknown error occurred during creation of vault.");
+                console.error("An unknown error occurred during creation of note.");
                 alert("An unknown error occurred.");
             }
             form.resetFields();
