@@ -9,25 +9,45 @@ import { TextAreaBinding } from "y-textarea";
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js";
 import { LinkParser } from "@/editor-dev/components/LinkParser";
+import {useRouter, useParams} from "next/navigation";
+
+
 
 // Create shared Yjs document
 const ydoc = new Y.Doc();
-const ytext = ydoc.getText("markdown");
 
-// WebSocket provider setup (dummy address)
-const provider = new WebsocketProvider("ws://localhost:1234", "markdown-room", ydoc);
+
 
 const useCollaborativeEditor = () => {
+    const params = useParams();
+    const noteId = params?.note_id as string;
+    
+    console.log("Noteid: ", noteId);
+    useEffect(() => {
+        if (noteId) {
+            ymap.set("noteId", noteId); // Set the noteId in a shared Y.Map if you want
+        }
+    }, [noteId]);
+    
+    // WebSocket provider setup (dummy address)
+    const provider = new WebsocketProvider(`ws://localhost:1234/${noteId}`, noteId, ydoc);
+    const ytext = ydoc.getText("markdown");
+    const ymap = ydoc.getMap("meta"); 
     const [content, setContent] = useState(ytext.toString());
     const [users, setUsers] = useState<Array<{ name: string; color: string }>>([]);
     const [isConnected, setIsConnected] = useState(false);
-
+    
+    
     // Content synchronization
     useEffect(() => {
         const handleUpdate = () => setContent(ytext.toString());
         ytext.observe(handleUpdate);
         return () => ytext.unobserve(handleUpdate);
     }, []);
+
+    useEffect(() => {
+        console.log("Current ytext content:", ytext.toString());
+    }, [content]); // This will log when the content changes
 
     // Connection and awareness state
     useEffect(() => {
