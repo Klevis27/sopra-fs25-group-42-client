@@ -6,6 +6,7 @@ import {Button, Card, Form, Input, Typography} from "antd";
 import {App} from "antd";
 import {Suspense} from "react";
 import {Note} from "@/types/note";
+import { AxiosError } from "axios";
 
 const {Title} = Typography;
 
@@ -37,15 +38,32 @@ const CreateNote: React.FC = () => {
             message.success("Note created successfully!");
             router.push(`/vaults/${vaultId}/notes/${response.note.id}`);
         } catch (error: unknown) {
-            if (error instanceof Error) {
-                alert(`Note name already taken`);
+            if (error && typeof error === "object" && "isAxiosError" in error) {
+                const axiosError = error as AxiosError<{ message: string }>;
+                const backendMessage = axiosError.response?.data?.message;
+                if (backendMessage) {
+                    alert(`Error: ${backendMessage}`);
+                } else {
+                    alert("An error occurred while creating the note.");
+                }
+            } else if (error instanceof Error) {
+                alert(`Error: ${error.message}`);
             } else {
-                // Handle unknown error
-                console.error("An unknown error occurred during creation of note.");
                 alert("An unknown error occurred.");
             }
             form.resetFields();
             router.push("/vaults");
+        
+        // catch (error: unknown) {
+        //     if (error instanceof Error) {
+        //         alert(`Note name already taken`);
+        //     } else {
+        //         // Handle unknown error
+        //         console.error("An unknown error occurred during creation of note.");
+        //         alert("An unknown error occurred.");
+        //     }
+        //     form.resetFields();
+        //     router.push("/vaults");
         }
     };
 
