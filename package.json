@@ -14,6 +14,7 @@
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "@tailwindcss/cli": "^4.0.17",
     "antd": "^5.24.6",
+    "axios": "^1.8.4",
     "firebase": "^11.6.0",
     "force-graph": "^1.49.5",
     "highlight.js": "^11.11.1",
@@ -25,9 +26,11 @@
     "react-markdown": "^10.1.0",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
+    "y-redis": "^1.0.3",
+    "y-textarea": "^1.0.2",
     "y-webrtc": "^10.3.0",
     "y-websocket": "^3.0.0",
-    "yjs": "^13.6.24"
+    "yjs": "^13.6.26"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.0",

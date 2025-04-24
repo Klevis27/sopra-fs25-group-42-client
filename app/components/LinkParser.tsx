@@ -39,7 +39,7 @@ export const LinkParser = ({ children, onInternalLinkClick }: LinkParserProps) =
         if (Array.isArray(child)) {
             return child.map(processChildren);
         }
-        return child;
+        return child; // Don't alter non-strings like <strong>, <code>, etc.
     };
 
     return <>{React.Children.map(children, processChildren)}</>;

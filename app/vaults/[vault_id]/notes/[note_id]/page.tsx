@@ -5,11 +5,33 @@ import { useState } from "react";
 import Image from "next/image";
 import MarkdownEditor from "@/components/MarkdownEditor"
 import Sidebar from "@/components/Sidebar";
+import {Note} from "@/types/note";
+import { useApi } from "@/hooks/useApi";
 
 export default function Editor() {
     const [showSettings, setShowSettings] = useState(false);
     const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
     const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
+    const [noteTitles, setNoteTitles] = useState<string[]>([]);
+    const [currentNoteTitle, setCurrentNoteTitle] = useState<string>("ACTIVE NOTE");
+
+    const apiService = useApi(); // Make sure this hook is working
+
+    useEffect(() => {
+        const getAllNotes = async () => {
+            try {
+                const response = await apiService.get<Note[]>("/vaults/1/notes");
+                const titles = response
+                    .filter(note => note.title != null)
+                    .map(note => note.title!);
+                setNoteTitles(titles);
+            } catch (error) {
+                console.error("Failed to fetch notes:", error);
+            }
+        };
+
+        getAllNotes();
+    }, [apiService]);
 
     return (
         <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
@@ -19,21 +41,31 @@ export default function Editor() {
                     <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "black" }}>YOUR VAULT</span>
                     <a href={"/vaults"} className={"ml-3"}>Back to vaults</a>
                 </div>
-
                 <button style={{ padding: "8px 12px", background: "#007bff", color: "white", borderRadius: "4px", border: "none" }}>Extract as PDF</button>
             </header>
 
             {/* Main Layout */}
-            <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+            <div style={{ display: "flex", flex: 1, overflow: "hidden", font:"black" }}>
                 {/* Left Sidebar */}
                 {isLeftSidebarOpen && (
                     <Sidebar isOpen={isLeftSidebarOpen} onClose={() => setIsLeftSidebarOpen(false)} position="left">
-                        <h2>Project Navigator</h2>
+                        <h2>Notes</h2>
+
                         <ul>
-                            <li>▶ Main</li>
-                            <li>▶ Topic2</li>
-                            <li>▶ Topic3</li>
-                            <li>▶ Topic4</li>
+                            {noteTitles.map((title, index) => (
+                                <li
+                                    key={index}
+                                    onClick={() => setCurrentNoteTitle(title)} // Set current note
+                                    style={{
+                                        cursor: "pointer",
+                                        padding: "4px 0",
+                                        color: title === currentNoteTitle ? "#007bff" : "black",
+                                        fontWeight: title === currentNoteTitle ? "bold" : "normal",
+                                    }}
+                                >
+                                    - {title}
+                                </li>
+                            ))}
                         </ul>
                         <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "16px" }}>Status: Read Only</p>
                     </Sidebar>
@@ -55,7 +87,7 @@ export default function Editor() {
                     }}
                 >
                     <h1 style={{ fontSize: "1.5rem", fontWeight: "bold", textAlign: "center", marginBottom: "16px", color: "black" }}>
-                        ACTIVE NOTE
+                        {currentNoteTitle}
                     </h1>
                     <div style={{height:"90%", fontSize: "1.5rem", color: "black" }}>
                         <MarkdownEditor/>
