@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "antd";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import Image from "next/image";
 import MarkdownEditor from "@/components/MarkdownEditor"
 import Sidebar from "@/components/Sidebar";

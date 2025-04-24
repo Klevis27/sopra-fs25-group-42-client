@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import {useState, useEffect, useCallback, PropsWithChildren, JSX} from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -9,6 +9,7 @@ import { TextAreaBinding } from "y-textarea";
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js";
 import { LinkParser } from "@/components/LinkParser";
+import {useParams} from "next/navigation";
 
 // Create shared Yjs document
 const ydoc = new Y.Doc();
@@ -42,7 +43,7 @@ const useCollaborativeEditor = () => {
         ytext.observe(handleContentUpdate);
 
         return () => ytext.unobserve(handleContentUpdate);
-    }, []);
+    }, [ytext]);
 
     // Connection status and awareness
     useEffect(() => {
@@ -92,16 +93,19 @@ export default function CollaborativeMarkdownEditor() {
         // Implement navigation logic here
     };
 
-    const safeWrapWithLinkParser = (ComponentTag: string) => {
-        return ({ children, ...props }: any) => (
+    const safeWrapWithLinkParser = <T extends keyof JSX.IntrinsicElements>(ComponentTag: T) => {
+        const WrappedComponent = ({ children, ...props }: PropsWithChildren<JSX.IntrinsicElements[T]>) => (
+            // @ts-expect-error - TypeScript struggles with dynamic tag names
             <ComponentTag {...props}>
                 <LinkParser onInternalLinkClick={handleInternalLink}>
                     {children}
                 </LinkParser>
             </ComponentTag>
         );
-    };
 
+        WrappedComponent.displayName = `safeWrapWithLinkParser(${String(ComponentTag)})`;
+        return WrappedComponent;
+    };
     const customComponents = {
         p: safeWrapWithLinkParser("p"),
         h1: safeWrapWithLinkParser("h1"),
@@ -112,7 +116,7 @@ export default function CollaborativeMarkdownEditor() {
         td: safeWrapWithLinkParser("td"),
         th: safeWrapWithLinkParser("th"),
         // don't wrap code blocks to avoid breaking syntax highlight
-    };
+    } as const;
 
     return (
         <div className="w-full flex h-screen">
