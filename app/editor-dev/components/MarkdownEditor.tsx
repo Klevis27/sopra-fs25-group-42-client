@@ -16,13 +16,10 @@ import {useRouter, useParams} from "next/navigation";
 // Create shared Yjs document
 const ydoc = new Y.Doc();
 
-
-
 const useCollaborativeEditor = () => {
     const params = useParams();
     const noteId = params?.note_id as string;
     
-    console.log("Noteid: ", noteId);
     useEffect(() => {
         if (noteId) {
             ymap.set("noteId", noteId); // Set the noteId in a shared Y.Map if you want
