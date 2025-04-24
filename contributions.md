@@ -104,8 +104,8 @@ reason).
 |                    | 29.03.2025 |  |  |  |
 | **nfcolak**        | 15.04.2025 |[Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/a4dbe9153d22c5fa7975230054cb60ec79b68b76)|Setting page desing and conflicts resolution|UI and fix|
 |                    | 29.03.2025 |  |  |  |
-| **SvenVest**       | 29.03.2025 |  |  |  |
-|                    | 30.03.2025 |  |  |  |
+| **SvenVest**       | 29.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-client/commit/09bde643e867c6d27d93636a28f1fb98fe96f978 |Markdown fixes   |  |
+|                    | 30.03.2025 |https://github.com/Klevis27/sopra-fs25-group-42-client/commit/9e5e8b0e20dd211c28cbae13e3fae3a3b819cfe7 | notes in sidebar dznamic from repo |  |
 
 ---
 
