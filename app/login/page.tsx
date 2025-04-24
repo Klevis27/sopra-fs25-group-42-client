@@ -31,6 +31,7 @@ const Login: React.FC = () => {
         setCookie("id", response.id, 1);
         localStorage.setItem("id", response.id);
         localStorage.setItem("accessToken", response.accessToken);
+        localStorage.setItem("username", values.username);
       }
 
       router.push("/vaults");
