@@ -70,10 +70,13 @@ const Profile: React.FC = () => {
           ...response,
           birthday: response.birthday || null,
         });
-      } catch (error: any) {
-        if (error?.status === 404) {
-          message.error("User with this ID could not be found");
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          alert(`Something went wrong during update:\n${error.message}`);
+        } else {
+          console.error("An unknown error occurred during update.");
         }
+
         router.push("/profile");
       }
     };

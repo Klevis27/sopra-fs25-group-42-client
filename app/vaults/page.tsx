@@ -31,11 +31,11 @@ const Vaults: React.FC = () => {
           return;
         }
         setVaults(response);
-      } catch (error: any) {
-        if (error?.status === 404) {
-          alert("Vaults not found.");
+      } catch (error) {
+        if (error instanceof Error) {
+          alert(`Something went wrong during update:\n${error.message}`);
         } else {
-          alert("Unknown error occurred.");
+          console.error("An unknown error occurred during update.");
         }
       }
     };

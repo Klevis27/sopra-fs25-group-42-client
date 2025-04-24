@@ -4,12 +4,10 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
 import { User } from "@/types/user";
-import { Button, Card, Form, DatePicker, Input, ConfigProvider } from "antd";
-import dayjs, { Dayjs } from "dayjs";
+import { Button, Card, Form, Input } from "antd";
 
 interface EditPageProps {
   username: string | null;
-  birthday: Dayjs | null;
 }
 
 const Edit: React.FC = () => {
@@ -32,16 +30,13 @@ const Edit: React.FC = () => {
         router.push("/login");
         return;
       }
-
-      let birthday = values.birthday ? values.birthday.format("YYYY-MM-DD") : null;
-      let username = values.username;
+      const username = values.username;
       const currentUser = userTableObject?.[0];
 
       // Check if anything changed
       if (
         currentUser &&
-        username === currentUser.username &&
-        birthday === (dayjs.isDayjs(currentUser.birthday) ? currentUser.birthday.format("YYYY-MM-DD") : currentUser.birthday)
+        username === currentUser.username
       ) {
         router.push(`/profile/${slug}`);
         return;
@@ -50,9 +45,7 @@ const Edit: React.FC = () => {
       const userData = {
         id: slug,
         username: username !== currentUser?.username ? username : null,
-        birthday: birthday !== (dayjs.isDayjs(currentUser?.birthday) ? currentUser.birthday.format("YYYY-MM-DD") : currentUser?.birthday) ? birthday : null,
       };
-      console.log("GÖNDERİLEN VERİ:", userData);
       await apiService.put<User>(`/users/${slug}`, userData, accessToken);
       router.push(`/profile/${slug}`);
 
@@ -80,15 +73,12 @@ const Edit: React.FC = () => {
         }
         const response = await apiService.get<User>(`/users/${slug}`, accessToken);
 
-        const birthdayDayjs = response.birthday ? dayjs(response.birthday) : null;
-
-        setUserTableObject([{ ...response, birthday: birthdayDayjs }]);
+        setUserTableObject([ response ]);
 
         form.setFieldsValue({
           username: response.username,
-          birthday: birthdayDayjs,
         });
-      } catch (error) {
+      } catch {
         router.push(`/profile/${slug}`);
       }
     };
@@ -117,26 +107,6 @@ const Edit: React.FC = () => {
                 initialValue={userTableObject[0].username}
               >
                 <Input placeholder="Enter username" />
-              </Form.Item>
-
-              <Form.Item
-                name="birthday"
-                label="Birthday (YYYY-MM-DD)"
-                initialValue={userTableObject[0].birthday}
-              >
-                <ConfigProvider
-                  theme={{
-                    token: {
-                      colorTextPlaceholder: "#777",
-                      colorBgElevated: "#777",
-                    },
-                  }}
-                >
-                  <DatePicker
-                    format="YYYY-MM-DD"
-                    style={{ width: "100%" }}
-                  />
-                </ConfigProvider>
               </Form.Item>
 
               <Form.Item>

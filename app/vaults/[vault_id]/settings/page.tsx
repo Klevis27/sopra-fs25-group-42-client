@@ -62,7 +62,7 @@ const VaultSettings: React.FC = () => {
         messageApi.error("Vault not found.");
         router.push("/vaults");
       });
-  }, [vaultId, router, form, messageApi]);
+  }, [vaultId, router, form, messageApi, apiService]);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -75,7 +75,7 @@ const VaultSettings: React.FC = () => {
     apiService.get<VaultPermission[]>(`/vaults/${vaultId}/settings/permissions`, token)
       .then((data) => setPermissions(data))
       .catch(() => messageApi.error("Failed to load permissions"));
-  }, [vaultId, messageApi]);
+  }, [vaultId, messageApi, apiService]);
 
   const handleSave = async (values: { name: string; state: string }) => {
     if (!vault) return;
@@ -90,11 +90,11 @@ const VaultSettings: React.FC = () => {
       await apiService.put(`/vaults/${vaultId}`, values, token);
       messageApi.success("Vault updated successfully!");
       router.replace("/vaults");
-    } catch (error: any) {
-      if (error.status === 403) {
-        messageApi.error("Only the owner can update the vault.");
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(`Something went wrong during update:\n${error.message}`);
       } else {
-        messageApi.error(error?.message || "Update failed");
+        console.error("An unknown error occurred during update.");
       }
     }
   };
@@ -125,7 +125,7 @@ const VaultSettings: React.FC = () => {
   const handleDeleteVault = async () => {
     if (!vault) return;
 
-    const confirmed = window.confirm("Are you sure you want to delete this vault?");
+    const confirmed = globalThis.confirm("Are you sure you want to delete this vault?");
     if (!confirmed) return;
 
     const token = localStorage.getItem("accessToken");
@@ -135,11 +135,11 @@ const VaultSettings: React.FC = () => {
       await apiService.delete(`/vaults/${vaultId}/settings/delete`, token);
       messageApi.success("Vault deleted.");
       router.push("/vaults");
-    } catch (error: any) {
-      if (error.status === 403) {
-        messageApi.error("Only the owner can delete this vault.");
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(`Something went wrong during update:\n${error.message}`);
       } else {
-        messageApi.error(error?.message || "Could not delete vault.");
+        console.error("An unknown error occurred during update.");
       }
     }
   };
