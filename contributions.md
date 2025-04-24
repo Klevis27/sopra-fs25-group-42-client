@@ -103,7 +103,7 @@ reason).
 | **elifdenizi**     | 24.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/2d9298da504efffa2cf584ca1c1d79d04ac8e623) | implementation of the livechat app to the editor page with authentication | External API is a must |
 |                    | 24.04.2025 | [Link to Pull commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/e53cc808a0e2c1dfcc57b45d4aa055d797d40d89) | fixation of the note permission logic and adding role for the permission | core feature |
 | **nfcolak**        | 15.04.2025 |[Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/a4dbe9153d22c5fa7975230054cb60ec79b68b76)|Setting page desing and conflicts resolution|UI and fix|
-|                    | 29.03.2025 |  |  |  |
+|                    | 24.04.2025 |[Link to Pull commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/b09ef5e1ffd44810e8fbf883a018d1829b3bacd7)|Profile page settings and user role hook changes|Main functionality  |
 | **SvenVest**       | 29.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-client/commit/09bde643e867c6d27d93636a28f1fb98fe96f978 |Markdown fixes   |  |
 |                    | 30.03.2025 |https://github.com/Klevis27/sopra-fs25-group-42-client/commit/9e5e8b0e20dd211c28cbae13e3fae3a3b819cfe7 | notes in sidebar dznamic from repo |  |
 
