@@ -1,124 +1,131 @@
 "use client";
 import '@ant-design/v5-patch-for-react-19';
-import React, {useEffect, useState} from "react";
-import {useRouter, useParams} from "next/navigation";
-import {useApi} from "@/hooks/useApi";
-import {User} from "@/types/user";
-import {Button, Card, Table} from "antd";
-import type {TableProps} from "antd";
+import React, { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { useApi } from "@/hooks/useApi";
+import { User } from "@/types/user";
+import dayjs, { Dayjs } from "dayjs";
+import {
+  Avatar,
+  Button,
+  Card,
+  Descriptions,
+  Row,
+  Space,
+  Spin,
+  Tag,
+  Typography,
+  message,
+} from "antd";
+import {
+  UserOutlined,
+  EditOutlined,
+  DashboardOutlined,
+  FolderOpenOutlined,
+} from "@ant-design/icons";
 
-// Columns for the antd table of User objects
-const columns: TableProps<User>["columns"] = [
-    {
-        title: "Id",
-        dataIndex: "id",
-        key: "id",
-    },
-    {
-        title: "Username",
-        dataIndex: "username",
-        key: "username",
-    },
-    {
-        title: "Creation Date",
-        dataIndex: "creationDate",
-        key: "creationDate",
-    },
-    {
-        title: "Status",
-        dataIndex: "status",
-        key: "status",
-    },
-    {
-        title: "Birthday",
-        dataIndex: "birthday",
-        key: "birthday",
-    },
-];
+const { Title } = Typography;
 
 const Profile: React.FC = () => {
-    const router = useRouter();
-    const apiService = useApi();
-    const [userTableObject, setUserTableObject] = useState<User[] | null>(null);
-    const params = useParams();
-    const slug = params.id;
-    const [editable, setEditable] = useState<boolean>(false);
+  const router = useRouter();
+  const apiService = useApi();
+  const params = useParams();
+  const slug = params.id;
 
-    const goToDashboard = (): void => {
+  const [user, setUser] = useState<User | null>(null);
+  const [editable, setEditable] = useState(false);
+
+  const goToDashboard = () => router.push("/profile");
+  const goToEdit = () => router.push(`/profile/${slug}/edit`);
+  const goToVaults = () => router.push("/vaults");
+
+  // ✅ Supports Date | Dayjs | string | null
+  const formatDate = (value?: string | Date | Dayjs | null): string => {
+    if (!value) return "N/A";
+    if (dayjs.isDayjs(value)) return value.toDate().toLocaleDateString();
+    if (value instanceof Date) return value.toLocaleDateString();
+    return new Date(value).toLocaleDateString();
+  };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const id = localStorage.getItem("id");
+        const accessToken = localStorage.getItem("accessToken");
+        if (!accessToken || !id) {
+          router.push("/login");
+          return;
+        }
+        if (id === slug) {
+          setEditable(true);
+        }
+
+        const response = await apiService.get<User>(`/users/${slug}`, accessToken);
+        if (!response) {
+          message.error("No such user exists");
+          router.push("/profile");
+          return;
+        }
+        setUser({
+          ...response,
+          birthday: response.birthday || null,
+        });
+      } catch (error: any) {
+        if (error?.status === 404) {
+          message.error("User with this ID could not be found");
+        }
         router.push("/profile");
-        return
-    }
-    const goToEdit = (): void => {
-        router.push(`/profile/${slug}/edit`);
-        return
-    }
+      }
+    };
+    fetchUser();
+  }, [apiService, router, slug]);
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const id = localStorage.getItem("id");
-                const accessToken = localStorage.getItem("accessToken");
-                if (!accessToken || !id) {
-                    router.push("/login");
-                    return;
-                }
-                if (id == slug){
-                    setEditable(true);
-                }
-                const response = await apiService.get<User>(`/users/${slug}`, accessToken);
+  return (
+    <div className="m-12 flex justify-center">
+      <Card
+        className="w-full max-w-3xl shadow-2xl"
+        title={<Title level={3}>Profile</Title>}
+        extra={
+          editable && (
+            <Button type="primary" icon={<EditOutlined />} onClick={goToEdit}>
+              Edit
+            </Button>
+          )
+        }
+      >
+        {!user ? (
+          <Spin tip="Loading..." size="large" className="flex justify-center" />
+        ) : (
+          <Space direction="vertical" size="large" className="w-full">
+            <Row justify="center">
+              <Avatar size={96} icon={<UserOutlined />} />
+            </Row>
 
-                // If no such user exists
-                if (response == null) {
-                    console.error("No such user exists");
-                    router.push("/profile");
-                    return
-                }
+            <Descriptions bordered column={1} size="middle" className="mx-auto w-full md:w-2/3">
+              <Descriptions.Item label="ID">{user.id}</Descriptions.Item>
+              <Descriptions.Item label="Username">{user.username}</Descriptions.Item>
+              <Descriptions.Item label="Creation Date">{formatDate(user.creationDate)}</Descriptions.Item>
+              <Descriptions.Item label="Status">
+                <Tag color={user.status === "ACTIVE" ? "green" : "default"}>{user.status}</Tag>
+              </Descriptions.Item>
+              <Descriptions.Item label="Birthday">{formatDate(user.birthday)}</Descriptions.Item>
+            </Descriptions>
 
-                if (!response.birthday) {
-                    response.birthday = "N/A";
-                }
-                setUserTableObject([response]);
-            } catch (error) {
-                // @ts-expect-error - No proper interface
-                if (error.status == 404) {
-                    console.error("User with this ID could not be found");
-                    alert("User with this ID could not be found");
-                }
-                // @ts-expect-error - No proper interface
-                console.error("Error", error.status);
-                router.push("/profile");
-            }
-        };
-        fetchUser();
-    }, [apiService, router, slug]);
-
-    return (
-        <div className="card-container">
-            <Card
-                title={"Profile Page"}
-                loading={!userTableObject}
-                className="dashboard-container"
-            >
-                {userTableObject && (
-                    <>
-                        {/* antd Table: pass the columns and data, plus a rowKey for stable row identity */}
-                        <Table<User>
-                            columns={columns}
-                            dataSource={userTableObject}
-                            rowKey="id"
-                            pagination={false}
-                        />
-                        <br/>
-                        {editable && <><Button type="primary" onClick={goToEdit}> Edit </Button><br/><br/></>}
-                        <Button onClick={goToDashboard} type="primary">
-                            To the dashboard
-                        </Button>
-                    </>
-                )}
-            </Card>
-
-        </div>
-    );
+            <Row justify="center" gutter={16}>
+              <Space size="middle">
+                <Button type="primary" icon={<DashboardOutlined />} onClick={goToDashboard}>
+                  Dashboard
+                </Button>
+                <Button icon={<FolderOpenOutlined />} onClick={goToVaults}>
+                  Vaults
+                </Button>
+              </Space>
+            </Row>
+          </Space>
+        )}
+      </Card>
+    </div>
+  );
 };
 
 export default Profile;
