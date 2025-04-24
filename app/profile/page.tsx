@@ -72,10 +72,7 @@ const Dashboard: React.FC = () => {
             }
         };
         fetchUsers();
-    }, [apiService, router]); // dependency apiService does not re-trigger the useEffect on every render because the hook uses memoization (check useApi.tsx in the hooks).
-    // if the dependency array is left empty, the useEffect will trigger exactly once
-    // if the dependency array is left away, the useEffect will run on every state change. Since we do a state change to profile in the useEffect, this results in an infinite loop.
-    // read more here: https://react.dev/reference/react/useEffect#specifying-reactive-dependencies
+    }, [apiService, router]);
 
     return (
         <div className="card-container">
@@ -86,13 +83,12 @@ const Dashboard: React.FC = () => {
             >
                 {users && (
                     <>
-                        {/* antd Table: pass the columns and data, plus a rowKey for stable row identity */}
                         <Table<User>
                             columns={columns}
                             dataSource={users}
                             rowKey="id"
                             onRow={(row) => ({
-                                onClick: () => router.push(`/vaults/${"1"}/notes/${row.id}`),
+                                onClick: () => router.push(`/profile/${row.id}`),
                                 style: {cursor: "pointer"},
                             })}
                         />
