@@ -19,12 +19,16 @@ const ydoc = new Y.Doc();
 const useCollaborativeEditor = () => {
     const params = useParams();
     const noteId = params?.note_id as string;
+    const accessToken = localStorage.getItem("accessToken");
     
     useEffect(() => {
         if (noteId) {
             ymap.set("noteId", noteId); // Set the noteId in a shared Y.Map if you want
+        } 
+        if (accessToken){
+            ymap.set("accessToken", accessToken);
         }
-    }, [noteId]);
+    }, [noteId, accessToken]);
     
     // WebSocket provider setup (dummy address)
     const provider = new WebsocketProvider(`ws://localhost:1234/${noteId}`, noteId, ydoc);
@@ -33,7 +37,7 @@ const useCollaborativeEditor = () => {
     const [content, setContent] = useState(ytext.toString());
     const [users, setUsers] = useState<Array<{ name: string; color: string }>>([]);
     const [isConnected, setIsConnected] = useState(false);
-    
+
     
     // Content synchronization
     useEffect(() => {
