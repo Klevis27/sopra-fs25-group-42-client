@@ -12,20 +12,30 @@ import { LinkParser } from "@/components/LinkParser";
 
 // Create shared Yjs document
 const ydoc = new Y.Doc();
-const ytext = ydoc.getText("markdown");
-
-// WebSocket provider configuration
-const provider = new WebsocketProvider(
-    "ws://localhost:1234", // dummi addres
-    "markdown-room",
-    ydoc
-);
 
 const useCollaborativeEditor = () => {
+    const params = useParams();
+    const noteId = params?.note_id as string;
+    const accessToken = localStorage.getItem("accessToken");
+
+    useEffect(() => {
+        if (noteId) {
+            ymap.set("noteId", noteId); // Set the noteId in a shared Y.Map if you want
+        }
+        if (accessToken){
+            ymap.set("accessToken", accessToken);
+        }
+    }, [noteId, accessToken]);
+    
+    // WebSocket provider setup (dummy address)
+    const provider = new WebsocketProvider(`ws://localhost:1234/${noteId}`, noteId, ydoc);
+    const ytext = ydoc.getText("markdown");
+    const ymap = ydoc.getMap("meta"); 
     const [content, setContent] = useState(ytext.toString());
     const [users, setUsers] = useState<Array<{ name: string; color: string }>>([]);
     const [isConnected, setIsConnected] = useState(false);
 
+    
     // Content synchronization
     useEffect(() => {
         const handleContentUpdate = () => setContent(ytext.toString());
