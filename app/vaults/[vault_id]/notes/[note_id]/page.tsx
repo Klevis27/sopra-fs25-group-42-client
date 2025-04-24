@@ -8,6 +8,10 @@ import Sidebar from "@/components/Sidebar";
 import {Note} from "@/types/note";
 import { useApi } from "@/hooks/useApi";
 
+import ChatBox from "@/components/ChatBox";
+import { useParams } from "next/navigation";
+
+
 export default function Editor() {
     const [showSettings, setShowSettings] = useState(false);
     const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
@@ -16,6 +20,10 @@ export default function Editor() {
     const [currentNoteTitle, setCurrentNoteTitle] = useState<string>("ACTIVE NOTE");
 
     const apiService = useApi(); // Make sure this hook is working
+
+    const params = useParams();
+    const noteId = params.note_id as string;
+
 
     useEffect(() => {
         const getAllNotes = async () => {
@@ -108,6 +116,12 @@ export default function Editor() {
                                 </div>
                             )}
                         </div>
+
+                        {/* ✅ Add ChatBox here */}
+                        <div style={{ marginTop: "24px" }}>
+                            <ChatBox roomId={noteId} />
+                        </div>
+
                     </Sidebar>
                 )}
             </div>

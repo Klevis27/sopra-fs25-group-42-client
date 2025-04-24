@@ -2,8 +2,8 @@
 import '@ant-design/v5-patch-for-react-19';
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Card, Input, Typography, List, Space, message } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { Button, Card, Input, Typography, List, Space, message, Tag } from "antd";
+import { UserOutlined, FolderOpenOutlined } from "@ant-design/icons";
 import { Vault } from "@/types/vault";
 import { useApi } from "@/hooks/useApi";
 
@@ -16,7 +16,7 @@ const Vaults: React.FC = () => {
   const apiService = useApi();
 
   useEffect(() => {
-    const fetchNotes = async () => {
+    const fetchVaults = async () => {
       try {
         const id = localStorage.getItem("id");
         const accessToken = localStorage.getItem("accessToken");
@@ -27,19 +27,19 @@ const Vaults: React.FC = () => {
 
         const response = await apiService.get<Vault[]>(`/vaults`, accessToken);
         if (!response) {
-          alert("No such vaults exist!");
+          alert("No vaults available!");
           return;
         }
         setVaults(response);
       } catch (error) {
         if (error instanceof Error) {
-          alert(`Something went wrong during update:\n${error.message}`);
+          alert(`Something went wrong:\n${error.message}`);
         } else {
-          console.error("An unknown error occurred during update.");
+          console.error("An unknown error occurred.");
         }
       }
     };
-    fetchNotes();
+    fetchVaults();
   }, [apiService, router]);
 
   const handleContinueToCreation = () => {
@@ -77,7 +77,11 @@ const Vaults: React.FC = () => {
             renderItem={(vault) => (
               <List.Item>
                 <div className="flex justify-between w-full items-center">
-                  <span className="font-medium">{vault.name}</span>
+                  <div className="flex items-center gap-2">
+                    <FolderOpenOutlined style={{ color: "#1677ff" }} />
+                    <span className="font-semibold text-base">{vault.name}</span>
+                    <Tag color="geekblue">Vault ID: {vault.id}</Tag>
+                  </div>
                   <Space>
                     <Button size="small" onClick={() => router.push(`/vaults/${vault.id}/notes`)}>Notes</Button>
                     <Button size="small" onClick={() => router.push(`/vaults/${vault.id}/settings`)}>Settings</Button>
