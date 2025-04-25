@@ -1,14 +1,14 @@
 "use client";
 
 import { Button } from "antd";
-import {useEffect, useState} from "react";
-import MarkdownEditor from "../../../../editor-dev/components/MarkdownEditor";
-import Sidebar from "@/editor-dev/components/Sidebar";
-import NoteGraph from "@/notegraph/components/NoteGraph";
-import { useApi } from "@/hooks/useApi";
+import { useState } from "react";
+import Image from "next/image";
+import MarkdownEditor from "@/components/MarkdownEditor"
+import Sidebar from "@/components/Sidebar";
 import {Note} from "@/types/note";
+import { useApi } from "@/hooks/useApi";
 
-export default function Home() {
+export default function Editor() {
     const [showSettings, setShowSettings] = useState(false);
     const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
     const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
@@ -37,7 +37,10 @@ export default function Home() {
         <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
             {/* Header */}
             <header style={{ background: "#f8f9fa", padding: "16px", borderBottom: "1px solid #ddd", display: "flex", justifyContent: "space-between" }}>
-                <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "black" }}>YOUR VAULT</span>
+                <div>
+                    <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "black" }}>YOUR VAULT</span>
+                    <a href={"/vaults"} className={"ml-3"}>Back to vaults</a>
+                </div>
                 <button style={{ padding: "8px 12px", background: "#007bff", color: "white", borderRadius: "4px", border: "none" }}>Extract as PDF</button>
             </header>
 
@@ -64,10 +67,10 @@ export default function Home() {
                                 </li>
                             ))}
                         </ul>
-
                         <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "16px" }}>Status: Read Only</p>
                     </Sidebar>
                 )}
+
                 {/* Main Content - Markdown Editor */}
                 <main
                     style={{
@@ -94,8 +97,8 @@ export default function Home() {
                 {/* Right Sidebar */}
                 {isRightSidebarOpen && (
                     <Sidebar isOpen={isRightSidebarOpen} onClose={() => setIsRightSidebarOpen(false)} position="right">
-                        <div style={{ width: "100%", height: "30%", border: "1px solid #ddd", borderRadius: "8px", background: "#e9ecef", display: "flex", alignItems: "center", justifyContent: "center", overflow:"hidden" }}>
-                            <NoteGraph/>
+                        <div style={{ width: "100%", height: "300px", border: "1px solid #ddd", borderRadius: "8px", background: "#e9ecef", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <Image src="/graph-mock.png" alt="Graph View" width={250} height={200} />
                         </div>
                         <div style={{ textAlign: "center", padding: "16px" }}>
                             <Button type="primary" onClick={() => setShowSettings(!showSettings)}>Settings</Button>

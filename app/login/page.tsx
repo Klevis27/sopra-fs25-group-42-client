@@ -1,4 +1,5 @@
-"use client"; // For components that need React hooks and browser APIs, SSR (server side rendering) has to be disabled. Read more here: https://nextjs.org/docs/pages/building-your-application/rendering/server-side-rendering
+"use client"; // Disable SSR for hook usage
+
 import '@ant-design/v5-patch-for-react-19';
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
@@ -6,9 +7,7 @@ import { User } from "@/types/user";
 import { Button, Form, Input } from "antd";
 import Link from "next/link";
 import { setCookie } from "@/utils/cookies";
-import styles from "@/styles/page.module.css";
-import Image from "next/image";
-
+import {SpinningLogo} from "@/components/Design";
 
 interface LoginFormValues {
   username: string;
@@ -22,102 +21,89 @@ const Login: React.FC = () => {
 
   const handleLogin = async (values: LoginFormValues) => {
     try {
-      const userData = {
+      const response = await apiService.post<User>("/login", {
         username: values.username,
         password: values.password,
-      };
+      });
 
-      const response = await apiService.post<User>("/login", userData);
-
-      // Store access and refresh token
       if (response.accessToken && response.id) {
-        setCookie("accessToken", response.accessToken, 1); // Set cookie for 7 days
+        setCookie("accessToken", response.accessToken, 1);
         setCookie("id", response.id, 1);
         localStorage.setItem("id", response.id);
         localStorage.setItem("accessToken", response.accessToken);
       }
 
-      // Navigate to the user overview
       router.push("/vaults");
-    } catch (error) {
-      if (error instanceof Error) {
-        alert(`Invalid login credentials`);
-      } else {
-        console.error("An unknown error occurred during login.");
-      }
+    } catch {
+      alert("Invalid login credentials");
       form.resetFields();
       router.push("/login");
     }
   };
 
   return (
-    <div className={styles.page}>
+      <div className="relative min-h-screen bg-[#c5eba2] text-black overflow-x-hidden">
+        {/* Centered Header Logo */}
+        <header className="flex justify-center pt-6">
+          <SpinningLogo />
+        </header>
 
-      <header className={styles.loginHeader}>
-        <div className={styles.logoWrapper}>
-          <Image
-              src="/logo.png"
-              width= "100"
-              height= "100"
-              style={{width: "400px", height: "auto"}}
-              alt={""}
-          />
-        </div>
-      </header>
-
-      <main className={styles.main}>
-        <title>Login</title>
-        <div className={styles.loginWrapper}>
-          <div className="login-container">
-            <Form
+        {/* Login Panel */}
+        <div className="absolute top-0 left-[50px] w-[550px] h-screen bg-[#A0BF84]/70 p-5 flex items-center justify-center">
+          <Form
               form={form}
               name="login"
               size="large"
-              variant="outlined"
-              onFinish={handleLogin}
               layout="vertical"
               requiredMark={false}
-            >
-              <h1 className='centered-text'>Login</h1>
-              <Form.Item
+              onFinish={handleLogin}
+              className="w-full"
+          >
+            <h1 className="text-2xl font-bold text-center text-black mb-6">
+              Login
+            </h1>
+
+            <Form.Item
                 name="username"
-                label={<span style={{ color: "black", fontWeight: "bold", fontSize: "16px" }}>Username</span>}
+                label={<span className="text-black font-bold text-base">Username</span>}
                 rules={[{ required: true, message: "Please input your username!" }]}
-              >
-                <Input
-                  className='input'
+            >
+              <Input
                   placeholder="E.g: Marx420"
-                  style={{ color: "white" }}
-                />
-              </Form.Item>
-              <Form.Item
+                  className="bg-[#1A1A1A] text-white rounded-md"
+              />
+            </Form.Item>
+
+            <Form.Item
                 name="password"
-                label={<span style={{ color: "black", fontWeight: "bold", fontSize: "16px" }}>Password</span>}
+                label={<span className="text-black font-bold text-base">Password</span>}
                 rules={[{ required: true, message: "Please input your password!" }]}
-              >
-                <Input
-                  className='input'
+            >
+              <Input.Password
                   placeholder="E.g: 1917"
-                  style={{ color: "white" }}
-                />
-              </Form.Item>
-              <Link href="/register">Don&apos;t have an account yet? Register here!</Link>
-              <Form.Item>
-                <Button type="primary" htmlType="submit" className="login-button"
-                style={{color: 'white', backgroundColor: 'black', fontSize: 20}}>
-                  Login
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
+                  className="bg-[#1A1A1A] text-white rounded-md"
+              />
+            </Form.Item>
+
+            <div className="mb-4 text-sm">
+              <Link href="/register" className="text-blue-600 hover:underline">
+                Don&apos;t have an account yet? Register here!
+              </Link>
+            </div>
+
+            <Form.Item>
+              <Button
+                  type="primary"
+                  htmlType="submit"
+                  className="w-full bg-black text-white text-lg hover:bg-gray-800"
+              >
+                Login
+              </Button>
+            </Form.Item>
+          </Form>
         </div>
-
-
-
-      </main>
-    </div>
+      </div>
   );
 };
 
 export default Login;
-
