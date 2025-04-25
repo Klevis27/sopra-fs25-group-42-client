@@ -1,15 +1,15 @@
 "use client";
 import {useState, useEffect, useCallback, PropsWithChildren, JSX} from "react";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import * as Y from "yjs";
-import { WebsocketProvider } from "y-websocket";
-import { TextAreaBinding } from "y-textarea";
+import {WebsocketProvider} from "y-websocket";
+import {TextAreaBinding} from "y-textarea";
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js";
-import { LinkParser } from "@/editor-dev/components/LinkParser";
-import { useParams } from "next/navigation";
+import {LinkParser} from "@/components/LinkParser";
+import {useParams} from "next/navigation";
 import "github-markdown-css";
 
 // Create shared Yjs document
@@ -55,7 +55,7 @@ const useCollaborativeEditor = () => {
 
         const handleAwareness = () => {
             const states = Array.from(provider.awareness.getStates().values());
-            setUsers(states.filter(s => s.user).map(s => s.user);
+            setUsers(states.filter(s => s.user).map(s => s.user));
         };
 
         provider.on("status", handleStatus);
@@ -81,11 +81,11 @@ const useCollaborativeEditor = () => {
         return () => binding.destroy();
     }, []);
 
-    return { content, bindEditor, users, isConnected };
+    return {content, bindEditor, users, isConnected};
 };
 
 export default function CollaborativeMarkdownEditor() {
-    const { content, bindEditor, users, isConnected } = useCollaborativeEditor();
+    const {content, bindEditor, users, isConnected} = useCollaborativeEditor();
 
     // Apply syntax highlighting
     useEffect(() => {
@@ -96,48 +96,65 @@ export default function CollaborativeMarkdownEditor() {
         console.log("Internal link clicked:", pageTitle);
     };
 
-    const components = {
+    const components: Components = {
+        // Plain text
+        p: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['p']>) => (
+            <p className="my-2" {...props}>
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
+            </p>
+        ),
+
         // Headers
-        h1: ({ children, ...props }: any) => (
+        h1: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['h1']>) => (
             <h1 className="text-3xl font-bold my-4 border-b pb-2" {...props}>
                 {children}
             </h1>
         ),
-        h2: ({ children, ...props }: any) => (
+        h2: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['h2']>) => (
             <h2 className="text-2xl font-bold my-3 border-b pb-1" {...props}>
                 {children}
             </h2>
         ),
-        h3: ({ children, ...props }: any) => (
+        h3: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['h3']>) => (
             <h3 className="text-xl font-semibold my-2" {...props}>
                 {children}
             </h3>
         ),
 
         // Text formatting
-        em: ({ children, ...props }: any) => (
+        em: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['em']>) => (
             <em className="italic" {...props}>
-                {children}
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
             </em>
         ),
-        strong: ({ children, ...props }: any) => (
+        strong: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['strong']>) => (
             <strong className="font-bold" {...props}>
-                {children}
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
             </strong>
         ),
 
         // Lists
-        ol: ({ children, ...props }: any) => (
+        ol: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['ol']>) => (
             <ol className="list-decimal pl-8 my-2" {...props}>
-                {children}
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
             </ol>
         ),
-        ul: ({ children, ...props }: any) => (
+        ul: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['ul']>) => (
             <ul className="list-disc pl-8 my-2" {...props}>
-                {children}
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
             </ul>
         ),
-        li: ({ children, ...props }: any) => (
+        li: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['li']>) => (
             <li className="my-1 pl-2" {...props}>
                 <LinkParser onInternalLinkClick={handleInternalLink}>
                     {children}
@@ -146,7 +163,7 @@ export default function CollaborativeMarkdownEditor() {
         ),
 
         // Links
-        a: ({ children, href, ...props }: any) => (
+        a: ({children, href, ...props}: PropsWithChildren<JSX.IntrinsicElements['a']> & { href?: string }) => (
             <a
                 href={href}
                 className="text-blue-600 hover:underline"
@@ -158,35 +175,8 @@ export default function CollaborativeMarkdownEditor() {
             </a>
         ),
 
-        // Wiki links ([[S]])
-        text: ({ children, ...props }: any) => {
-            const text = children?.toString() || '';
-            if (text.includes('[[') && text.includes(']]')) {
-                return (
-                    <span>
-                        {text.split(/(\[\[.*?\]\])/).map((part, i) => {
-                            if (part.match(/\[\[.*?\]\]/)) {
-                                const page = part.replace(/\[\[|\]\]/g, '');
-                                return (
-                                    <a
-                                        key={i}
-                                        className="text-blue-600 hover:underline cursor-pointer"
-                                        onClick={() => handleInternalLink(page)}
-                                    >
-                                        {page}
-                                    </a>
-                                );
-                            }
-                            return part;
-                        })}
-                    </span>
-                );
-            }
-            return <span {...props}>{children}</span>;
-        },
-
         // Code blocks
-        code({ node, inline, className, children, ...props }: any) {
+        code: (({ inline, className, children, ...props }: { inline?: boolean; className?: string; children?: React.ReactNode }) => {
             const match = /language-(\w+)/.exec(className || '');
             return !inline && match ? (
                 <div className="bg-gray-100 rounded p-2 my-2">
@@ -199,20 +189,20 @@ export default function CollaborativeMarkdownEditor() {
                     {children}
                 </code>
             );
-        }
+        })
     };
 
     return (
         <div className="w-full flex h-screen">
             {/* Connection Status */}
             <div className="absolute top-4 left-1/2 transform -translate-x-1/2 flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"}`} />
+                <div className={`w-3 h-3 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"}`}/>
                 <div className="flex -space-x-2">
                     {users.map((user, i) => (
                         <div
                             key={i}
                             className="w-4 h-4 rounded-full border-2 border-white"
-                            style={{ backgroundColor: user.color }}
+                            style={{backgroundColor: user.color}}
                             title={user.name}
                         />
                     ))}
