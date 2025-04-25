@@ -8,68 +8,71 @@ import { WebsocketProvider } from "y-websocket";
 import { TextAreaBinding } from "y-textarea";
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js";
-import { LinkParser } from "@/components/LinkParser";
-import {useParams} from "next/navigation";
+import { LinkParser } from "@/editor-dev/components/LinkParser";
+import { useParams } from "next/navigation";
+import "github-markdown-css";
 
 // Create shared Yjs document
 const ydoc = new Y.Doc();
+const ytext = ydoc.getText("markdown");
+const ymap = ydoc.getMap("meta");
 
 const useCollaborativeEditor = () => {
     const params = useParams();
     const noteId = params?.note_id as string;
-    const accessToken = localStorage.getItem("accessToken");
-
-    useEffect(() => {
-        if (noteId) {
-            ymap.set("noteId", noteId); // Set the noteId in a shared Y.Map if you want
-        }
-        if (accessToken){
-            ymap.set("accessToken", accessToken);
-        }
-    }, [noteId, accessToken]);
-    
-    // WebSocket provider setup (dummy address)
-    const provider = new WebsocketProvider(`ws://localhost:1234/${noteId}`, noteId, ydoc);
-    const ytext = ydoc.getText("markdown");
-    const ymap = ydoc.getMap("meta"); 
     const [content, setContent] = useState(ytext.toString());
     const [users, setUsers] = useState<Array<{ name: string; color: string }>>([]);
     const [isConnected, setIsConnected] = useState(false);
+    const [provider, setProvider] = useState<WebsocketProvider | null>(null);
 
-    
+    // Initialize WebSocket provider
+    useEffect(() => {
+        if (!noteId) return;
+
+        const wsProvider = new WebsocketProvider("ws://localhost:1234", noteId, ydoc);
+        setProvider(wsProvider);
+        ymap.set("noteId", noteId);
+
+        return () => {
+            wsProvider.destroy();
+        };
+    }, [noteId]);
+
     // Content synchronization
     useEffect(() => {
-        const handleContentUpdate = () => setContent(ytext.toString());
-        ytext.observe(handleContentUpdate);
+        const handleUpdate = () => setContent(ytext.toString());
+        ytext.observe(handleUpdate);
+        return () => ytext.unobserve(handleUpdate);
+    }, []);
 
-        return () => ytext.unobserve(handleContentUpdate);
-    }, [ytext]);
-
-    // Connection status and awareness
+    // Connection and awareness state
     useEffect(() => {
-        provider.on("status", (event: { status: string }) => {
-            setIsConnected(event.status === "connected");
-        });
+        if (!provider) return;
 
-        const handleAwarenessUpdate = () => {
-            const states = Array.from(provider.awareness.getStates().values());
-            setUsers(states.filter(s => s.user).map(s => s.user));
+        const handleStatus = (event: { status: string }) => {
+            setIsConnected(event.status === "connected");
         };
 
-        provider.awareness.on("change", handleAwarenessUpdate);
+        const handleAwareness = () => {
+            const states = Array.from(provider.awareness.getStates().values());
+            setUsers(states.filter(s => s.user).map(s => s.user);
+        };
+
+        provider.on("status", handleStatus);
+        provider.awareness.on("change", handleAwareness);
+
         provider.awareness.setLocalState({
             user: {
                 name: `User ${Math.floor(Math.random() * 1000)}`,
-                color: `#${Math.floor(Math.random() * 16777215).toString(16)}`
+                color: `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`
             }
         });
 
         return () => {
-            provider.awareness.off("change", handleAwarenessUpdate);
-            // @ts-expect-error: Need a buildable version rn
-            provider.off("status");
+            provider.off("status", handleStatus);
+            provider.awareness.off("change", handleAwareness);
         };
-    }, []);
+    }, [provider]);
 
     // Bind textarea using y-textarea
     const bindEditor = useCallback((element: HTMLTextAreaElement | null) => {
@@ -84,39 +87,120 @@ const useCollaborativeEditor = () => {
 export default function CollaborativeMarkdownEditor() {
     const { content, bindEditor, users, isConnected } = useCollaborativeEditor();
 
+    // Apply syntax highlighting
     useEffect(() => {
         hljs.highlightAll();
     }, [content]);
 
     const handleInternalLink = (pageTitle: string) => {
         console.log("Internal link clicked:", pageTitle);
-        // Implement navigation logic here
     };
 
-    const safeWrapWithLinkParser = <T extends keyof JSX.IntrinsicElements>(ComponentTag: T) => {
-        const WrappedComponent = ({ children, ...props }: PropsWithChildren<JSX.IntrinsicElements[T]>) => (
-            // @ts-expect-error - TypeScript struggles with dynamic tag names
-            <ComponentTag {...props}>
+    const components = {
+        // Headers
+        h1: ({ children, ...props }: any) => (
+            <h1 className="text-3xl font-bold my-4 border-b pb-2" {...props}>
+                {children}
+            </h1>
+        ),
+        h2: ({ children, ...props }: any) => (
+            <h2 className="text-2xl font-bold my-3 border-b pb-1" {...props}>
+                {children}
+            </h2>
+        ),
+        h3: ({ children, ...props }: any) => (
+            <h3 className="text-xl font-semibold my-2" {...props}>
+                {children}
+            </h3>
+        ),
+
+        // Text formatting
+        em: ({ children, ...props }: any) => (
+            <em className="italic" {...props}>
+                {children}
+            </em>
+        ),
+        strong: ({ children, ...props }: any) => (
+            <strong className="font-bold" {...props}>
+                {children}
+            </strong>
+        ),
+
+        // Lists
+        ol: ({ children, ...props }: any) => (
+            <ol className="list-decimal pl-8 my-2" {...props}>
+                {children}
+            </ol>
+        ),
+        ul: ({ children, ...props }: any) => (
+            <ul className="list-disc pl-8 my-2" {...props}>
+                {children}
+            </ul>
+        ),
+        li: ({ children, ...props }: any) => (
+            <li className="my-1 pl-2" {...props}>
                 <LinkParser onInternalLinkClick={handleInternalLink}>
                     {children}
                 </LinkParser>
-            </ComponentTag>
-        );
+            </li>
+        ),
 
-        WrappedComponent.displayName = `safeWrapWithLinkParser(${String(ComponentTag)})`;
-        return WrappedComponent;
+        // Links
+        a: ({ children, href, ...props }: any) => (
+            <a
+                href={href}
+                className="text-blue-600 hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+                {...props}
+            >
+                {children}
+            </a>
+        ),
+
+        // Wiki links ([[S]])
+        text: ({ children, ...props }: any) => {
+            const text = children?.toString() || '';
+            if (text.includes('[[') && text.includes(']]')) {
+                return (
+                    <span>
+                        {text.split(/(\[\[.*?\]\])/).map((part, i) => {
+                            if (part.match(/\[\[.*?\]\]/)) {
+                                const page = part.replace(/\[\[|\]\]/g, '');
+                                return (
+                                    <a
+                                        key={i}
+                                        className="text-blue-600 hover:underline cursor-pointer"
+                                        onClick={() => handleInternalLink(page)}
+                                    >
+                                        {page}
+                                    </a>
+                                );
+                            }
+                            return part;
+                        })}
+                    </span>
+                );
+            }
+            return <span {...props}>{children}</span>;
+        },
+
+        // Code blocks
+        code({ node, inline, className, children, ...props }: any) {
+            const match = /language-(\w+)/.exec(className || '');
+            return !inline && match ? (
+                <div className="bg-gray-100 rounded p-2 my-2">
+                    <code className={className} {...props}>
+                        {children}
+                    </code>
+                </div>
+            ) : (
+                <code className="bg-gray-100 px-1 rounded" {...props}>
+                    {children}
+                </code>
+            );
+        }
     };
-    const customComponents = {
-        p: safeWrapWithLinkParser("p"),
-        h1: safeWrapWithLinkParser("h1"),
-        h2: safeWrapWithLinkParser("h2"),
-        h3: safeWrapWithLinkParser("h3"),
-        li: safeWrapWithLinkParser("li"),
-        blockquote: safeWrapWithLinkParser("blockquote"),
-        td: safeWrapWithLinkParser("td"),
-        th: safeWrapWithLinkParser("th"),
-        // don't wrap code blocks to avoid breaking syntax highlight
-    } as const;
 
     return (
         <div className="w-full flex h-screen">
@@ -135,25 +219,26 @@ export default function CollaborativeMarkdownEditor() {
                 </div>
             </div>
 
-            {/* Editor Pane */}
+            {/* Editor */}
             <div className="w-1/2 p-4 border-r border-gray-200">
                 <div className="h-full bg-white rounded-lg shadow-sm">
-          <textarea
-              ref={bindEditor}
-              className="w-full h-full p-4 resize-none focus:outline-none font-mono"
-              placeholder="Collaborate in real-time..."
-          />
+                    <textarea
+                        ref={bindEditor}
+                        className="w-full h-full p-4 resize-none focus:outline-none font-mono"
+                        placeholder="Collaborate in real-time..."
+                        defaultValue={content}
+                    />
                 </div>
             </div>
 
-            {/* Preview Pane */}
+            {/* Preview */}
             <div className="w-1/2 p-4">
-                <div className="h-full bg-white rounded-lg shadow-sm overflow-auto">
-                    <div className="p-4 prose max-w-none">
+                <div className="h-full bg-white rounded-lg shadow-sm overflow-auto markdown-body">
+                    <div className="p-4">
                         <ReactMarkdown
                             remarkPlugins={[remarkGfm]}
                             rehypePlugins={[rehypeRaw]}
-                            components={customComponents}
+                            components={components}
                         >
                             {content}
                         </ReactMarkdown>
