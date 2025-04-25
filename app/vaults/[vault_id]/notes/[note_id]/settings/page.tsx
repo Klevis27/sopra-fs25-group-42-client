@@ -1,10 +1,10 @@
 "use client";
 
 import "@ant-design/v5-patch-for-react-19";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
-import { Button, Card, Form, Input, message } from "antd";
+import { Button, Card, Form, Input, message, Select } from "antd";
 
 const NoteSettings: React.FC = () => {
   const router = useRouter();
@@ -15,8 +15,9 @@ const NoteSettings: React.FC = () => {
 
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [permissions, setPermissions] = useState<{ username: string; role: string }[]>([]);
 
-  const handleSendInvitation = async (values: { username: string }) => {
+  const handleSendInvitation = async (values: { username: string; role: string }) => {
     setLoading(true);
     try {
       const accessToken = localStorage.getItem("accessToken");
@@ -28,12 +29,23 @@ const NoteSettings: React.FC = () => {
 
       await apiService.post(
         `/notes/${noteId}/invite`,
-        { username: values.username },
+        {
+          username: values.username,
+          role: values.role,
+        },
         accessToken
       );
 
-      message.success(`Invitation sent to ${values.username}!`);
+      message.success(`Invitation sent to ${values.username} as ${values.role}!`);
       form.resetFields();
+
+      // Fetch updated permissions list
+      const data = await apiService.get<{ username: string; role: string }[]>(
+        `/notes/${noteId}/permissions`,
+        accessToken
+      );
+      setPermissions(data);
+
     } catch (error: unknown) {
       if (
         typeof error === "object" &&
@@ -58,6 +70,25 @@ const NoteSettings: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+        if (!accessToken) return;
+
+        const data = await apiService.get<{ username: string; role: string }[]>(
+          `/notes/${noteId}/permissions`,
+          accessToken
+        );
+        setPermissions(data);
+      } catch (err) {
+        console.error("Failed to fetch note permissions:", err);
+      }
+    };
+
+    fetchPermissions();
+  }, [noteId, apiService]);
+
   return (
     <div className="card-container">
       <Card
@@ -79,6 +110,17 @@ const NoteSettings: React.FC = () => {
             <Input placeholder="Enter username (e.g. edi)" />
           </Form.Item>
 
+          <Form.Item
+            name="role"
+            label="Assign role"
+            rules={[{ required: true, message: "Please select a role." }]}
+          >
+            <Select placeholder="Choose a role">
+              <Select.Option value="reader">Reader</Select.Option>
+              <Select.Option value="editor">Editor</Select.Option>
+            </Select>
+          </Form.Item>
+
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={loading}>
               Send Invitation
@@ -86,9 +128,60 @@ const NoteSettings: React.FC = () => {
           </Form.Item>
         </Form>
 
+        {permissions.length > 0 && (
+  <div
+    style={{
+      marginTop: "32px",
+      padding: "16px",
+      background: "#f6f6f6",
+      border: "1px solid #ddd",
+      borderRadius: "8px",
+    }}
+  >
+    <h3
+      style={{
+        fontSize: "18px",
+        fontWeight: 600,
+        marginBottom: "12px",
+        color: "#222",
+      }}
+    >
+      👥 Users with access to this note
+    </h3>
+
+    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+      {permissions.map((perm, index) => (
+        <div
+          key={index}
+          style={{
+            background: "#fff",
+            border: "1px solid #ccc",
+            borderRadius: "6px",
+            padding: "8px 12px",
+            fontSize: "14px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            color: "#333",
+          }}
+        >
+          <span>
+            <strong>{perm.username}</strong>
+          </span>
+          <span style={{ fontStyle: "italic", color: "#888" }}>
+            {perm.role}
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+
         <Button
           type="default"
           onClick={() => router.push(`/vaults/${vaultId}/notes/${noteId}`)}
+          style={{ marginTop: "16px" }}
         >
           Back to Note
         </Button>

@@ -91,19 +91,20 @@ reason).
 
 ---
 
-## Contributions Week 4 - [Begin Date] to [End Date]
+## Contributions Week 4 - 14.04. to 25.04.
 
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **Klevis27**       | 01.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
-|                    | 27.03.2025 |  |  |  |
-|                    | 30.03.2025 |  |  |  |
+| **Klevis27**       | 24.04.2025 | [Link to Pull request 1 client](https://github.com/Klevis27/sopra-fs25-group-42-client/pull/19) | Merging changes to the markdown editor and preparation for the Yjs | Resolving conflicts is important |
+|                    | 24.04.2025 | [Link to Pull request 1 server](https://github.com/Klevis27/sopra-fs25-group-42-server/pull/35) | Merging changes to the markdown editor and preparation for the Yjs | Resolving conflicts is important |
+|                    | 24.04.2025 | [Link to Pull request 2 client](https://github.com/Klevis27/sopra-fs25-group-42-client/pull/18) | Merging changes to the markdown editor and preparation for the Yjs | Resolving conflicts is important |
+|                    | 24.04.2025 | [Link to Pull request 2 server](https://github.com/Klevis27/sopra-fs25-group-42-server/pull/34) | Merging changes to the settings | Resolving conflicts is important. Note: I've been merging a lot and generally helping all around while not getting to author that many changes myself. There's a lot of bugfixing, hotfixing, conflict-resolving, managing and merging I've been doing that I can't succinctly mention here. Just look at code blame and ask my teammates |
 | **AntWarz**        | 30.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
-| **elifdenizi**     | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
+| **elifdenizi**     | 24.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/2d9298da504efffa2cf584ca1c1d79d04ac8e623) | implementation of the livechat app to the editor page with authentication | External API is a must |
+|                    | 24.04.2025 | [Link to Pull commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/e53cc808a0e2c1dfcc57b45d4aa055d797d40d89) | fixation of the note permission logic and adding role for the permission | core feature |
 | **nfcolak**        | 15.04.2025 |[Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/a4dbe9153d22c5fa7975230054cb60ec79b68b76)|Setting page desing and conflicts resolution|UI and fix|
-|                    | 29.03.2025 |  |  |  |
+|                    | 24.04.2025 |[Link to Pull commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/b09ef5e1ffd44810e8fbf883a018d1829b3bacd7)|Profile page settings and user role hook changes|Main functionality  |
 | **SvenVest**       | 29.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-client/commit/09bde643e867c6d27d93636a28f1fb98fe96f978 |Markdown fixes   |  |
 |                    | 30.03.2025 |https://github.com/Klevis27/sopra-fs25-group-42-client/commit/9e5e8b0e20dd211c28cbae13e3fae3a3b819cfe7 | notes in sidebar dznamic from repo |  |
 
@@ -113,8 +114,7 @@ reason).
 
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **Klevis27**       | 01.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
-|                    | 27.03.2025 |  |  |  |
+| **Klevis27**       | 24.04.2025 | [Link to Pull request 1 client](https://github.com/Klevis27/sopra-fs25-group-42-client/pull/19) | Merging changes to the markdown editor and preparation for the Yjs | Resolving conflicts is important |
 |                    | 30.03.2025 |  |  |  |
 | **AntWarz**        | 30.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
