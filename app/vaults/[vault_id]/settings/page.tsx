@@ -7,11 +7,11 @@ import {
   Card,
   Form,
   Input,
-  Select,
   Typography,
   message,
   Table,
   App,
+  Select,
 } from "antd";
 import { useApi } from "@/hooks/useApi";
 
@@ -55,7 +55,6 @@ const VaultSettings: React.FC = () => {
         setVault(data);
         form.setFieldsValue({
           name: data.name,
-          state: data.state || "Private",
         });
       })
       .catch(() => {
@@ -77,7 +76,7 @@ const VaultSettings: React.FC = () => {
       .catch(() => messageApi.error("Failed to load permissions"));
   }, [vaultId, messageApi, apiService]);
 
-  const handleSave = async (values: { name: string; state: string }) => {
+  const handleSave = async (values: { name: string }) => {
     if (!vault) return;
 
     const token = localStorage.getItem("accessToken");
@@ -160,26 +159,9 @@ const VaultSettings: React.FC = () => {
                 <Input />
               </Form.Item>
 
-              <Form.Item
-                name="state"
-                label="Visibility"
-                rules={[{ required: true, message: "Please select a visibility" }]}
-              >
-                <Select>
-                  <Select.Option value="Private">Private</Select.Option>
-                  <Select.Option value="Shared">Shared</Select.Option>
-                </Select>
-              </Form.Item>
-
               <Form.Item>
                 <Button type="primary" htmlType="submit" block>
                   Save Changes
-                </Button>
-              </Form.Item>
-
-              <Form.Item>
-                <Button block onClick={() => router.push("/vaults")} danger>
-                  Cancel
                 </Button>
               </Form.Item>
 
@@ -235,6 +217,17 @@ const VaultSettings: React.FC = () => {
             ]}
           />
         </Card>
+
+        {/* Return Button at Bottom */}
+        <div style={{ marginTop: "2rem" }}>
+          <Button
+            type="default"
+            block
+            onClick={() => router.push("/vaults")}
+          >
+            Return to the vaults page
+          </Button>
+        </div>
       </div>
     </App>
   );
