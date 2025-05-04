@@ -53,7 +53,9 @@ const VaultSettings: React.FC = () => {
     apiService.get<Vault>(`/vaults/${vaultId}`, token)
       .then((data) => {
         setVault(data);
-        form.setFieldsValue({ name: data.name });
+        form.setFieldsValue({
+          name: data.name,
+        });
       })
       .catch(() => {
         messageApi.error("Vault not found.");
@@ -100,16 +102,19 @@ const VaultSettings: React.FC = () => {
     const token = localStorage.getItem("accessToken");
     if (!token) return;
     try {
-      const updated = await apiService.post<VaultPermission[]>(
-        `/vaults/${vaultId}/settings/permissions`,
-        values,
+      await apiService.post(
+        `/invite/create`,
+        {
+          userId: values.userId,
+          vaultId: vaultId,
+          role: values.role,
+        },
         token
       );
-      messageApi.success("Permission added.");
+      messageApi.success("Invitation sent.");
       permForm.resetFields();
-      setPermissions(updated);
     } catch {
-      messageApi.error("Could not add permission.");
+      messageApi.error("Could not send invitation.");
     }
   };
 
@@ -151,7 +156,7 @@ const VaultSettings: React.FC = () => {
               </Form.Item>
 
               <Form.Item>
-                <Button danger block onClick={handleDeleteVault}>
+                <Button danger type="default" block onClick={handleDeleteVault}>
                   Delete Vault
                 </Button>
               </Form.Item>
@@ -218,7 +223,11 @@ const VaultSettings: React.FC = () => {
         </Card>
 
         <div style={{ marginTop: "2rem" }}>
-          <Button block onClick={() => router.push("/vaults")}>
+          <Button
+            type="default"
+            block
+            onClick={() => router.push("/vaults")}
+          >
             Return to the vaults page
           </Button>
         </div>
