@@ -115,7 +115,7 @@ reason).
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **Klevis27**       | 03.05.2025 | [Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/15) | Implementing Sonar test coverage metric | Necessary to be able to efficiently write tests |
-|                    | 30.03.2025 |  |  |  |
+|                    | 30.03.2025 | [Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/42) | Implementing a button | Moreso important would be the User Story and task structuring I've done in the course of doing this |
 | **AntWarz**        | 30.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
 | **elifdenizi**     | 29.03.2025 |  |  |  |
