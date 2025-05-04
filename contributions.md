@@ -110,51 +110,51 @@ reason).
 
 ---
 
-## Contributions Week 5 - [Begin Date] to [End Date]
+## Contributions Week 5 - 28.04 to 04.05.
 
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **Klevis27**       | 24.04.2025 | [Link to Pull request 1 client](https://github.com/Klevis27/sopra-fs25-group-42-client/pull/19) | Merging changes to the markdown editor and preparation for the Yjs | Resolving conflicts is important |
+| **Klevis27**       | 03.05.2025 | [Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/15) | Implementing Sonar test coverage metric | Necessary to be able to efficiently write tests |
 |                    | 30.03.2025 |  |  |  |
 | **AntWarz**        | 30.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
 | **elifdenizi**     | 29.03.2025 |  |  |  |
 |                    | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
-| **nfcolak**        | 29.03.2025 |  |  |  |
-| **SvenVest**       | 29.03.2025 |  |  |  |
+| **nfcolak**        | 04.05.2025 |[Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/2948523cedae3123ac93fc47d4fed4de136b22ce) |Implementing invite of the users to the spesific vault via message | Core Feature |
+|                    | 04.05.2025 |[Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/5852f994229fe773a7d2c3b8c5852e17068b9a6d) |Notifications (Invitation Message Container) page added. Profile page changes|Core Feature |
+|                    | 01.05.2025 |[Link to issue 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/4d0a27df42ba91d455ce609c3cd267b1fecc9314) | Vault_Settings page visual changes | Improvement |
+| **SvenVest**       | 30.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
 
 ---
 
-## Contributions Week 6 - [Begin Date] to [End Date]
+## Contributions Week 6 - 05.05 to 11.05.
 
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **Klevis27**       | 01.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
-|                    | 27.03.2025 |  |  |  |
+| **Klevis27**       | 03.05.2025 | [Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/15) | Implementing Sonar test coverage metric | Necessary to be able to efficiently write tests |
 |                    | 30.03.2025 |  |  |  |
 | **AntWarz**        | 30.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
 | **elifdenizi**     | 29.03.2025 |  |  |  |
 |                    | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
 | **nfcolak**        | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
 | **SvenVest**       | 29.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
 
 
+## Contributions Week 7 - 12.05 to 18.05.
 
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **Klevis27**       | 01.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
-|                    | 27.03.2025 |  |  |  |
+| **Klevis27**       | 03.05.2025 | [Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/15) | Implementing Sonar test coverage metric | Necessary to be able to efficiently write tests |
 |                    | 30.03.2025 |  |  |  |
 | **AntWarz**        | 30.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
 | **elifdenizi**     | 29.03.2025 |  |  |  |
 |                    | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
 | **nfcolak**        | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
 | **SvenVest**       | 29.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
