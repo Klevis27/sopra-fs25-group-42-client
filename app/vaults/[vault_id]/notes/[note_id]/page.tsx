@@ -1,15 +1,15 @@
 "use client";
 
-import { Button } from "antd";
+import {Button} from "antd";
 import {useEffect, useState} from "react";
 import Image from "next/image";
 import MarkdownEditor from "@/components/MarkdownEditor"
 import Sidebar from "@/components/Sidebar";
 import {Note} from "@/types/note";
-import { useApi } from "@/hooks/useApi";
+import {useApi} from "@/hooks/useApi";
 
 import ChatBox from "@/components/ChatBox";
-import { useParams } from "next/navigation";
+import {useParams} from "next/navigation";
 
 
 export default function Editor() {
@@ -19,11 +19,20 @@ export default function Editor() {
     const [noteTitles, setNoteTitles] = useState<string[]>([]);
     const [currentNoteTitle, setCurrentNoteTitle] = useState<string>("ACTIVE NOTE");
 
-    const apiService = useApi(); // Make sure this hook is working
+    const [routeParams, setRouteParams] = useState<string[]>([]);
 
+    const apiService = useApi();
     const params = useParams();
-    const noteId = params.note_id as string;
 
+    useEffect(() => {
+        const setRoute = () => {
+            const vaultId = params.vault_id as string;
+            const noteId = params.note_id as string;
+            if (!vaultId || !noteId) return;
+            setRouteParams([vaultId, noteId]);
+        }
+        setRoute();
+    }, [params.note_id, params.vault_id]);
 
     useEffect(() => {
         const getAllNotes = async () => {
@@ -42,18 +51,32 @@ export default function Editor() {
     }, [apiService]);
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+        <div style={{display: "flex", flexDirection: "column", height: "100vh"}}>
             {/* Header */}
-            <header style={{ background: "#f8f9fa", padding: "16px", borderBottom: "1px solid #ddd", display: "flex", justifyContent: "space-between" }}>
+            <header style={{
+                background: "#f8f9fa",
+                padding: "16px",
+                borderBottom: "1px solid #ddd",
+                display: "flex",
+                justifyContent: "space-between"
+            }}>
                 <div>
-                    <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "black" }}>YOUR VAULT</span>
+                    <span style={{fontSize: "1.25rem", fontWeight: "bold", color: "black"}}>YOUR VAULT</span>
                     <a href={"/vaults"} className={"ml-3"}>Back to vaults</a>
                 </div>
-                <button style={{ padding: "8px 12px", background: "#007bff", color: "white", borderRadius: "4px", border: "none" }}>Extract as PDF</button>
+                <div>
+                    {params.vault_id && params.note_id && (
+                        <a className={"px-2 py-1 text-white rounded-sm mr-3"}
+                           href={`/vaults/${routeParams[0]}/notes/${routeParams[1]}/history`}>Version
+                            history</a>
+                    )}
+                    <button className={"px-2 py-1 bg-blue-700 text-white rounded-sm hover:bg-blue-900"}>Extract as PDF
+                    </button>
+                </div>
             </header>
 
             {/* Main Layout */}
-            <div style={{ display: "flex", flex: 1, overflow: "hidden", font:"black" }}>
+            <div style={{display: "flex", flex: 1, overflow: "hidden", font: "black"}}>
                 {/* Left Sidebar */}
                 {isLeftSidebarOpen && (
                     <Sidebar isOpen={isLeftSidebarOpen} onClose={() => setIsLeftSidebarOpen(false)} position="left">
@@ -75,7 +98,7 @@ export default function Editor() {
                                 </li>
                             ))}
                         </ul>
-                        <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "16px" }}>Status: Read Only</p>
+                        <p style={{fontSize: "0.75rem", color: "#888", marginTop: "16px"}}>Status: Read Only</p>
                     </Sidebar>
                 )}
 
@@ -94,10 +117,16 @@ export default function Editor() {
                         marginRight: isRightSidebarOpen ? "290px" : "0px",
                     }}
                 >
-                    <h1 style={{ fontSize: "1.5rem", fontWeight: "bold", textAlign: "center", marginBottom: "16px", color: "black" }}>
+                    <h1 style={{
+                        fontSize: "1.5rem",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        marginBottom: "16px",
+                        color: "black"
+                    }}>
                         {currentNoteTitle}
                     </h1>
-                    <div style={{height:"90%", fontSize: "1.5rem", color: "black" }}>
+                    <div style={{height: "90%", fontSize: "1.5rem", color: "black"}}>
                         <MarkdownEditor/>
                     </div>
                 </main>
@@ -105,21 +134,36 @@ export default function Editor() {
                 {/* Right Sidebar */}
                 {isRightSidebarOpen && (
                     <Sidebar isOpen={isRightSidebarOpen} onClose={() => setIsRightSidebarOpen(false)} position="right">
-                        <div style={{ width: "100%", height: "300px", border: "1px solid #ddd", borderRadius: "8px", background: "#e9ecef", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                            <Image src="/graph-mock.png" alt="Graph View" width={250} height={200} />
+                        <div style={{
+                            width: "100%",
+                            height: "300px",
+                            border: "1px solid #ddd",
+                            borderRadius: "8px",
+                            background: "#e9ecef",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center"
+                        }}>
+                            <Image src="/graph-mock.png" alt="Graph View" width={250} height={200}/>
                         </div>
-                        <div style={{ textAlign: "center", padding: "16px" }}>
+                        <div style={{textAlign: "center", padding: "16px"}}>
                             <Button type="primary" onClick={() => setShowSettings(!showSettings)}>Settings</Button>
                             {showSettings && (
-                                <div style={{ marginTop: "10px", padding: "16px", border: "1px solid #ddd", borderRadius: "8px", background: "#f8f9fa" }}>
+                                <div style={{
+                                    marginTop: "10px",
+                                    padding: "16px",
+                                    border: "1px solid #ddd",
+                                    borderRadius: "8px",
+                                    background: "#f8f9fa"
+                                }}>
                                     <p>Settings Panel (Placeholder)</p>
                                 </div>
                             )}
                         </div>
 
                         {/* ✅ Add ChatBox here */}
-                        <div style={{ marginTop: "24px" }}>
-                            <ChatBox roomId={noteId} />
+                        <div style={{marginTop: "24px"}}>
+                            <ChatBox roomId={routeParams[0]}/>
                         </div>
 
                     </Sidebar>
