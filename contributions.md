@@ -120,10 +120,11 @@ reason).
 |                    | 30.03.2025 |  |  |  |
 | **elifdenizi**     | 29.03.2025 |  |  |  |
 |                    | 29.03.2025 |  |  |  |
-| **nfcolak**        | 29.03.2025 |  |  |  |
-|                    | 04.05.2025 |[Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/2948523cedae3123ac93fc47d4fed4de136b22ce) |Implementing invite of the users to the spesific vault via message | Core Feature |
-| **SvenVest**       | 04.05.2025 |[Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/5852f994229fe773a7d2c3b8c5852e17068b9a6d) |Notifications (Invitation Message Container) page added. Profile page changes|Core Feature |
+| **nfcolak**        | 04.05.2025 |[Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/2948523cedae3123ac93fc47d4fed4de136b22ce) |Implementing invite of the users to the spesific vault via message | Core Feature |
+|                    | 04.05.2025 |[Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/5852f994229fe773a7d2c3b8c5852e17068b9a6d) |Notifications (Invitation Message Container) page added. Profile page changes|Core Feature |
 |                    | 01.05.2025 |[Link to issue 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/4d0a27df42ba91d455ce609c3cd267b1fecc9314) | Vault_Settings page visual changes | Improvement |
+| **SvenVest**       | 30.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
 
 ---
 
