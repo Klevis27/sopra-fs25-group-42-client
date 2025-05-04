@@ -108,16 +108,19 @@ const VaultSettings: React.FC = () => {
     if (!token) return;
 
     try {
-      const updated = await apiService.post<VaultPermission[]>(
-        `/vaults/${vaultId}/settings/permissions`,
-        values,
+      await apiService.post(
+        `/invite/create`,
+        {
+          userId: values.userId,
+          vaultId: vaultId,
+          role: values.role,
+        },
         token
       );
-      messageApi.success("Permission added.");
+      messageApi.success("Invitation sent.");
       permForm.resetFields();
-      setPermissions(updated);
     } catch {
-      messageApi.error("Could not add permission.");
+      messageApi.error("Could not send invitation.");
     }
   };
 
@@ -218,7 +221,6 @@ const VaultSettings: React.FC = () => {
           />
         </Card>
 
-        {/* Return Button at Bottom */}
         <div style={{ marginTop: "2rem" }}>
           <Button
             type="default"

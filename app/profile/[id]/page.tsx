@@ -22,6 +22,7 @@ import {
   EditOutlined,
   DashboardOutlined,
   FolderOpenOutlined,
+  BellOutlined,
 } from "@ant-design/icons";
 
 const { Title } = Typography;
@@ -38,8 +39,8 @@ const Profile: React.FC = () => {
   const goToDashboard = () => router.push("/profile");
   const goToEdit = () => router.push(`/profile/${slug}/edit`);
   const goToVaults = () => router.push("/vaults");
+  const goToNotifications = () => router.push("/notifications");
 
-  // ✅ Supports Date | Dayjs | string | null
   const formatDate = (value?: string | Date | Dayjs | null): string => {
     if (!value) return "N/A";
     if (dayjs.isDayjs(value)) return value.toDate().toLocaleDateString();
@@ -76,7 +77,6 @@ const Profile: React.FC = () => {
         } else {
           console.error("An unknown error occurred during update.");
         }
-
         router.push("/profile");
       }
     };
@@ -121,6 +121,9 @@ const Profile: React.FC = () => {
                 </Button>
                 <Button icon={<FolderOpenOutlined />} onClick={goToVaults}>
                   Vaults
+                </Button>
+                <Button icon={<BellOutlined />} onClick={goToNotifications}>
+                  Notifications
                 </Button>
               </Space>
             </Row>
