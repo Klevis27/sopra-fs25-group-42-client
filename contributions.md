@@ -123,8 +123,8 @@ reason).
 | **nfcolak**        | 04.05.2025 |[Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/2948523cedae3123ac93fc47d4fed4de136b22ce) |Implementing invite of the users to the spesific vault via message | Core Feature |
 |                    | 04.05.2025 |[Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/5852f994229fe773a7d2c3b8c5852e17068b9a6d) |Notifications (Invitation Message Container) page added. Profile page changes|Core Feature |
 |                    | 01.05.2025 |[Link to issue 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/4d0a27df42ba91d455ce609c3cd267b1fecc9314) | Vault_Settings page visual changes | Improvement |
-| **SvenVest**       | 30.03.2025 |  |  |  |
-|                    | 30.03.2025 |  |  |  |
+| **SvenVest**       | 30.03.2025 |https://github.com/Klevis27/sopra-fs25-group-42-server/commit/8e1b003a3645b17d8273f55f7f52617342842c3b  |  persitence of yjs|  |
+|                    | 30.03.2025 |https://github.com/Klevis27/sopra-fs25-group-42-server/commit/554b8d327367758118ca6e6e92ebe63f6229a361  | adding controller and service |  |
 
 ---
 
