@@ -118,8 +118,8 @@ reason).
 |                    | 30.03.2025 | [Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/42) | Implementing a button | Moreso important would be the User Story and task structuring I've done in the course of doing this |
 | **AntWarz**        | 30.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
-| **elifdenizi**     | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
+| **elifdenizi**     | 01.05.2025 | [Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/4a29d99b339c2f4f9c8e56af97a726ec40843aab) |implementation of second table displaying all shared vaults in the vault page |to split the shared and own vaults  |
+|                    | 01.05.2025 | [Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/5c30f9af7b5afaed9d28999b3cde6c587853e1c6) | frontend implementation of the shared vaults part |  |
 | **nfcolak**        | 04.05.2025 |[Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/2948523cedae3123ac93fc47d4fed4de136b22ce) |Implementing invite of the users to the spesific vault via message | Core Feature |
 |                    | 04.05.2025 |[Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/5852f994229fe773a7d2c3b8c5852e17068b9a6d) |Notifications (Invitation Message Container) page added. Profile page changes|Core Feature |
 |                    | 01.05.2025 |[Link to issue 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/4d0a27df42ba91d455ce609c3cd267b1fecc9314) | Vault_Settings page visual changes | Improvement |
