@@ -12,6 +12,7 @@ import {
   Table,
   App,
   Select,
+  Modal,
 } from "antd";
 import { useApi } from "@/hooks/useApi";
 
@@ -113,6 +114,12 @@ const VaultSettings: React.FC = () => {
       );
       messageApi.success("Invitation sent.");
       permForm.resetFields();
+
+      const updated = await apiService.get<VaultPermission[]>(
+        `/vaults/${vaultId}/settings/permissions`,
+        token
+      );
+      setPermissions(updated);
     } catch {
       messageApi.error("Could not send invitation.");
     }
@@ -131,6 +138,32 @@ const VaultSettings: React.FC = () => {
       if (error instanceof Error) alert(`Delete failed:\n${error.message}`);
       else console.error("Unknown error.");
     }
+  };
+
+  const handleRemovePermission = (userId: number) => {
+    Modal.confirm({
+      title: "Remove this user's permission?",
+      content: "This user will no longer have access to the vault.",
+      okText: "Remove",
+      okType: "danger",
+      cancelText: "Cancel",
+      onOk: async () => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) return;
+        try {
+          await apiService.delete(`/vaults/${vaultId}/settings/permissions/${userId}`, token);
+          messageApi.success("Permission removed.");
+
+          const updated = await apiService.get<VaultPermission[]>(
+            `/vaults/${vaultId}/settings/permissions`,
+            token
+          );
+          setPermissions(updated);
+        } catch {
+          messageApi.error("Failed to remove permission.");
+        }
+      },
+    });
   };
 
   return (
@@ -218,6 +251,16 @@ const VaultSettings: React.FC = () => {
             columns={[
               { title: "Username", dataIndex: "username" },
               { title: "Role", dataIndex: "role" },
+              {
+                title: "Action",
+                key: "action",
+                render: (_, record: VaultPermission) =>
+                  record.role !== "OWNER" && (
+                    <Button danger type="link" onClick={() => handleRemovePermission(record.userId)}>
+                      Remove
+                    </Button>
+                  ),
+              },
             ]}
           />
         </Card>
