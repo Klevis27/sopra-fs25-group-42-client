@@ -136,8 +136,8 @@ reason).
 |                    | 30.03.2025 |  |  |  |
 | **AntWarz**        | 30.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
-| **elifdenizi**     | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
+| **elifdenizi**     | 09.05.2025 | [Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/85de02e657c5c5ced841eacdeca571cb49c9a771) | backend part of the shared-notes feature | improve the usability of the app |
+|                    | 09.05.2025 | [Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/1bda328746e9093cf2a48b88c45a8ca49763e7dd) | Display shared notes in notes dashboards in order to access vaults and notes user has access to | improve the usability of the app |
 | **nfcolak**        | 29.03.2025 |  |  |  |
 |                    | 29.03.2025 |  |  |  |
 | **SvenVest**       | 29.03.2025 |  |  |  |
