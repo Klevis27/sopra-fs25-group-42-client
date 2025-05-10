@@ -8,7 +8,6 @@ import { WebsocketProvider } from "y-websocket";
 import { TextAreaBinding } from "y-textarea";
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js";
-//import { LinkParser } from '@/app/components/LinkParser.tsx';
 import {LinkParser} from './LinkParser';
 import { useParams } from "next/navigation";
 import "github-markdown-css";
@@ -103,66 +102,75 @@ export default function CollaborativeMarkdownEditor() {
     const handleInternalLink = (pageTitle: string) => {
         console.log("Internal link clicked:", pageTitle);
     };
-    interface MarkdownComponents {
-        [key: string]: ComponentType<{
-            children?: ReactNode;
-            className?: string;
-            node?: unknown;
-            inline?: boolean;
-        } & HTMLAttributes<HTMLElement>>;
+    interface MarkdownComponentProps {
+        children?: ReactNode;
+        className?: string;
+        node?: any;
+        [key: string]: any;
     }
+
+    interface CodeComponentProps extends MarkdownComponentProps {
+        inline?: boolean;
+    }
+
     const components: {
-        h1: ({children, ...props}: any) => JSX.Element;
-        h2: ({children, ...props}: any) => JSX.Element;
-        h3: ({children, ...props}: any) => JSX.Element;
-        em: ({children, ...props}: any) => JSX.Element;
-        strong: ({children, ...props}: any) => JSX.Element;
-        ol: ({children, ...props}: any) => JSX.Element;
-        ul: ({children, ...props}: any) => JSX.Element;
-        li: ({children, ...props}: any) => JSX.Element;
-        code({node, inline, className, children, ...props}: any): JSX.Element
-    }  = {
+        [key: string]: ComponentType<MarkdownComponentProps>;
+    } = {
         // Headers
-        h1: ({ children, ...props }: any) => (
+        h1: ({ children, ...props }: MarkdownComponentProps) => (
             <h1 className="text-3xl font-bold my-4 border-b pb-2" {...props}>
-                {children}
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
             </h1>
         ),
-        h2: ({ children, ...props }: any) => (
+        h2: ({ children, ...props }: MarkdownComponentProps) => (
             <h2 className="text-2xl font-bold my-3 border-b pb-1" {...props}>
-                {children}
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
             </h2>
         ),
-        h3: ({ children, ...props }: any) => (
+        h3: ({ children, ...props }: MarkdownComponentProps) => (
             <h3 className="text-xl font-semibold my-2" {...props}>
-                {children}
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
             </h3>
         ),
 
         // Text formatting
-        em: ({ children, ...props }: any) => (
+        em: ({ children, ...props }: MarkdownComponentProps) => (
             <em className="italic" {...props}>
-                {children}
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
             </em>
         ),
-        strong: ({ children, ...props }: any) => (
+        strong: ({ children, ...props }: MarkdownComponentProps) => (
             <strong className="font-bold" {...props}>
-                {children}
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
             </strong>
         ),
 
         // Lists
-        ol: ({ children, ...props }: any) => (
+        ol: ({ children, ...props }: MarkdownComponentProps) => (
             <ol className="list-decimal pl-8 my-2" {...props}>
-                {children}
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
             </ol>
         ),
-        ul: ({ children, ...props }: any) => (
+        ul: ({ children, ...props }: MarkdownComponentProps) => (
             <ul className="list-disc pl-8 my-2" {...props}>
-                {children}
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
             </ul>
         ),
-        li: ({ children, ...props }: any) => (
+        li: ({ children, ...props }: MarkdownComponentProps) => (
             <li className="my-1 pl-2" {...props}>
                 <LinkParser onInternalLinkClick={handleInternalLink}>
                     {children}
@@ -170,50 +178,26 @@ export default function CollaborativeMarkdownEditor() {
             </li>
         ),
 
-        // Links
-/*
-        a: ({ children, href, ...props }: any) => (
-            <a
-                href={href}
-                className="text-blue-600 hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
-                {...props}
-            >
-                {children}
-            </a>
+        // Paragraphs and text
+        p: ({ children, ...props }: MarkdownComponentProps) => (
+            <p {...props}>
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
+            </p>
         ),
-*/
-
-/*        // Wiki links ([[S]])
-        text: ({ children, ...props }: any) => {
-            const text = children?.toString() || '';
-            if (text.includes('[[') && text.includes(']]')) {
-                return (
-                    <span>
-                        {text.split(/(\[\[.*?\]\])/).map((part, i) => {
-                            if (part.match(/\[\[.*?\]\]/)) {
-                                const page = part.replace(/\[\[|\]\]/g, '');
-                                return (
-                                    <a
-                                        key={i}
-                                        className="text-blue-600 hover:underline cursor-pointer"
-                                        onClick={() => handleInternalLink(page)}
-                                    >
-                                        {page}
-                                    </a>
-                                );
-                            }
-                            return part;
-                        })}
-                    </span>
-                );
-            }
-            return <span {...props}>{children}</span>;
-        },*/
+        text: ({ children, ...props }) => {
+            return (
+                <span style={{ color: "blue"}}>
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
+            </span>
+            );
+        },
 
         // Code blocks
-        code({ node, inline, className, children, ...props }: any) {
+        code: ({ node, inline, className, children, ...props }: CodeComponentProps) => {
             const match = /language-(\w+)/.exec(className || '');
             return !inline && match ? (
                 <div className="bg-gray-100 rounded p-2 my-2">
@@ -226,7 +210,22 @@ export default function CollaborativeMarkdownEditor() {
                     {children}
                 </code>
             );
-        }
+        },
+
+        // Links
+        a: ({ children, href, ...props }: MarkdownComponentProps) => (
+            <a
+                href={href}
+                className="text-blue-600 hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+                {...props}
+            >
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
+            </a>
+        )
     };
 
     return (
