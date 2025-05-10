@@ -7,7 +7,7 @@ import MarkdownEditor from "@/components/MarkdownEditor"
 import Sidebar from "@/components/Sidebar";
 import {Note} from "@/types/note";
 import { useApi } from "@/hooks/useApi";
-
+import  NoteGraph  from "@/components/NoteGraph";
 import ChatBox from "@/components/ChatBox";
 import { useParams } from "next/navigation";
 
@@ -105,9 +105,26 @@ export default function Editor() {
                 {/* Right Sidebar */}
                 {isRightSidebarOpen && (
                     <Sidebar isOpen={isRightSidebarOpen} onClose={() => setIsRightSidebarOpen(false)} position="right">
-                        <div style={{ width: "100%", height: "300px", border: "1px solid #ddd", borderRadius: "8px", background: "#e9ecef", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                            <Image src="/graph-mock.png" alt="Graph View" width={250} height={200} />
+                        <div style={{
+                            width: "100%",
+                            height: "300px",
+                            border: "1px solid #ddd",
+                            borderRadius: "8px",
+                            background: "#e9ecef",
+                            position: "relative",  // Important for child absolute positioning
+                            overflow: "hidden"     // Prevent any overflow
+                        }}>
+                            <NoteGraph style={{
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                width: "100%",
+                                height: "100%"
+                            }} />
                         </div>
+
                         <div style={{ textAlign: "center", padding: "16px" }}>
                             <Button type="primary" onClick={() => setShowSettings(!showSettings)}>Settings</Button>
                             {showSettings && (

@@ -1,5 +1,5 @@
 "use client";
-import {useState, useEffect, useCallback, PropsWithChildren, JSX} from "react";
+import {useState, useEffect, useCallback, JSX, ReactNode, ComponentType, HTMLAttributes} from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -8,7 +8,8 @@ import { WebsocketProvider } from "y-websocket";
 import { TextAreaBinding } from "y-textarea";
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js";
-import { LinkParser } from "@/editor-dev/components/LinkParser";
+//import { LinkParser } from '@/app/components/LinkParser.tsx';
+import {LinkParser} from './LinkParser';
 import { useParams } from "next/navigation";
 import "github-markdown-css";
 
@@ -54,18 +55,25 @@ const useCollaborativeEditor = () => {
         };
 
         const handleAwareness = () => {
-            const states = Array.from(provider.awareness.getStates().values());
-            setUsers(states.filter(s => s.user).map(s => s.user);
+            // NEW: Correct way to get awareness states in latest Yjs
+            const states: Map<number, any> = provider.awareness.states;
+            const usersArray = Array.from(states.values())
+                .filter(state => state.user)
+                .map(state => state.user);
+
+            setUsers(usersArray);
         };
 
         provider.on("status", handleStatus);
         provider.awareness.on("change", handleAwareness);
 
-        provider.awareness.setLocalState({
-            user: {
-                name: `User ${Math.floor(Math.random() * 1000)}`,
-                color: `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`
-            }
+        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0")}`;
+        const randomName = `User ${Math.floor(Math.random() * 1000)}`;
+
+        // NEW: Correct way to set awareness state
+        provider.awareness.setLocalStateField("user", {
+            name: randomName,
+            color: randomColor
         });
 
         return () => {
@@ -95,8 +103,25 @@ export default function CollaborativeMarkdownEditor() {
     const handleInternalLink = (pageTitle: string) => {
         console.log("Internal link clicked:", pageTitle);
     };
-
-    const components = {
+    interface MarkdownComponents {
+        [key: string]: ComponentType<{
+            children?: ReactNode;
+            className?: string;
+            node?: unknown;
+            inline?: boolean;
+        } & HTMLAttributes<HTMLElement>>;
+    }
+    const components: {
+        h1: ({children, ...props}: any) => JSX.Element;
+        h2: ({children, ...props}: any) => JSX.Element;
+        h3: ({children, ...props}: any) => JSX.Element;
+        em: ({children, ...props}: any) => JSX.Element;
+        strong: ({children, ...props}: any) => JSX.Element;
+        ol: ({children, ...props}: any) => JSX.Element;
+        ul: ({children, ...props}: any) => JSX.Element;
+        li: ({children, ...props}: any) => JSX.Element;
+        code({node, inline, className, children, ...props}: any): JSX.Element
+    }  = {
         // Headers
         h1: ({ children, ...props }: any) => (
             <h1 className="text-3xl font-bold my-4 border-b pb-2" {...props}>
@@ -146,6 +171,7 @@ export default function CollaborativeMarkdownEditor() {
         ),
 
         // Links
+/*
         a: ({ children, href, ...props }: any) => (
             <a
                 href={href}
@@ -157,8 +183,9 @@ export default function CollaborativeMarkdownEditor() {
                 {children}
             </a>
         ),
+*/
 
-        // Wiki links ([[S]])
+/*        // Wiki links ([[S]])
         text: ({ children, ...props }: any) => {
             const text = children?.toString() || '';
             if (text.includes('[[') && text.includes(']]')) {
@@ -183,7 +210,7 @@ export default function CollaborativeMarkdownEditor() {
                 );
             }
             return <span {...props}>{children}</span>;
-        },
+        },*/
 
         // Code blocks
         code({ node, inline, className, children, ...props }: any) {
