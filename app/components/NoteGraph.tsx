@@ -26,7 +26,7 @@ interface GraphData {
 }
 
 interface NoteGraphProps {
-    graphData: GraphData;
+    graphData?: GraphData;// maybe not needed
 }
 
 

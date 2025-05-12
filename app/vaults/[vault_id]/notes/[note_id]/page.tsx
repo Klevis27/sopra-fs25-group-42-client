@@ -114,15 +114,7 @@ export default function Editor() {
                             position: "relative",  // Important for child absolute positioning
                             overflow: "hidden"     // Prevent any overflow
                         }}>
-                            <NoteGraph style={{
-                                position: "absolute",
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                width: "100%",
-                                height: "100%"
-                            }} />
+                            <NoteGraph />
                         </div>
 
                         <div style={{ textAlign: "center", padding: "16px" }}>
