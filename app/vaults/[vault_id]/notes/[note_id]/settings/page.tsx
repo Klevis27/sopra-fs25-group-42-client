@@ -1,193 +1,284 @@
 "use client";
 
 import "@ant-design/v5-patch-for-react-19";
-import React, { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
-import { useApi } from "@/hooks/useApi";
-import { Button, Card, Form, Input, message, Select } from "antd";
+import React, {useState, useEffect} from "react";
+import {useRouter, useParams} from "next/navigation";
+import {useApi} from "@/hooks/useApi";
+import {
+    Button,
+    Card,
+    Form,
+    Select,
+    Table,
+    Typography,
+    App,
+    message,
+    Modal,
+    Input,
+} from "antd";
+import type {DefaultOptionType} from "antd/es/select";
+
+const {Title} = Typography;
+
+type User = {
+    id: number;
+    username: string;
+};
+
+type NotePermission = {
+    username: string;
+    role: "VIEWER" | "EDITOR" | "OWNER";
+};
+
+type Note = {
+    id: number;
+    title: string;
+};
 
 const NoteSettings: React.FC = () => {
-  const router = useRouter();
-  const apiService = useApi();
-  const params = useParams();
-  const noteId = params.note_id as string;
-  const vaultId = params.vault_id as string;
+    const router = useRouter();
+    const apiService = useApi();
+    const params = useParams();
+    const noteId = params.note_id as string;
+    const vaultId = params.vault_id as string;
 
-  const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
-  const [permissions, setPermissions] = useState<{ username: string; role: string }[]>([]);
+    const [permForm] = Form.useForm();
+    const [users, setUsers] = useState<User[]>([]);
+    const [permissions, setPermissions] = useState<NotePermission[]>([]);
+    const [noteTitle, setNoteTitle] = useState<string>("");
+    const [messageApi, contextHolder] = message.useMessage();
+    const [myRole, setMyRole] = useState<"VIEWER" | "EDITOR" | "OWNER" | null>(null);
 
-  const handleSendInvitation = async (values: { username: string; role: string }) => {
-    setLoading(true);
-    try {
-      const accessToken = localStorage.getItem("accessToken");
-      if (!accessToken) {
-        message.error("You must be logged in.");
-        router.push("/login");
-        return;
-      }
+    const userOptions: DefaultOptionType[] = users
+        .filter((u) => !permissions.some((p) => p.username === u.username))
+        .map((u) => ({label: u.username, value: u.username}));
 
-      await apiService.post(
-        `/notes/${noteId}/invite`,
-        {
-          username: values.username,
-          role: values.role,
-        },
-        accessToken
-      );
-
-      message.success(`Invitation sent to ${values.username} as ${values.role}!`);
-      form.resetFields();
-
-      // Fetch updated permissions list
-      const data = await apiService.get<{ username: string; role: string }[]>(
-        `/notes/${noteId}/permissions`,
-        accessToken
-      );
-      setPermissions(data);
-
-    } catch (error: unknown) {
-      if (
-        typeof error === "object" &&
-        error !== null &&
-        "status" in error &&
-        typeof (error as { status: unknown }).status === "number"
-      ) {
-        const status = (error as { status: number }).status;
-
-        if (status === 409) {
-          message.warning("User already has permission to this note.");
-        } else if (status === 404) {
-          message.error("User not found.");
-        } else {
-          message.error("Something went wrong.");
-        }
-      } else {
-        message.error("Unexpected error occurred.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      try {
+    useEffect(() => {
         const accessToken = localStorage.getItem("accessToken");
         if (!accessToken) return;
 
-        const data = await apiService.get<{ username: string; role: string }[]>(
-          `/notes/${noteId}/permissions`,
-          accessToken
-        );
-        setPermissions(data);
-      } catch (err) {
-        console.error("Failed to fetch note permissions:", err);
-      }
+        apiService
+            .get<Note>(`/notes/${noteId}`, accessToken)
+            .then((note) => setNoteTitle(note.title))
+            .catch(() => messageApi.error("Failed to load note title"));
+
+        apiService
+            .get<User[]>("/users", accessToken)
+            .then(setUsers)
+            .catch(() => messageApi.error("Failed to load users"));
+
+        apiService
+            .get<NotePermission[]>(`/notes/${noteId}/permissions`, accessToken)
+            .then((perms) => {
+                setPermissions(perms);
+                const currentUsername = localStorage.getItem("username");
+                const myPerm = perms.find(p => p.username === currentUsername);
+                if (myPerm) setMyRole(myPerm.role);
+            })
+            .catch(() => messageApi.error("Failed to load note permissions"));
+    }, [noteId, apiService, messageApi]);
+
+    const handleSendInvitation = async (values: {
+        username: string;
+        role: "VIEWER" | "EDITOR";
+    }) => {
+        const accessToken = localStorage.getItem("accessToken");
+        if (!accessToken) {
+            messageApi.error("You must be logged in.");
+            router.push("/login");
+            return;
+        }
+
+        try {
+            await apiService.post(
+                `/notes/${noteId}/invite`,
+                {
+                    username: values.username,
+                    role: values.role,
+                },
+                accessToken
+            );
+
+            messageApi.success(
+                `Invitation sent to ${values.username} as ${values.role.toLowerCase()}`
+            );
+            permForm.resetFields();
+
+            const updated = await apiService.get<NotePermission[]>(
+                `/notes/${noteId}/permissions`,
+                accessToken
+            );
+            setPermissions(updated);
+
+            const currentUsername = localStorage.getItem("username");
+            const myPerm = updated.find(p => p.username === currentUsername);
+            if (myPerm) setMyRole(myPerm.role);
+        } catch (error: unknown) {
+            // @ts-expect-error - No proper interface
+            if (error?.status === 409) {
+                messageApi.warning("User already has permission to this note.");
+            // @ts-expect-error - No proper interface
+            } else if (error?.status === 404) {
+                messageApi.error("User not found.");
+            // @ts-expect-error - No proper interface
+            } else if (error?.status === 403) {
+                messageApi.error("You are not allowed to do this.");
+            } else {
+                messageApi.error("Unexpected error occurred.");
+            }
+        }
     };
 
-    fetchPermissions();
-  }, [noteId, apiService]);
+    const handleNameChange = async () => {
+        const accessToken = localStorage.getItem("accessToken");
+        if (!accessToken) return;
 
-  return (
-    <div className="card-container">
-      <Card
-        title={`Vault Settings (Vault ID: ${vaultId})`}
-        className="dashboard-container"
-      >
-        <Form
-          form={form}
-          name="invite"
-          onFinish={handleSendInvitation}
-          layout="vertical"
-          size="large"
-        >
-          <Form.Item
-            name="username"
-            label="Invite user by username"
-            rules={[{ required: true, message: "Please enter a username." }]}
-          >
-            <Input placeholder="Enter username (e.g. edi)" />
-          </Form.Item>
+        try {
+            await apiService.put(
+                `/notes/${noteId}`,
+                {title: noteTitle},
+                accessToken
+            );
+            messageApi.success("Note name updated");
+        } catch {
+            messageApi.error("Failed to update name");
+        }
+    };
 
-          <Form.Item
-            name="role"
-            label="Assign role"
-            rules={[{ required: true, message: "Please select a role." }]}
-          >
-            <Select placeholder="Choose a role">
-              <Select.Option value="reader">Reader</Select.Option>
-              <Select.Option value="editor">Editor</Select.Option>
-            </Select>
-          </Form.Item>
+    const handleDeleteNote = () => {
+        const accessToken = localStorage.getItem("accessToken");
+        if (!accessToken) return;
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading}>
-              Send Invitation
-            </Button>
-          </Form.Item>
-        </Form>
+        Modal.confirm({
+            title: "Are you sure you want to delete this note?",
+            okText: "Yes, delete",
+            okType: "danger",
+            cancelText: "Cancel",
+            onOk: async () => {
+                try {
+                    await apiService.delete(`/notes/${noteId}`, accessToken);
+                    messageApi.success("Note deleted");
+                    router.push(`/vaults/${vaultId}/notes`);
+                } catch {
+                    messageApi.error("Failed to delete note");
+                }
+            },
+        });
+    };
 
-        {permissions.length > 0 && (
-  <div
-    style={{
-      marginTop: "32px",
-      padding: "16px",
-      background: "#f6f6f6",
-      border: "1px solid #ddd",
-      borderRadius: "8px",
-    }}
-  >
-    <h3
-      style={{
-        fontSize: "18px",
-        fontWeight: 600,
-        marginBottom: "12px",
-        color: "#222",
-      }}
-    >
-      👥 Users with access to this note
-    </h3>
+    return (
+        <App>
+            {contextHolder}
+            <div style={{padding: "2rem", maxWidth: 700, margin: "0 auto"}}>
+                <Card>
+                    <Title level={3}>Note Permissions</Title>
 
-    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-      {permissions.map((perm, index) => (
-        <div
-          key={index}
-          style={{
-            background: "#fff",
-            border: "1px solid #ccc",
-            borderRadius: "6px",
-            padding: "8px 12px",
-            fontSize: "14px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            color: "#333",
-          }}
-        >
-          <span>
-            <strong>{perm.username}</strong>
-          </span>
-          <span style={{ fontStyle: "italic", color: "#888" }}>
-            {perm.role}
-          </span>
-        </div>
-      ))}
-    </div>
-  </div>
-)}
+                    <Card
+                        size="small"
+                        style={{
+                            marginBottom: 24,
+                            backgroundColor: "#1f1f1f",
+                            border: "1px solid #434343",
+                            color: "#ffffff",
+                        }}
+                    >
+                        <Title level={5} style={{color: "#ffffff"}}>
+                            Change Note Name
+                        </Title>
+                        <Form layout="inline" onFinish={handleNameChange}>
+                            <Form.Item style={{flex: 1}}>
+                                <Input
+                                    style={{
+                                        width: 400,
+                                        padding: 8,
+                                        border: "1px solid #434343",
+                                        borderRadius: 4,
+                                        backgroundColor: "#141414",
+                                        color: "#ffffff",
+                                    }}
+                                    value={noteTitle}
+                                    onChange={(e) => setNoteTitle(e.target.value)}
+                                />
+                            </Form.Item>
+                            <Form.Item>
+                                <Button htmlType="submit" type="primary">
+                                    Save name
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </Card>
 
+                    <Form layout="inline" form={permForm} onFinish={handleSendInvitation}>
+                        <Form.Item
+                            name="username"
+                            rules={[{required: true, message: "Select a user"}]}
+                        >
+                            <Select
+                                showSearch
+                                placeholder="Select user"
+                                style={{width: 200}}
+                                options={userOptions}
+                                filterOption={(input, option) =>
+                                    (option?.label as string)
+                                        .toLowerCase()
+                                        .includes(input.toLowerCase())
+                                }
+                            />
+                        </Form.Item>
 
-        <Button
-          type="default"
-          onClick={() => router.push(`/vaults/${vaultId}/notes/${noteId}`)}
-          style={{ marginTop: "16px" }}
-        >
-          Back to Note
-        </Button>
-      </Card>
-    </div>
-  );
+                        <Form.Item
+                            name="role"
+                            rules={[{required: true, message: "Select role"}]}
+                        >
+                            <Select
+                                placeholder="Select role"
+                                style={{width: 150}}
+                                options={[
+                                    {label: "Editor", value: "EDITOR"},
+                                    {label: "Viewer", value: "VIEWER"},
+                                ]}
+                            />
+                        </Form.Item>
+
+                        <Form.Item>
+                            <Button htmlType="submit" type="primary">
+                                Add
+                            </Button>
+                        </Form.Item>
+                    </Form>
+
+                    <Table
+                        style={{marginTop: "1rem"}}
+                        dataSource={permissions}
+                        rowKey="username"
+                        pagination={false}
+                        columns={[
+                            {title: "Username", dataIndex: "username"},
+                            {title: "Role", dataIndex: "role"},
+                        ]}
+                    />
+                </Card>
+
+                {myRole === "OWNER" && (
+                    <div style={{marginTop: "2rem"}}>
+                        <Button danger block onClick={handleDeleteNote}>
+                            Delete Note
+                        </Button>
+                    </div>
+                )}
+
+                <div style={{marginTop: "1rem"}}>
+                    <Button
+                        type="default"
+                        block
+                        onClick={() => router.push(`/vaults/${vaultId}/notes/${noteId}`)}
+                    >
+                        Return to the note
+                    </Button>
+                </div>
+            </div>
+        </App>
+    );
 };
 
 export default NoteSettings;

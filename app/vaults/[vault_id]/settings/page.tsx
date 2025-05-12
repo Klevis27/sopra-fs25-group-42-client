@@ -7,11 +7,12 @@ import {
   Card,
   Form,
   Input,
-  Select,
   Typography,
   message,
   Table,
   App,
+  Select,
+  Modal,
 } from "antd";
 import { useApi } from "@/hooks/useApi";
 
@@ -55,7 +56,6 @@ const VaultSettings: React.FC = () => {
         setVault(data);
         form.setFieldsValue({
           name: data.name,
-          state: data.state || "Private",
         });
       })
       .catch(() => {
@@ -69,33 +69,29 @@ const VaultSettings: React.FC = () => {
     if (!token) return;
 
     apiService.get<User[]>(`/users`, token)
-      .then((data) => setUsers(data))
+      .then(setUsers)
       .catch(() => messageApi.error("Failed to load users"));
 
-    apiService.get<VaultPermission[]>(`/vaults/${vaultId}/settings/permissions`, token)
-      .then((data) => setPermissions(data))
+    apiService
+      .get<VaultPermission[]>(`/vaults/${vaultId}/settings/permissions`, token)
+      .then(setPermissions)
       .catch(() => messageApi.error("Failed to load permissions"));
   }, [vaultId, messageApi, apiService]);
 
-  const handleSave = async (values: { name: string; state: string }) => {
+  const handleSave = async (values: { name: string }) => {
     if (!vault) return;
-
     const token = localStorage.getItem("accessToken");
     if (!token) {
       messageApi.error("Unauthorized");
       return;
     }
-
     try {
       await apiService.put(`/vaults/${vaultId}`, values, token);
       messageApi.success("Vault updated successfully!");
       router.replace("/vaults");
     } catch (error) {
-      if (error instanceof Error) {
-        alert(`Something went wrong during update:\n${error.message}`);
-      } else {
-        console.error("An unknown error occurred during update.");
-      }
+      if (error instanceof Error) alert(`Update failed:\n${error.message}`);
+      else console.error("Unknown error.");
     }
   };
 
@@ -104,44 +100,70 @@ const VaultSettings: React.FC = () => {
       messageApi.error("Cannot assign OWNER role manually.");
       return;
     }
-
     const token = localStorage.getItem("accessToken");
     if (!token) return;
-
     try {
-      const updated = await apiService.post<VaultPermission[]>(
-        `/vaults/${vaultId}/settings/permissions`,
-        values,
+      await apiService.post(
+        `/invite/create`,
+        {
+          userId: values.userId,
+          vaultId: vaultId,
+          role: values.role,
+        },
         token
       );
-      messageApi.success("Permission added.");
+      messageApi.success("Invitation sent.");
       permForm.resetFields();
+
+      const updated = await apiService.get<VaultPermission[]>(
+        `/vaults/${vaultId}/settings/permissions`,
+        token
+      );
       setPermissions(updated);
     } catch {
-      messageApi.error("Could not add permission.");
+      messageApi.error("Could not send invitation.");
     }
   };
 
   const handleDeleteVault = async () => {
     if (!vault) return;
-
-    const confirmed = globalThis.confirm("Are you sure you want to delete this vault?");
-    if (!confirmed) return;
-
+    if (!globalThis.confirm("Are you sure you want to delete this vault?")) return;
     const token = localStorage.getItem("accessToken");
     if (!token) return;
-
     try {
       await apiService.delete(`/vaults/${vaultId}/settings/delete`, token);
       messageApi.success("Vault deleted.");
       router.push("/vaults");
     } catch (error) {
-      if (error instanceof Error) {
-        alert(`Something went wrong during update:\n${error.message}`);
-      } else {
-        console.error("An unknown error occurred during update.");
-      }
+      if (error instanceof Error) alert(`Delete failed:\n${error.message}`);
+      else console.error("Unknown error.");
     }
+  };
+
+  const handleRemovePermission = (userId: number) => {
+    Modal.confirm({
+      title: "Remove this user's permission?",
+      content: "This user will no longer have access to the vault.",
+      okText: "Remove",
+      okType: "danger",
+      cancelText: "Cancel",
+      onOk: async () => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) return;
+        try {
+          await apiService.delete(`/vaults/${vaultId}/settings/permissions/${userId}`, token);
+          messageApi.success("Permission removed.");
+
+          const updated = await apiService.get<VaultPermission[]>(
+            `/vaults/${vaultId}/settings/permissions`,
+            token
+          );
+          setPermissions(updated);
+        } catch {
+          messageApi.error("Failed to remove permission.");
+        }
+      },
+    });
   };
 
   return (
@@ -160,26 +182,9 @@ const VaultSettings: React.FC = () => {
                 <Input />
               </Form.Item>
 
-              <Form.Item
-                name="state"
-                label="Visibility"
-                rules={[{ required: true, message: "Please select a visibility" }]}
-              >
-                <Select>
-                  <Select.Option value="Private">Private</Select.Option>
-                  <Select.Option value="Shared">Shared</Select.Option>
-                </Select>
-              </Form.Item>
-
               <Form.Item>
                 <Button type="primary" htmlType="submit" block>
                   Save Changes
-                </Button>
-              </Form.Item>
-
-              <Form.Item>
-                <Button block onClick={() => router.push("/vaults")} danger>
-                  Cancel
                 </Button>
               </Form.Item>
 
@@ -198,16 +203,29 @@ const VaultSettings: React.FC = () => {
               name="userId"
               rules={[{ required: true, message: "Select a user" }]}
             >
-              <Select placeholder="Select user" style={{ width: 200 }}>
+              <Select
+                showSearch
+                placeholder="Select user"
+                style={{ width: 200 }}
+                optionFilterProp="children"
+                filterOption={(input, option) => {
+                  const child = option?.children as unknown;
+                  return (
+                    typeof child === "string" &&
+                    child.toLowerCase().includes(input.toLowerCase())
+                  );
+                }}
+              >
                 {users
-                  .filter((user) => !permissions.some((p) => p.userId === user.id))
-                  .map((user) => (
-                    <Select.Option key={user.id} value={user.id}>
-                      {user.username}
+                  .filter((u) => !permissions.some((p) => p.userId === u.id))
+                  .map((u) => (
+                    <Select.Option key={u.id} value={u.id}>
+                      {u.username}
                     </Select.Option>
                   ))}
               </Select>
             </Form.Item>
+
             <Form.Item
               name="role"
               rules={[{ required: true, message: "Select role" }]}
@@ -217,6 +235,7 @@ const VaultSettings: React.FC = () => {
                 <Select.Option value="VIEWER">Viewer</Select.Option>
               </Select>
             </Form.Item>
+
             <Form.Item>
               <Button htmlType="submit" type="primary">
                 Add
@@ -232,9 +251,29 @@ const VaultSettings: React.FC = () => {
             columns={[
               { title: "Username", dataIndex: "username" },
               { title: "Role", dataIndex: "role" },
+              {
+                title: "Action",
+                key: "action",
+                render: (_, record: VaultPermission) =>
+                  record.role !== "OWNER" && (
+                    <Button danger type="link" onClick={() => handleRemovePermission(record.userId)}>
+                      Remove
+                    </Button>
+                  ),
+              },
             ]}
           />
         </Card>
+
+        <div style={{ marginTop: "2rem" }}>
+          <Button
+            type="default"
+            block
+            onClick={() => router.push("/vaults")}
+          >
+            Return to the vaults page
+          </Button>
+        </div>
       </div>
     </App>
   );
