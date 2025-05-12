@@ -97,12 +97,6 @@ export default function CollaborativeMarkdownEditor() {
     const handleInternalLink = (pageTitle: string) => {
         console.log("Internal link clicked:", pageTitle);
     };
-    interface MarkdownComponentProps {
-        children?: ReactNode;
-        className?: string;
-        node?: any;
-        [key: string]: any;
-    }
 
     const components: Components = {
         // Plain text
