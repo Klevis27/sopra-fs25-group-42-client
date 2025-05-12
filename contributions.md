@@ -122,8 +122,8 @@ reason).
 |                    | 29.03.2025 |  |  |  |
 |                    | 29.03.2025 |  |  |  |
 | **nfcolak**        | 29.03.2025 |  |  |  |
-| **SvenVest**       | 29.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-client/commit/ee244224df80daf1043fb2ea6c8eb167e2383a43 |  |  |
-|                    | 30.03.2025 |  https://github.com/Klevis27/sopra-fs25-group-42-client/commit/15f055cc953bea014581f8e3f7cdba39a636817d|  |  |
+| **SvenVest**       | 29.03.2025 |  |  |  |
+|                    | 30.03.2025 |  |  |  |
 
 ---
 
