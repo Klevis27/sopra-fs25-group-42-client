@@ -138,10 +138,11 @@ reason).
 |                    | 30.03.2025 |  |  |  |
 | **elifdenizi**     | 09.05.2025 | [Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/85de02e657c5c5ced841eacdeca571cb49c9a771) | backend part of the shared-notes feature | improve the usability of the app |
 |                    | 09.05.2025 | [Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/1bda328746e9093cf2a48b88c45a8ca49763e7dd) | Display shared notes in notes dashboards in order to access vaults and notes user has access to | improve the usability of the app |
-| **nfcolak**        | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
+| **nfcolak**        | 29.03.2025 |[Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/a11c1e64dcb5749133a3edf797b0d77e769d39ae)|Notes Settings page has changed.|To improve the user interface.|
+|                    | 29.03.2025 |[Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/769e99a643652f5a36804ca698c57b5018ccbf45)|Notes page backend changes and user role deletion functionality added for vault pages.|Main Functionality|
 | **SvenVest**       | 29.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
+
 
 
 ## Contributions Week 7 - 12.05 to 18.05.
