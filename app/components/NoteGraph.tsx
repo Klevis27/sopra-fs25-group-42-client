@@ -26,7 +26,7 @@ interface GraphData {
 }
 
 interface NoteGraphProps {
-    graphData: GraphData;
+    graphData?: GraphData;// maybe not needed
 }
 
 
@@ -71,31 +71,47 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ }: NoteGraphProps) => {
                 getAllLinks();
             }
         }, [notesArray, apiService, existsLink]);
-
-        useEffect(() => {
-            const getAllNotes = async () => {
-                //TODO: Right now the vault_id is hardcoded to be 1, because
-                //this is just the component which I didn't implement for any specific URL
-                const response = await apiService.get<Note[]>("/vaults/1/notes")
-                notesArray.forEach(element => {
-                    console.log(`Note: ${element}`)
-                });
-                for (const element of response) {
-                    if (element.id != null && element.title != null) {
-                        const note: Node = { id: element.id, title: element.title };
-
-                        const noteExists = notesArray.some(n => n.id === note.id);
-
-                        if (noteExists) {
-                            console.log(`Note: ${note.title} is already in the list`);
-                            continue;
-                        }
-                        setNotes((prevNotes) => [...prevNotes, note]);
+    useEffect(() => {
+        const getAllNotes = async () => {
+            const response = await apiService.get<Note[]>("/vaults/1/notes");
+            const uniqueNotes = response.reduce((acc, element) => {
+                if (element.id && element.title) {
+                    const noteExists = acc.some(n => n.id === element.id);
+                    if (!noteExists) {
+                        acc.push({ id: element.id, title: element.title });
                     }
                 }
-            }
-            getAllNotes();
-        }, [apiService, notesArray]);
+                return acc;
+            }, [] as Node[]);
+
+            setNotes(uniqueNotes);
+        };
+        getAllNotes();
+    }, [apiService]);
+    /*        useEffect(() => {
+                const getAllNotes = async () => {
+                    //TODO: Right now the vault_id is hardcoded to be 1, because
+                    //this is just the component which I didn't implement for any specific URL
+                    const response = await apiService.get<Note[]>("/vaults/1/notes")
+                    notesArray.forEach(element => {
+                        console.log(`Note: ${element}`)
+                    });
+                    for (const element of response) {
+                        if (element.id != null && element.title != null) {
+                            const note: Node = { id: element.id, title: element.title };
+
+                            const noteExists = notesArray.some(n => n.id === note.id);
+
+                            if (noteExists) {
+                                console.log(`Note: ${note.title} is already in the list`);
+                                continue;
+                            }
+                            setNotes((prevNotes) => [...prevNotes, note]);
+                        }
+                    }
+                }
+                getAllNotes();
+            }, [apiService, notesArray]);*/
     return (
         <ForceGraph2D
             graphData={{

@@ -61,11 +61,13 @@ const useCollaborativeEditor = () => {
         provider.on("status", handleStatus);
         provider.awareness.on("change", handleAwareness);
 
-        provider.awareness.setLocalState({
-            user: {
-                name: `User ${Math.floor(Math.random() * 1000)}`,
-                color: `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`
-            }
+        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0")}`;
+        const randomName = `User ${Math.floor(Math.random() * 1000)}`;
+
+        // NEW: Correct way to set awareness state
+        provider.awareness.setLocalStateField("user", {
+            name: randomName,
+            color: randomColor
         });
 
         return () => {
@@ -109,17 +111,23 @@ export default function CollaborativeMarkdownEditor() {
         // Headers
         h1: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['h1']>) => (
             <h1 className="text-3xl font-bold my-4 border-b pb-2" {...props}>
-                {children}
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
             </h1>
         ),
         h2: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['h2']>) => (
             <h2 className="text-2xl font-bold my-3 border-b pb-1" {...props}>
-                {children}
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
             </h2>
         ),
         h3: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['h3']>) => (
             <h3 className="text-xl font-semibold my-2" {...props}>
-                {children}
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
             </h3>
         ),
 
