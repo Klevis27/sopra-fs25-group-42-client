@@ -149,7 +149,7 @@ reason).
 
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **Klevis27**       | 03.05.2025 | [Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/15) | Implementing Sonar test coverage metric | Necessary to be able to efficiently write tests |
+| **Klevis27**       | 03.05.2025 | [Link to Pull Request 1](https://github.com/Klevis27/sopra-fs25-group-42-client/pull/28) | Merged this pull request | Necessary in preparation for implementing persistence |
 |                    | 30.03.2025 |  |  |  |
 | **AntWarz**        | 30.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
