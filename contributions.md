@@ -134,8 +134,8 @@ reason).
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
 | **Klevis27**       | 03.05.2025 | [Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/15) | Implementing Sonar test coverage metric | Necessary to be able to efficiently write tests |
 |                    | 30.03.2025 |  |  |  |
-| **AntWarz**        | 30.03.2025 |  |  |  |
-|                    | 30.03.2025 |  |  |  |
+| **AntWarz**        | 30.03.2025 | [Link to commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/72f0553) |  Written last 3 tests for NoteController | Tests are important |
+|                    | 30.03.2025 | [Link to commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/c1c79d7) | Written 9 tests for NoteController | Tests are important |
 | **elifdenizi**     | 09.05.2025 | [Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/85de02e657c5c5ced841eacdeca571cb49c9a771) | backend part of the shared-notes feature | improve the usability of the app |
 |                    | 09.05.2025 | [Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/1bda328746e9093cf2a48b88c45a8ca49763e7dd) | Display shared notes in notes dashboards in order to access vaults and notes user has access to | improve the usability of the app |
 | **nfcolak**        | 07.05.2025 |[Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/a11c1e64dcb5749133a3edf797b0d77e769d39ae)|Notes Settings page has changed.|To improve the user interface.|
