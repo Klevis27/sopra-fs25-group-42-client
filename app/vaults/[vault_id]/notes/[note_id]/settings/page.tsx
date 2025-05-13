@@ -217,6 +217,10 @@ const NoteSettings: React.FC = () => {
                                 showSearch
                                 placeholder="Select user"
                                 style={{width: 200}}
+                                dropdownStyle={{
+                                    backgroundColor: "#141414",
+                                    color: "#ffffff",
+                                }}
                                 options={userOptions}
                                 filterOption={(input, option) =>
                                     (option?.label as string)
@@ -233,6 +237,10 @@ const NoteSettings: React.FC = () => {
                             <Select
                                 placeholder="Select role"
                                 style={{width: 150}}
+                                dropdownStyle={{
+                                    backgroundColor: "#141414",
+                                    color: "#ffffff",
+                                }}
                                 options={[
                                     {label: "Editor", value: "EDITOR"},
                                     {label: "Viewer", value: "VIEWER"},
