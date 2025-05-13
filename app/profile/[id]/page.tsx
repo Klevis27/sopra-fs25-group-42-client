@@ -87,7 +87,7 @@ const Profile: React.FC = () => {
     <div className="m-12 flex justify-center">
       <Card
         className="w-full max-w-3xl shadow-2xl"
-        title={<Title level={3}>Profile</Title>}
+        title={<Title level={3} style={{color: "#ffffff"}}>Profile</Title>}
         extra={
           editable && (
             <Button type="primary" icon={<EditOutlined />} onClick={goToEdit}>
@@ -105,13 +105,13 @@ const Profile: React.FC = () => {
             </Row>
 
             <Descriptions bordered column={1} size="middle" className="mx-auto w-full md:w-2/3">
-              <Descriptions.Item label="ID">{user.id}</Descriptions.Item>
-              <Descriptions.Item label="Username">{user.username}</Descriptions.Item>
-              <Descriptions.Item label="Creation Date">{formatDate(user.creationDate)}</Descriptions.Item>
-              <Descriptions.Item label="Status">
+              <Descriptions.Item label={<span style={{color: "#ffffff"}}>ID</span>}>{user.id}</Descriptions.Item>
+              <Descriptions.Item label={<span style={{color: "#ffffff"}}>Username</span>}>{user.username}</Descriptions.Item>
+              <Descriptions.Item label={<span style={{color: "#ffffff"}}>Creation Date</span>}>{formatDate(user.creationDate)}</Descriptions.Item>
+              <Descriptions.Item label={<span style={{color: "#ffffff"}}>Status</span>}>
                 <Tag color={user.status === "ACTIVE" ? "green" : "default"}>{user.status}</Tag>
               </Descriptions.Item>
-              <Descriptions.Item label="Birthday">{formatDate(user.birthday)}</Descriptions.Item>
+              <Descriptions.Item label={<span style={{color: "#ffffff"}}>Birthday</span>}>{formatDate(user.birthday)}</Descriptions.Item>
             </Descriptions>
 
             <Row justify="center" gutter={16}>
