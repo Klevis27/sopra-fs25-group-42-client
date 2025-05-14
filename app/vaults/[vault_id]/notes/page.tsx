@@ -5,6 +5,12 @@ import {useParams, useRouter} from "next/navigation";
 import {Button, Card, Input, Typography, List, Space, message} from "antd";
 import {useApi} from "@/hooks/useApi";
 import {Note} from "@/types/note";
+import { ArrowLeftOutlined } from "@ant-design/icons";
+
+import {
+  UserOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
 
 const {Title} = Typography;
 
@@ -65,17 +71,87 @@ const Notes: React.FC = () => {
   //   router.push("/login");
   // };
 
-  const handleContinueToNoteCreation = () => {
+  const handleCreateNote = async () => {
     if (!newNoteName.trim()) {
       message.warning("Please enter a note name.");
       return;
     }
-    const encodedName = encodeURIComponent(newNoteName.trim());
-    router.push(`/vaults/${vaultId}/notes/create?name=${encodedName}`);
+  
+    const accessToken = localStorage.getItem("accessToken");
+    const creatorId = localStorage.getItem("id");
+  
+    if (!accessToken || !creatorId) {
+      message.error("You must be logged in to create a note.");
+      router.push("/login");
+      return;
+    }
+  
+    try {
+      const newNote = await apiService.post<Note>(
+        `/vaults/${vaultId}/notes`,
+        {
+          title: newNoteName.trim(),
+          creatorId,
+        },
+        accessToken
+      );
+  
+      message.success("Note created!");
+  
+      // Option 1: Redirect directly to the editor
+      router.push(`/vaults/${vaultId}/notes/${newNote.id}`);
+  
+      // Option 2 (alternate): Just show it in the list
+      // setNotes((prev) => [...prev, newNote]);
+  
+      setNewNoteName("");
+    } catch (error) {
+      if (error instanceof Error) {
+        message.error(`Failed to create note: ${error.message}`);
+      } else {
+        console.error("Unknown error during note creation:", error);
+      }
+    }
   };
+
+  const handleLogout = () => {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("id");
+      localStorage.removeItem("username");
+      message.success("You have been logged out.");
+      router.push("/");
+    };
+  
 
   return (
       <div className="m-12">
+        <div className="flex justify-end gap-4 mb-6">
+        <Button
+          icon={<UserOutlined />}
+          onClick={() => {
+            const id = localStorage.getItem("id");
+            if (id) {
+              router.push(`/profile/${id}`);
+            } else {
+              message.error("User ID not found. Please login again.");
+            }
+          }}
+        >
+          Profile
+        </Button>
+
+        <Button icon={<LogoutOutlined />} danger onClick={handleLogout}>
+          Logout
+        </Button>
+      </div>
+        <Button
+  icon={<ArrowLeftOutlined />}
+  onClick={() => router.push("/vaults")}
+  style={{ marginBottom: "1rem" }}
+>
+  Back to Vaults
+</Button>
+
         <div className={"flex flex-wrap gap-[2rem] p-[2rem]"}>
           {/* Left Column: Note List */}
           <Card style={{flex: 1}}>
@@ -123,9 +199,10 @@ const Notes: React.FC = () => {
                   value={newNoteName}
                   onChange={(e) => setNewNoteName(e.target.value)}
               />
-              <Button type="primary" block onClick={handleContinueToNoteCreation}>
-                Continue
-              </Button>
+              <Button type="primary" block onClick={handleCreateNote}>
+  Create Note
+</Button>
+
             </Space>
           </Card>
         </div>

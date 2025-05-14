@@ -204,37 +204,45 @@ const VaultSettings: React.FC = () => {
               rules={[{ required: true, message: "Select a user" }]}
             >
               <Select
-                showSearch
-                placeholder="Select user"
-                style={{ width: 200 }}
-                optionFilterProp="children"
-                filterOption={(input, option) => {
-                  const child = option?.children as unknown;
-                  return (
-                    typeof child === "string" &&
-                    child.toLowerCase().includes(input.toLowerCase())
-                  );
-                }}
-              >
-                {users
-                  .filter((u) => !permissions.some((p) => p.userId === u.id))
-                  .map((u) => (
-                    <Select.Option key={u.id} value={u.id}>
-                      {u.username}
-                    </Select.Option>
-                  ))}
+  showSearch
+  placeholder="Select user"
+  style={{ width: 200, color: "white" }}
+  dropdownStyle={{ backgroundColor: "#1f1f1f", color: "#ffffff" }}
+  optionFilterProp="children"
+  filterOption={(input, option) => {
+    const child = option?.children as unknown;
+    return (
+      typeof child === "string" &&
+      child.toLowerCase().includes(input.toLowerCase())
+    );
+  }}
+>
+
+               {users
+  .filter((u) => !permissions.some((p) => p.userId === u.id))
+  .map((u) => (
+    <Select.Option key={u.id} value={u.id}>
+      <span style={{ color: "#ffffff" }}>{u.username}</span>
+    </Select.Option>
+  ))}
+
               </Select>
             </Form.Item>
 
             <Form.Item
-              name="role"
-              rules={[{ required: true, message: "Select role" }]}
-            >
-              <Select placeholder="Select role" style={{ width: 150 }}>
-                <Select.Option value="EDITOR">Editor</Select.Option>
-                <Select.Option value="VIEWER">Viewer</Select.Option>
-              </Select>
-            </Form.Item>
+  name="role"
+  rules={[{ required: true, message: "Select role" }]}
+>
+  <Select
+    placeholder="Select role"
+    style={{ width: 150, color: "white" }}
+    dropdownStyle={{ backgroundColor: "#1f1f1f", color: "#ffffff" }}
+  >
+    <Select.Option value="EDITOR">Editor</Select.Option>
+    <Select.Option value="VIEWER">Viewer</Select.Option>
+  </Select>
+</Form.Item>
+
 
             <Form.Item>
               <Button htmlType="submit" type="primary">

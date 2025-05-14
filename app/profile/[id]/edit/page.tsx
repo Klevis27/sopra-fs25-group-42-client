@@ -46,8 +46,30 @@ const Edit: React.FC = () => {
         id: slug,
         username: username !== currentUser?.username ? username : null,
       };
-      await apiService.put<User>(`/users/${slug}`, userData, accessToken);
-      router.push(`/profile/${slug}`);
+      try {
+        await apiService.put<User>(`/users/${slug}`, userData, accessToken);
+        router.push(`/profile/${slug}`);
+      } catch (error) {
+        if (
+          typeof error === "object" &&
+          error !== null &&
+          "status" in error &&
+          (error as { status: number }).status === 409
+        ) {
+          form.setFields([
+            {
+              name: "username",
+              errors: ["This username is already taken."],
+            },
+          ]);
+        } else if (error instanceof Error) {
+          alert(`Something went wrong during update:\n${error.message}`);
+        } else {
+          console.error("An unknown error occurred during update.");
+        }
+      }
+      
+      
 
     } catch (error) {
       if (error instanceof Error) {

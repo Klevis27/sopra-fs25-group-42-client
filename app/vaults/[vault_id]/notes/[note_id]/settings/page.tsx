@@ -209,36 +209,40 @@ const NoteSettings: React.FC = () => {
                     </Card>
 
                     <Form layout="inline" form={permForm} onFinish={handleSendInvitation}>
-                        <Form.Item
-                            name="username"
-                            rules={[{required: true, message: "Select a user"}]}
-                        >
-                            <Select
-                                showSearch
-                                placeholder="Select user"
-                                style={{width: 200}}
-                                options={userOptions}
-                                filterOption={(input, option) =>
-                                    (option?.label as string)
-                                        .toLowerCase()
-                                        .includes(input.toLowerCase())
-                                }
-                            />
-                        </Form.Item>
+                    <Form.Item
+  name="username"
+  rules={[{ required: true, message: "Select a user" }]}
+>
+  <Select
+    showSearch
+    placeholder="Select user"
+    style={{ width: 200, color: "white" }}
+    dropdownStyle={{ backgroundColor: "#1f1f1f", color: "#ffffff" }}
+    options={userOptions}
+    filterOption={(input, option) =>
+      (option?.label as string)
+        .toLowerCase()
+        .includes(input.toLowerCase())
+    }
+  />
+</Form.Item>
 
-                        <Form.Item
-                            name="role"
-                            rules={[{required: true, message: "Select role"}]}
-                        >
-                            <Select
-                                placeholder="Select role"
-                                style={{width: 150}}
-                                options={[
-                                    {label: "Editor", value: "EDITOR"},
-                                    {label: "Viewer", value: "VIEWER"},
-                                ]}
-                            />
-                        </Form.Item>
+
+<Form.Item
+  name="role"
+  rules={[{ required: true, message: "Select role" }]}
+>
+  <Select
+    placeholder="Select role"
+    style={{ width: 150, color: "white" }}
+    dropdownStyle={{ backgroundColor: "#1f1f1f", color: "#ffffff" }}
+    options={[
+      { label: "Editor", value: "EDITOR" },
+      { label: "Viewer", value: "VIEWER" },
+    ]}
+  />
+</Form.Item>
+
 
                         <Form.Item>
                             <Button htmlType="submit" type="primary">
@@ -271,7 +275,7 @@ const NoteSettings: React.FC = () => {
                     <Button
                         type="default"
                         block
-                        onClick={() => router.push(`/vaults/${vaultId}/notes/${noteId}`)}
+                        onClick={() => router.push(`/vaults/${vaultId}/notes`)}
                     >
                         Return to the note
                     </Button>
