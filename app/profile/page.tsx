@@ -6,7 +6,7 @@ import {useApi} from "@/hooks/useApi";
 import {User} from "@/types/user";
 import {Button, Card, Table} from "antd";
 import type {TableProps} from "antd";
-import {clearLoginCookie} from "@/utils/cookies";
+
 
 const columns: TableProps<User>["columns"] = [
     {
@@ -31,26 +31,7 @@ const Dashboard: React.FC = () => {
     const apiService = useApi();
     const [users, setUsers] = useState<User[] | null>(null);
 
-    const handleLogout = async (): Promise<void> => {
-        const accessToken = localStorage.getItem("accessToken");
-        const id = localStorage.getItem("id");
-        if (!accessToken || !id) {
-            router.push("/login");
-            return;
-        }
-        try {
-            const userData = {
-                id: id,
-            };
-            await apiService.post("/logout", userData, accessToken);
-            localStorage.removeItem("id");
-            localStorage.removeItem("accessToken");
-            clearLoginCookie();
-            router.push("/login");
-        } catch (error) {
-            console.error("Logout failed", error);
-        }
-    };
+    
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -92,9 +73,18 @@ const Dashboard: React.FC = () => {
                                 style: {cursor: "pointer"},
                             })}
                         />
-                        <Button onClick={handleLogout} type="primary">
-                            Logout
-                        </Button>
+                        <Button
+  type="default"
+  onClick={() => {
+    const id = localStorage.getItem("id");
+    if (id) {
+      router.push(`/profile/${id}`);
+    }
+  }}
+>
+  ← Back to Profile
+</Button>
+
                     </>
                 )}
             </Card>

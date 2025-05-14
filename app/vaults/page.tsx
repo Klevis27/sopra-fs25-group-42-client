@@ -55,13 +55,46 @@ const Vaults: React.FC = () => {
     fetchVaults();
   }, [apiService, router]);
 
-  const handleContinueToCreation = () => {
+  const handleCreateVault = async () => {
     if (!newVaultName.trim()) {
       message.warning("Please enter a vault name.");
       return;
     }
-    router.push(`/vaults/create?name=${encodeURIComponent(newVaultName.trim())}`);
+  
+    const name = newVaultName.trim();
+    const accessToken = localStorage.getItem("accessToken");
+    const ownerId = localStorage.getItem("id");
+  
+    if (!accessToken || !ownerId) {
+      message.error("User not authenticated.");
+      router.push("/login");
+      return;
+    }
+  
+    try {
+      const response = await apiService.post<Vault>(
+        "/vaults",
+        { name, ownerId },
+        accessToken
+      );
+  
+      message.success("Vault created!");
+      // EITHER redirect immediately:
+      router.push(`/vaults/${response.id}/notes`);
+  
+      // OR stay on dashboard and just update list:
+      // setVaults((prev) => [...prev, response]);
+  
+      setNewVaultName("");
+    } catch (error) {
+      if (error instanceof Error) {
+        message.error(`Failed to create vault: ${error.message}`);
+      } else {
+        console.error("Unknown error:", error);
+      }
+    }
   };
+  
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
@@ -155,7 +188,7 @@ const Vaults: React.FC = () => {
               />
                   <div className="mt-6 pl-2">
       <Button type="default" onClick={() => router.push("/shared-notes")}>
-      ← View All Shared Notes
+       View All Shared Notes
       </Button>  </div>
             </>
           )}
@@ -169,9 +202,10 @@ const Vaults: React.FC = () => {
               value={newVaultName}
               onChange={(e) => setNewVaultName(e.target.value)}
             />
-            <Button type="primary" block onClick={handleContinueToCreation}>
-              Continue
-            </Button>
+            <Button type="primary" block onClick={handleCreateVault}>
+  Create Vault
+</Button>
+
           </Space>
         </Card>
       </div>
