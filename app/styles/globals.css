@@ -8,3 +8,35 @@
     }
   }
 }
+
+.moving-logo {
+  position: fixed;
+  width: 80px;
+  height: 80px;
+  top: 10vh;
+  left: 10vw;
+  z-index: -1; /* stays behind everything */
+  animation: moveWithinBounds 12s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes moveWithinBounds {
+  0% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(60vw, 0);
+  }
+  40% {
+    transform: translate(60vw, 60vh);
+  }
+  60% {
+    transform: translate(0, 60vh);
+  }
+  80% {
+    transform: translate(30vw, 30vh);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
