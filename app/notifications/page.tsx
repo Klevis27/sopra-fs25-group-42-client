@@ -29,6 +29,14 @@ const NotificationsPage: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
+    const originalBg = document.body.style.backgroundColor;
+    document.body.style.backgroundColor = "#cbe8ae";
+    return () => {
+      document.body.style.backgroundColor = originalBg;
+    };
+  }, []);
+
+  useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
       router.push("/login");

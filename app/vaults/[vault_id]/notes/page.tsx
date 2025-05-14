@@ -1,22 +1,38 @@
 "use client";
-import '@ant-design/v5-patch-for-react-19';
-import React, {useEffect, useState} from "react";
-import {useParams, useRouter} from "next/navigation";
-import {Button, Card, Input, Typography, List, Space, message} from "antd";
-import {useApi} from "@/hooks/useApi";
-import {Note} from "@/types/note";
 
-const {Title} = Typography;
+import "@ant-design/v5-patch-for-react-19";
+import React, { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { Button, Card, Input, Typography, List, Space, message } from "antd";
+import { useApi } from "@/hooks/useApi";
+import { Note } from "@/types/note";
+import MovingLetters from "@/components/MovingLetters";
+
+const { Title } = Typography;
 
 const Notes: React.FC = () => {
   const router = useRouter();
+  const params = useParams<{ [key: string]: string }>(); // ✅ fixed
+  const vaultId = params.vault_id;
+
   const [notes, setNotes] = useState<Note[]>([]);
   const [vaultName, setVaultName] = useState("");
   const [newNoteName, setNewNoteName] = useState("");
   const apiService = useApi();
-  const params = useParams();
-  const vaultId = params.vault_id as string;
 
+  /* ── lock the page to viewport ─────────────────────────── */
+  useEffect(() => {
+    const originalBg = document.body.style.backgroundColor;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.backgroundColor = "#faf2b2";
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.backgroundColor = originalBg;
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
+  /* ── fetch data ─────────────────────────────────────────── */
   useEffect(() => {
     const fetchNotes = async () => {
       try {
@@ -27,44 +43,29 @@ const Notes: React.FC = () => {
           return;
         }
 
-        // GET Vault Name
-        const vaultInfo = await apiService.get<{ name: string }>(`/vaults/${vaultId}/name`, accessToken);
+        // 1. vault name
+        const vaultInfo = await apiService.get<{ name: string }>(
+          `/vaults/${vaultId}/name`,
+          accessToken
+        );
         setVaultName(vaultInfo.name);
 
-        // GET Notes
-        const response = await apiService.get<Note[]>(`/vaults/${vaultId}/notes`, accessToken);
-
-        // If no such user exists
-        if (response == null) {
-          console.error("No response returned");
-          alert("No response returned");
-          return
-        }
-
-        // Set Notes
-        setNotes(response)
-      } catch (error) {
-        // @ts-expect-error - No proper interface
-        if (error.status == 404) {
-          console.error("Could not find notes!");
-          alert("Notes not found.");
-        }
-        // @ts-expect-error - No proper interface
-        console.error("Error", error.status);
-        alert("Unknown error occurred.");
+        // 2. notes
+        const response = await apiService.get<Note[]>(
+          `/vaults/${vaultId}/notes`,
+          accessToken
+        );
+        setNotes(response ?? []);
+      } catch (err: unknown) {
+        const status = (err as { status?: number })?.status;
+        message.error(status === 404 ? "Notes not found." : "Unknown error occurred.");
       }
     };
-    fetchNotes();
+
+    if (vaultId) fetchNotes();
   }, [apiService, router, vaultId]);
 
-  // commented out for future use
-  // const handleLogout = () => {
-  //   localStorage.removeItem("accessToken");
-  //   localStorage.removeItem("id");
-  //   clearLoginCookie();
-  //   router.push("/login");
-  // };
-
+  /* ── navigation helpers ────────────────────────────────── */
   const handleContinueToNoteCreation = () => {
     if (!newNoteName.trim()) {
       message.warning("Please enter a note name.");
@@ -74,62 +75,62 @@ const Notes: React.FC = () => {
     router.push(`/vaults/${vaultId}/notes/create?name=${encodedName}`);
   };
 
+  /* ── render ─────────────────────────────────────────────── */
   return (
-      <div className="m-12">
-        <div className={"flex flex-wrap gap-[2rem] p-[2rem]"}>
-          {/* Left Column: Note List */}
-          <Card style={{flex: 1}}>
-            <Title level={3}>Vault: {vaultName}</Title>
-            <List
-                bordered
-                dataSource={notes}
-                renderItem={(note) => (
-                    <List.Item>
-                      <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            width: "100%",
-                            alignItems: "center",
-                          }}
-                      >
-                        <span style={{fontWeight: 500}}>{note.title}</span>
-                        <Space>
-                          <Button
-                              size="small"
-                              onClick={() => router.push(`/vaults/${vaultId}/notes/${note.id}`)}
-                          >
-                            Editor
-                          </Button>
-                          <Button
-                              size="small"
-                              onClick={() => router.push(`/vaults/${vaultId}/notes/${note.id}/settings`)}
-                          >
-                            Settings
-                          </Button>
-                        </Space>
-                      </div>
-                    </List.Item>
-                )}
-            />
-          </Card>
+    <div className="m-12 relative min-h-screen overflow-hidden">
+      <MovingLetters />
 
-          {/* Right Column: Create Note */}
-          <Card style={{width: 300}}>
-            <Title level={4}>Create New Note</Title>
-            <Space direction="vertical" style={{width: "100%"}}>
-              <Input
-                  placeholder="Note Name"
-                  value={newNoteName}
-                  onChange={(e) => setNewNoteName(e.target.value)}
-              />
-              <Button type="primary" block onClick={handleContinueToNoteCreation}>
-                Continue
-              </Button>
-            </Space>
-          </Card>
-        </div>
+      <div className="flex flex-wrap gap-[2rem] p-[2rem]">
+        {/* vault card */}
+        <Card style={{ flex: 1, alignSelf: "flex-start" }}>
+          <Title level={3}>Vault: {vaultName}</Title>
+          <List
+            bordered
+            dataSource={notes}
+            locale={{ emptyText: "No notes yet." }}
+            style={{ maxHeight: 400, overflowY: "auto" }}
+            renderItem={(note) => (
+              <List.Item>
+                <div className="flex justify-between items-center w-full">
+                  <span className="font-medium">{note.title}</span>
+                  <Space>
+                    <Button
+                      size="small"
+                      onClick={() => router.push(`/vaults/${vaultId}/notes/${note.id}`)}
+                    >
+                      Editor
+                    </Button>
+                    <Button
+                      size="small"
+                      onClick={() =>
+                        router.push(`/vaults/${vaultId}/notes/${note.id}/settings`)
+                      }
+                    >
+                      Settings
+                    </Button>
+                  </Space>
+                </div>
+              </List.Item>
+            )}
+          />
+        </Card>
+
+        {/* create‑note card */}
+        <Card style={{ width: 300, alignSelf: "flex-start" }}>
+          <Title level={4}>Create New Note</Title>
+          <Space direction="vertical" style={{ width: "100%" }}>
+            <Input
+              placeholder="Note Name"
+              value={newNoteName}
+              onChange={(e) => setNewNoteName(e.target.value)}
+            />
+            <Button type="primary" block onClick={handleContinueToNoteCreation}>
+              Continue
+            </Button>
+          </Space>
+        </Card>
       </div>
+    </div>
   );
 };
 
