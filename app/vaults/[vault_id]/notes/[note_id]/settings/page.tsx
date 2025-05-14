@@ -35,7 +35,6 @@ type Note = {
     title: string;
 };
 
-// Helper function for type-safe error handling
 function hasStatus(error: unknown): error is { status: number } {
     return typeof error === "object" && error !== null && "status" in error;
 }
@@ -57,6 +56,14 @@ const NoteSettings: React.FC = () => {
     const userOptions: DefaultOptionType[] = users
         .filter((u) => !permissions.some((p) => p.username === u.username))
         .map((u) => ({ label: u.username, value: u.username }));
+
+    useEffect(() => {
+        const originalBg = document.body.style.backgroundColor;
+        document.body.style.backgroundColor = "#cbe8ae";
+        return () => {
+            document.body.style.backgroundColor = originalBg;
+        };
+    }, []);
 
     useEffect(() => {
         const accessToken = localStorage.getItem("accessToken");
@@ -175,7 +182,7 @@ const NoteSettings: React.FC = () => {
     return (
         <App>
             {contextHolder}
-            <div style={{ padding: "2rem", maxWidth: 700, margin: "0 auto" }}>
+            <div style={{ padding: "2rem", maxWidth: 700, margin: "0 auto", backgroundColor: "#cbe8ae", minHeight: "100vh" }}>
                 <Card>
                     <Title level={3}>Note Permissions</Title>
 

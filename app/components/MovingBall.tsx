@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 const MovingBall: React.FC = () => {
-  const ballRef = useRef<HTMLImageElement>(null);
+  const ballRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 100, y: 100 });
   const [velocity, setVelocity] = useState({ x: 2, y: 2 });
 
@@ -19,20 +20,24 @@ const MovingBall: React.FC = () => {
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
 
-        let newX = prevPos.x + velocity.x;
-        let newY = prevPos.y + velocity.y;
-        let newVelocityX = velocity.x;
-        let newVelocityY = velocity.y;
+        const nextX = prevPos.x + velocity.x;
+        const nextY = prevPos.y + velocity.y;
 
-        if (newX <= 0 || newX + ballWidth >= screenWidth) {
-          newVelocityX = -newVelocityX;
+        let nextVelocityX = velocity.x;
+        let nextVelocityY = velocity.y;
+
+        if (nextX <= 0 || nextX + ballWidth >= screenWidth) {
+          nextVelocityX = -velocity.x;
         }
-        if (newY <= 0 || newY + ballHeight >= screenHeight) {
-          newVelocityY = -newVelocityY;
+        if (nextY <= 0 || nextY + ballHeight >= screenHeight) {
+          nextVelocityY = -velocity.y;
         }
 
-        setVelocity({ x: newVelocityX, y: newVelocityY });
-        return { x: newX, y: newY };
+        if (nextVelocityX !== velocity.x || nextVelocityY !== velocity.y) {
+          setVelocity({ x: nextVelocityX, y: nextVelocityY });
+        }
+
+        return { x: nextX, y: nextY };
       });
 
       animationFrameId = requestAnimationFrame(updatePosition);
@@ -46,22 +51,28 @@ const MovingBall: React.FC = () => {
   }, [velocity]);
 
   return (
-    <img
+    <div
       ref={ballRef}
-      src="/logo.png"
-      alt="Moving Ball"
       style={{
         position: "fixed",
         left: position.x,
         top: position.y,
-        width: "190px",     
-        height: "190px",    
-        opacity: 1,        
-        zIndex: 0,         
+        width: "190px",
+        height: "190px",
+        zIndex: 0,
         pointerEvents: "none",
-        animation: "spin 4s linear infinite",
       }}
-    />
+    >
+      <Image
+        src="/logo.png"
+        alt="Moving Ball"
+        width={190}
+        height={190}
+        style={{
+          animation: "spin 4s linear infinite",
+        }}
+      />
+    </div>
   );
 };
 

@@ -32,9 +32,12 @@ const Vaults: React.FC = () => {
 
   useEffect(() => {
     const originalBackground = document.body.style.backgroundColor;
+    const originalOverflow = document.body.style.overflow;
     document.body.style.backgroundColor = "#cbe8ae";
+    document.body.style.overflow = "hidden";
     return () => {
       document.body.style.backgroundColor = originalBackground;
+      document.body.style.overflow = originalOverflow;
     };
   }, []);
 
@@ -87,10 +90,10 @@ const Vaults: React.FC = () => {
   return (
     <>
       {contextHolder}
-      <div className="m-12 relative min-h-screen">
+      <div className="h-screen mx-12 relative overflow-hidden">
         <MovingBall />
 
-        <div className="flex justify-end gap-4 mb-6">
+        <div className="flex justify-end gap-4 mb-6 p-8">
           <Button
             icon={<UserOutlined />}
             onClick={() => {
@@ -110,8 +113,8 @@ const Vaults: React.FC = () => {
           </Button>
         </div>
 
-        <div className="flex flex-wrap gap-[2rem] p-[2rem]">
-          <Card style={{ flex: 1 }}>
+        <div className="flex flex-wrap gap-[2rem] p-[2rem] relative z-10 h-full overflow-auto">
+          <Card style={{ flex: 1, alignSelf: "flex-start" }}>
             {myVaults.length > 0 && (
               <>
                 <Title level={3}>My Vaults</Title>
@@ -168,15 +171,13 @@ const Vaults: React.FC = () => {
                   )}
                 />
                 <div className="mt-6 pl-2">
-                  <Button type="default" onClick={() => router.push("/shared-notes")}>
-                    ← View All Shared Notes
-                  </Button>
+                  <Button type="default" onClick={() => router.push("/shared-notes")}>← View All Shared Notes</Button>
                 </div>
               </>
             )}
           </Card>
 
-          <Card style={{ width: 300 }}>
+          <Card style={{ width: 300, alignSelf: "flex-start" }}>
             <Title level={4}>Create New Vault</Title>
             <Space direction="vertical" style={{ width: "100%" }}>
               <Input

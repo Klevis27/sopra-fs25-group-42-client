@@ -36,6 +36,14 @@ const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [editable, setEditable] = useState(false);
 
+  useEffect(() => {
+    const originalBg = document.body.style.backgroundColor;
+    document.body.style.backgroundColor = "#faf2b2";
+    return () => {
+      document.body.style.backgroundColor = originalBg;
+    };
+  }, []);
+
   const goToDashboard = () => router.push("/profile");
   const goToEdit = () => router.push(`/profile/${slug}/edit`);
   const goToVaults = () => router.push("/vaults");
