@@ -35,6 +35,14 @@ const VaultSettings: React.FC = () => {
   const apiService = useApi();
 
   useEffect(() => {
+    const originalBg = document.body.style.backgroundColor;
+    document.body.style.backgroundColor = "#faf2b2";
+    return () => {
+      document.body.style.backgroundColor = originalBg;
+    };
+  }, []);
+
+  useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (!token) return;
     apiService.get<Vault>(`/vaults/${vaultId}`, token)
@@ -105,14 +113,12 @@ const VaultSettings: React.FC = () => {
   return (
     <App>
       {contextHolder}
-      <div style={{ padding: "2rem", maxWidth: 700, margin: "0 auto" }}>
+      <div style={{ padding: "2rem", maxWidth: 700, margin: "0 auto", backgroundColor: "#faf2b2", minHeight: "100vh" }}>
         <Card loading={!vault}>
           <Title level={3}>Edit Vault</Title>
           {vault && (
             <Form form={form} layout="vertical" onFinish={handleSave}>
-              <Form.Item name="name" label="Vault Name" rules={[{ required: true, message: "Please enter a vault name" }]}>
-                <Input />
-              </Form.Item>
+              <Form.Item name="name" label="Vault Name" rules={[{ required: true, message: "Please enter a vault name" }]}> <Input /> </Form.Item>
               <Form.Item><Button type="primary" htmlType="submit" block>Save Changes</Button></Form.Item>
               <Form.Item><Button danger type="default" block onClick={handleDeleteVault}>Delete Vault</Button></Form.Item>
             </Form>
@@ -121,35 +127,17 @@ const VaultSettings: React.FC = () => {
 
         <Card style={{ marginTop: "2rem" }} title="Permissions">
           <Form layout="inline" form={permForm} onFinish={handleAddPermission}>
-            <Form.Item name="userId" rules={[{ required: true, message: "Select a user" }]}>
-              <Select
-                showSearch
-                placeholder={<span style={{ color: "#ffffff" }}>Select user</span>}
-                style={{ width: 200 }}
-                dropdownStyle={{ backgroundColor: "#141414", color: "#ffffff" }}
-                optionFilterProp="children"
-                filterOption={(input, option) => {
-                  const child = option?.children as unknown;
-                  return typeof child === "string" && child.toLowerCase().includes(input.toLowerCase());
-                }}
-              >
+            <Form.Item name="userId" rules={[{ required: true, message: "Select a user" }]}> <Select showSearch placeholder={<span style={{ color: "#ffffff" }}>Select user</span>} style={{ width: 200 }} dropdownStyle={{ backgroundColor: "#141414", color: "#ffffff" }} optionFilterProp="children" filterOption={(input, option) => { const child = option?.children as unknown; return typeof child === "string" && child.toLowerCase().includes(input.toLowerCase()); }}>
                 {users.filter(u => !permissions.some(p => p.userId === u.id)).map(u => (
                   <Select.Option key={u.id} value={u.id}>{u.username}</Select.Option>
                 ))}
               </Select>
             </Form.Item>
-
-            <Form.Item name="role" rules={[{ required: true, message: "Select role" }]}>
-              <Select
-                placeholder={<span style={{ color: "#ffffff" }}>Select role</span>}
-                style={{ width: 150 }}
-                dropdownStyle={{ backgroundColor: "#141414", color: "#ffffff" }}
-              >
+            <Form.Item name="role" rules={[{ required: true, message: "Select role" }]}> <Select placeholder={<span style={{ color: "#ffffff" }}>Select role</span>} style={{ width: 150 }} dropdownStyle={{ backgroundColor: "#141414", color: "#ffffff" }}>
                 <Select.Option value="EDITOR">Editor</Select.Option>
                 <Select.Option value="VIEWER">Viewer</Select.Option>
               </Select>
             </Form.Item>
-
             <Form.Item><Button htmlType="submit" type="primary">Add</Button></Form.Item>
           </Form>
 
