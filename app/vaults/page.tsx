@@ -96,14 +96,31 @@ const Vaults: React.FC = () => {
   };
   
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    const id = localStorage.getItem("id");
+  
+    if (!accessToken || !id) {
+      message.error("User not authenticated.");
+      router.push("/login");
+      return;
+    }
+  
+    try {
+      await apiService.post("/logout", { id }, accessToken); // Notify backend
+      message.success("You have been logged out.");
+    } catch (error) {
+      console.error("Logout failed:", error);
+      message.warning("Backend logout failed, but you're logged out locally.");
+    }
+  
+    // Clear client-side session regardless
     localStorage.removeItem("accessToken");
     localStorage.removeItem("id");
     localStorage.removeItem("username");
-    message.success("You have been logged out.");
     router.push("/");
   };
-
+  
   const myVaults = vaults.filter((v) => v.role === "OWNER");
   const sharedVaults = vaults.filter((v) => v.role !== "OWNER");
 
