@@ -153,8 +153,8 @@ reason).
 |                    | 30.03.2025 |  |  |  |
 | **AntWarz**        | 30.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
-| **elifdenizi**     | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
+| **elifdenizi**     | 14.05.2025 | [Link to commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/2b26d64428f58799bc46b54fbbb1557ef79107d1) | enhance the navigation through the app and make user friendly | for easy usage |
+|                    | 14.05.2025 | [Link to commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/556d3f949262112e58c1ea0de2377721773aeecd) | apply the changes that is advised by the M3 feedback | feedback |
 | **nfcolak**        | 29.03.2025 |  |  |  |
 |                    | 29.03.2025 |  |  |  |
 | **SvenVest**       | 29.03.2025 |  |  |  |
