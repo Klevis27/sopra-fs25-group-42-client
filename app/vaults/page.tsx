@@ -220,12 +220,6 @@ const Vaults: React.FC = () => {
                                                     </Button>
                                                 </Space>
                                             </div>
-                                            <Space>
-                                                <Button size="small"
-                                                        onClick={() => router.push(`/vaults/${vault.id}/notes`)}>
-                                                    Notes
-                                                </Button>
-                                            </Space>
                                         </List.Item>
                                     )}
                                 />
