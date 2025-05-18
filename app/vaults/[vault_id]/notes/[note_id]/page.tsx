@@ -122,6 +122,7 @@ export default function Editor() {
                         marginLeft: isLeftSidebarOpen ? "290px" : "0px",
                         marginRight: isRightSidebarOpen ? "290px" : "0px",
                     }}
+                    className={"overflow-auto"}
                 >
                     <h1 style={{
                         fontSize: "1.5rem",
