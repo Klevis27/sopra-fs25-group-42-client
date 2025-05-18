@@ -110,51 +110,52 @@ reason).
 
 ---
 
-## Contributions Week 5 - [Begin Date] to [End Date]
+## Contributions Week 5 - 28.04 to 04.05.
 
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **Klevis27**       | 24.04.2025 | [Link to Pull request 1 client](https://github.com/Klevis27/sopra-fs25-group-42-client/pull/19) | Merging changes to the markdown editor and preparation for the Yjs | Resolving conflicts is important |
-|                    | 30.03.2025 |  |  |  |
+| **Klevis27**       | 03.05.2025 | [Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/15) | Implementing Sonar test coverage metric | Necessary to be able to efficiently write tests |
+|                    | 30.03.2025 | [Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/42) | Implementing a button | Moreso important would be the User Story and task structuring I've done in the course of doing this |
 | **AntWarz**        | 30.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
-| **elifdenizi**     | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
-| **nfcolak**        | 29.03.2025 |  |  |  |
-| **SvenVest**       | 29.03.2025 |  |  |  |
-|                    | 30.03.2025 |  |  |  |
+| **elifdenizi**     | 01.05.2025 | [Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/4a29d99b339c2f4f9c8e56af97a726ec40843aab) |implementation of second table displaying all shared vaults in the vault page |to split the shared and own vaults  |
+|                    | 01.05.2025 | [Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/5c30f9af7b5afaed9d28999b3cde6c587853e1c6) | frontend implementation of the shared vaults part |  |
+| **nfcolak**        | 04.05.2025 |[Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/2948523cedae3123ac93fc47d4fed4de136b22ce) |Implementing invite of the users to the spesific vault via message | Core Feature |
+|                    | 04.05.2025 |[Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/5852f994229fe773a7d2c3b8c5852e17068b9a6d) |Notifications (Invitation Message Container) page added. Profile page changes|Core Feature |
+|                    | 01.05.2025 |[Link to issue 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/4d0a27df42ba91d455ce609c3cd267b1fecc9314) | Vault_Settings page visual changes | Improvement |
+| **SvenVest**       | 30.03.2025 |https://github.com/Klevis27/sopra-fs25-group-42-server/commit/8e1b003a3645b17d8273f55f7f52617342842c3b  |  persitence of yjs|  |
+|                    | 30.03.2025 |https://github.com/Klevis27/sopra-fs25-group-42-server/commit/554b8d327367758118ca6e6e92ebe63f6229a361  | adding controller and service |  |
 
 ---
 
-## Contributions Week 6 - [Begin Date] to [End Date]
+## Contributions Week 6 - 05.05 to 11.05.
 
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **Klevis27**       | 01.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
-|                    | 27.03.2025 |  |  |  |
+| **Klevis27**       | 03.05.2025 | [Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/15) | Implementing Sonar test coverage metric | Necessary to be able to efficiently write tests |
 |                    | 30.03.2025 |  |  |  |
-| **AntWarz**        | 30.03.2025 |  |  |  |
-|                    | 30.03.2025 |  |  |  |
-| **elifdenizi**     | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
-| **nfcolak**        | 29.03.2025 |  |  |  |
+| **AntWarz**        | 30.03.2025 | [Link to commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/72f0553) |  Written last 3 tests for NoteController | Tests are important |
+|                    | 30.03.2025 | [Link to commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/c1c79d7) | Written 9 tests for NoteController | Tests are important |
+| **elifdenizi**     | 09.05.2025 | [Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/85de02e657c5c5ced841eacdeca571cb49c9a771) | backend part of the shared-notes feature | improve the usability of the app |
+|                    | 09.05.2025 | [Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/1bda328746e9093cf2a48b88c45a8ca49763e7dd) | Display shared notes in notes dashboards in order to access vaults and notes user has access to | improve the usability of the app |
+| **nfcolak**        | 07.05.2025 |[Link to issue 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/a11c1e64dcb5749133a3edf797b0d77e769d39ae)|Notes Settings page has changed.|To improve the user interface.|
+|                    | 07.05.2025 |[Link to issue 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/769e99a643652f5a36804ca698c57b5018ccbf45)|Notes page backend changes and user role deletion functionality added for vault pages.|Main Functionality|
 | **SvenVest**       | 29.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
 
 
 
+## Contributions Week 7 - 12.05 to 18.05.
+
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **Klevis27**       | 01.04.2025 | [Link to Pull commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/88c8cbe1aa49e793caa2e8f022b705957f079e88) | Design a database schema | Yeah I mean it's important alright |
-|                    | 27.03.2025 |  |  |  |
+| **Klevis27**       | 03.05.2025 | [Link to Pull Request 1](https://github.com/Klevis27/sopra-fs25-group-42-client/pull/28) | Merged this pull request | Necessary in preparation for implementing persistence |
 |                    | 30.03.2025 |  |  |  |
 | **AntWarz**        | 30.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
-| **elifdenizi**     | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
+| **elifdenizi**     | 14.05.2025 | [Link to commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/2b26d64428f58799bc46b54fbbb1557ef79107d1) | enhance the navigation through the app and make user friendly | for easy usage |
+|                    | 14.05.2025 | [Link to commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/556d3f949262112e58c1ea0de2377721773aeecd) | apply the changes that is advised by the M3 feedback | feedback |
 | **nfcolak**        | 29.03.2025 |  |  |  |
+|                    | 29.03.2025 |  |  |  |
 | **SvenVest**       | 29.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
