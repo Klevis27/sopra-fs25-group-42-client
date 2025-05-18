@@ -30,7 +30,15 @@ const useCollaborativeEditor = () => {
     // Initialize WebSocket provider
     useEffect(() => {
         if (!noteId) return;
-        const baseURL = api.getBaseURL();
+        const rawBaseURL = api.getBaseURL();
+        console.log(rawBaseURL);
+        let baseURL:string;
+        if (rawBaseURL.startsWith("http://localhost:8080")) {
+            baseURL = rawBaseURL.slice(7, rawBaseURL.length-5);
+        } else {
+            baseURL = rawBaseURL.slice(7, -1);
+        }
+        console.log(baseURL);
         const wsProvider = new WebsocketProvider(`ws://${baseURL}:1234`, noteId, ydoc);
         setProvider(wsProvider);
         ymap.set("noteId", noteId);
