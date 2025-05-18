@@ -229,12 +229,13 @@ const Vaults: React.FC = () => {
                                         </List.Item>
                                     )}
                                 />
-                                <div className="mt-6 pl-2">
-                                    <Button type="default" onClick={() => router.push("/shared-notes")}>
-                                        View All Shared Notes
-                                    </Button></div>
                             </>
                         )}
+                        <div className="mt-6 pl-2">
+                            <Button type="default" onClick={() => router.push("/shared-notes")}>
+                                View All Shared Notes
+                            </Button>
+                        </div>
                     </Card>
 
                     <Card style={{width: 300}}>
