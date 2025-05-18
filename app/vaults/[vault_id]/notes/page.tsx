@@ -94,8 +94,6 @@ const Notes: React.FC = () => {
                 accessToken
             );
 
-            message.success("Note created!");
-
             // Option 1: Redirect directly to the editor
             router.push(`/vaults/${vaultId}/notes/${newNote.note.id}`);
 
