@@ -85,7 +85,7 @@ const Notes: React.FC = () => {
         }
 
         try {
-            const newNote = await apiService.post<Note>(
+            const newNote = await apiService.post<{ message : string, note : Note }>(
                 `/vaults/${vaultId}/notes`,
                 {
                     title: newNoteName.trim(),
@@ -97,7 +97,7 @@ const Notes: React.FC = () => {
             message.success("Note created!");
 
             // Option 1: Redirect directly to the editor
-            router.push(`/vaults/${vaultId}/notes/${newNote.id}`);
+            router.push(`/vaults/${vaultId}/notes/${newNote.note.id}`);
 
             // Option 2 (alternate): Just show it in the list
             // setNotes((prev) => [...prev, newNote]);
