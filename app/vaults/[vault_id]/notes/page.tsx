@@ -12,17 +12,31 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 
-const {Title} = Typography;
+const { Title } = Typography;
 
 const Notes: React.FC = () => {
   const router = useRouter();
+  const params = useParams<{ [key: string]: string }>(); // ✅ fixed
+  const vaultId = params.vault_id;
+
   const [notes, setNotes] = useState<Note[]>([]);
   const [vaultName, setVaultName] = useState("");
   const [newNoteName, setNewNoteName] = useState("");
   const apiService = useApi();
-  const params = useParams();
-  const vaultId = params.vault_id as string;
 
+  /* ── lock the page to viewport ─────────────────────────── */
+  useEffect(() => {
+    const originalBg = document.body.style.backgroundColor;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.backgroundColor = "#faf2b2";
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.backgroundColor = originalBg;
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
+  /* ── fetch data ─────────────────────────────────────────── */
   useEffect(() => {
     const fetchNotes = async () => {
       try {
@@ -33,43 +47,27 @@ const Notes: React.FC = () => {
           return;
         }
 
-        // GET Vault Name
-        const vaultInfo = await apiService.get<{ name: string }>(`/vaults/${vaultId}/name`, accessToken);
+        // 1. vault name
+        const vaultInfo = await apiService.get<{ name: string }>(
+          `/vaults/${vaultId}/name`,
+          accessToken
+        );
         setVaultName(vaultInfo.name);
 
-        // GET Notes
-        const response = await apiService.get<Note[]>(`/vaults/${vaultId}/notes`, accessToken);
-
-        // If no such user exists
-        if (response == null) {
-          console.error("No response returned");
-          alert("No response returned");
-          return
-        }
-
-        // Set Notes
-        setNotes(response)
-      } catch (error) {
-        // @ts-expect-error - No proper interface
-        if (error.status == 404) {
-          console.error("Could not find notes!");
-          alert("Notes not found.");
-        }
-        // @ts-expect-error - No proper interface
-        console.error("Error", error.status);
-        alert("Unknown error occurred.");
+        // 2. notes
+        const response = await apiService.get<Note[]>(
+          `/vaults/${vaultId}/notes`,
+          accessToken
+        );
+        setNotes(response ?? []);
+      } catch (err: unknown) {
+        const status = (err as { status?: number })?.status;
+        message.error(status === 404 ? "Notes not found." : "Unknown error occurred.");
       }
     };
-    fetchNotes();
-  }, [apiService, router, vaultId]);
 
-  // commented out for future use
-  // const handleLogout = () => {
-  //   localStorage.removeItem("accessToken");
-  //   localStorage.removeItem("id");
-  //   clearLoginCookie();
-  //   router.push("/login");
-  // };
+    if (vaultId) fetchNotes();
+  }, [apiService, router, vaultId]);
 
   const handleCreateNote = async () => {
     if (!newNoteName.trim()) {
@@ -113,7 +111,6 @@ const Notes: React.FC = () => {
       }
     }
   };
-
   const handleLogout = () => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("id");
@@ -207,6 +204,7 @@ const Notes: React.FC = () => {
           </Card>
         </div>
       </div>
+    </div>
   );
 };
 

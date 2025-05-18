@@ -10,19 +10,22 @@ import type {TableProps} from "antd";
 
 const columns: TableProps<User>["columns"] = [
     {
-        title: "Id",
+        title: <span style={{color: "#ffffff"}}>Id</span>,
         dataIndex: "id",
         key: "id",
+        render: (text) => <span style={{color: "#ffffff"}}>{text}</span>,
     },
     {
-        title: "Username",
+        title: <span style={{color: "#ffffff"}}>Username</span>,
         dataIndex: "username",
         key: "username",
+        render: (text) => <span style={{color: "#ffffff"}}>{text}</span>,
     },
     {
-        title: "Status",
+        title: <span style={{color: "#ffffff"}}>Status</span>,
         dataIndex: "status",
         key: "status",
+        render: (text) => <span style={{color: "#ffffff"}}>{text}</span>,
     },
 ];
 
@@ -31,7 +34,24 @@ const Dashboard: React.FC = () => {
     const apiService = useApi();
     const [users, setUsers] = useState<User[] | null>(null);
 
-    
+    const handleLogout = async (): Promise<void> => {
+        const accessToken = localStorage.getItem("accessToken");
+        const id = localStorage.getItem("id");
+        if (!accessToken || !id) {
+            router.push("/login");
+            return;
+        }
+        try {
+            const userData = {id: id};
+            await apiService.post("/logout", userData, accessToken);
+            localStorage.removeItem("id");
+            localStorage.removeItem("accessToken");
+            clearLoginCookie();
+            router.push("/login");
+        } catch (error) {
+            console.error("Logout failed", error);
+        }
+    };
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -58,7 +78,7 @@ const Dashboard: React.FC = () => {
     return (
         <div className="card-container">
             <Card
-                title="All users:"
+                title={<span style={{color: "#ffffff"}}>All users:</span>}
                 loading={!users}
                 className="dashboard-container"
             >

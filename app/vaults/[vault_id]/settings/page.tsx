@@ -18,22 +18,9 @@ import { useApi } from "@/hooks/useApi";
 
 const { Title } = Typography;
 
-type Vault = {
-  id: string;
-  name: string;
-  state: string;
-};
-
-type User = {
-  id: number;
-  username: string;
-};
-
-type VaultPermission = {
-  userId: number;
-  username: string;
-  role: "OWNER" | "EDITOR" | "VIEWER";
-};
+type Vault = { id: string; name: string; state: string };
+type User = { id: number; username: string };
+type VaultPermission = { userId: number; username: string; role: "OWNER" | "EDITOR" | "VIEWER" };
 
 const VaultSettings: React.FC = () => {
   const router = useRouter();
@@ -48,81 +35,50 @@ const VaultSettings: React.FC = () => {
   const apiService = useApi();
 
   useEffect(() => {
+    const originalBg = document.body.style.backgroundColor;
+    document.body.style.backgroundColor = "#faf2b2";
+    return () => {
+      document.body.style.backgroundColor = originalBg;
+    };
+  }, []);
+
+  useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (!token) return;
-
     apiService.get<Vault>(`/vaults/${vaultId}`, token)
       .then((data) => {
         setVault(data);
-        form.setFieldsValue({
-          name: data.name,
-        });
+        form.setFieldsValue({ name: data.name });
       })
-      .catch(() => {
-        messageApi.error("Vault not found.");
-        router.push("/vaults");
-      });
+      .catch(() => { messageApi.error("Vault not found."); router.push("/vaults"); });
   }, [vaultId, router, form, messageApi, apiService]);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (!token) return;
-
-    apiService.get<User[]>(`/users`, token)
-      .then(setUsers)
-      .catch(() => messageApi.error("Failed to load users"));
-
-    apiService
-      .get<VaultPermission[]>(`/vaults/${vaultId}/settings/permissions`, token)
-      .then(setPermissions)
-      .catch(() => messageApi.error("Failed to load permissions"));
+    apiService.get<User[]>(`/users`, token).then(setUsers).catch(() => messageApi.error("Failed to load users"));
+    apiService.get<VaultPermission[]>(`/vaults/${vaultId}/settings/permissions`, token)
+      .then(setPermissions).catch(() => messageApi.error("Failed to load permissions"));
   }, [vaultId, messageApi, apiService]);
 
   const handleSave = async (values: { name: string }) => {
     if (!vault) return;
     const token = localStorage.getItem("accessToken");
-    if (!token) {
-      messageApi.error("Unauthorized");
-      return;
-    }
-    try {
-      await apiService.put(`/vaults/${vaultId}`, values, token);
-      messageApi.success("Vault updated successfully!");
-      router.replace("/vaults");
-    } catch (error) {
-      if (error instanceof Error) alert(`Update failed:\n${error.message}`);
-      else console.error("Unknown error.");
-    }
+    if (!token) { messageApi.error("Unauthorized"); return; }
+    try { await apiService.put(`/vaults/${vaultId}`, values, token); messageApi.success("Vault updated successfully!"); router.replace("/vaults"); }
+    catch (e) { if (e instanceof Error) alert(`Update failed:\n${e.message}`); }
   };
 
   const handleAddPermission = async (values: { userId: number; role: string }) => {
-    if (values.role === "OWNER") {
-      messageApi.error("Cannot assign OWNER role manually.");
-      return;
-    }
+    if (values.role === "OWNER") { messageApi.error("Cannot assign OWNER role manually."); return; }
     const token = localStorage.getItem("accessToken");
     if (!token) return;
     try {
-      await apiService.post(
-        `/invite/create`,
-        {
-          userId: values.userId,
-          vaultId: vaultId,
-          role: values.role,
-        },
-        token
-      );
-      messageApi.success("Invitation sent.");
-      permForm.resetFields();
-
-      const updated = await apiService.get<VaultPermission[]>(
-        `/vaults/${vaultId}/settings/permissions`,
-        token
-      );
+      await apiService.post(`/invite/create`, { userId: values.userId, vaultId, role: values.role }, token);
+      messageApi.success("Invitation sent."); permForm.resetFields();
+      const updated = await apiService.get<VaultPermission[]>(`/vaults/${vaultId}/settings/permissions`, token);
       setPermissions(updated);
-    } catch {
-      messageApi.error("Could not send invitation.");
-    }
+    } catch { messageApi.error("Could not send invitation."); }
   };
 
   const handleDeleteVault = async () => {
@@ -130,14 +86,8 @@ const VaultSettings: React.FC = () => {
     if (!globalThis.confirm("Are you sure you want to delete this vault?")) return;
     const token = localStorage.getItem("accessToken");
     if (!token) return;
-    try {
-      await apiService.delete(`/vaults/${vaultId}/settings/delete`, token);
-      messageApi.success("Vault deleted.");
-      router.push("/vaults");
-    } catch (error) {
-      if (error instanceof Error) alert(`Delete failed:\n${error.message}`);
-      else console.error("Unknown error.");
-    }
+    try { await apiService.delete(`/vaults/${vaultId}/settings/delete`, token); messageApi.success("Vault deleted."); router.push("/vaults"); }
+    catch (e) { if (e instanceof Error) alert(`Delete failed:\n${e.message}`); }
   };
 
   const handleRemovePermission = (userId: number) => {
@@ -153,15 +103,9 @@ const VaultSettings: React.FC = () => {
         try {
           await apiService.delete(`/vaults/${vaultId}/settings/permissions/${userId}`, token);
           messageApi.success("Permission removed.");
-
-          const updated = await apiService.get<VaultPermission[]>(
-            `/vaults/${vaultId}/settings/permissions`,
-            token
-          );
+          const updated = await apiService.get<VaultPermission[]>(`/vaults/${vaultId}/settings/permissions`, token);
           setPermissions(updated);
-        } catch {
-          messageApi.error("Failed to remove permission.");
-        }
+        } catch { messageApi.error("Failed to remove permission."); }
       },
     });
   };
@@ -169,30 +113,14 @@ const VaultSettings: React.FC = () => {
   return (
     <App>
       {contextHolder}
-      <div style={{ padding: "2rem", maxWidth: 700, margin: "0 auto" }}>
+      <div style={{ padding: "2rem", maxWidth: 700, margin: "0 auto", backgroundColor: "#faf2b2", minHeight: "100vh" }}>
         <Card loading={!vault}>
           <Title level={3}>Edit Vault</Title>
           {vault && (
             <Form form={form} layout="vertical" onFinish={handleSave}>
-              <Form.Item
-                name="name"
-                label="Vault Name"
-                rules={[{ required: true, message: "Please enter a vault name" }]}
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item>
-                <Button type="primary" htmlType="submit" block>
-                  Save Changes
-                </Button>
-              </Form.Item>
-
-              <Form.Item>
-                <Button danger type="default" block onClick={handleDeleteVault}>
-                  Delete Vault
-                </Button>
-              </Form.Item>
+              <Form.Item name="name" label="Vault Name" rules={[{ required: true, message: "Please enter a vault name" }]}> <Input /> </Form.Item>
+              <Form.Item><Button type="primary" htmlType="submit" block>Save Changes</Button></Form.Item>
+              <Form.Item><Button danger type="default" block onClick={handleDeleteVault}>Delete Vault</Button></Form.Item>
             </Form>
           )}
         </Card>
@@ -264,9 +192,7 @@ const VaultSettings: React.FC = () => {
                 key: "action",
                 render: (_, record: VaultPermission) =>
                   record.role !== "OWNER" && (
-                    <Button danger type="link" onClick={() => handleRemovePermission(record.userId)}>
-                      Remove
-                    </Button>
+                    <Button danger type="link" onClick={() => handleRemovePermission(record.userId)}>Remove</Button>
                   ),
               },
             ]}
@@ -274,13 +200,7 @@ const VaultSettings: React.FC = () => {
         </Card>
 
         <div style={{ marginTop: "2rem" }}>
-          <Button
-            type="default"
-            block
-            onClick={() => router.push("/vaults")}
-          >
-            Return to the vaults page
-          </Button>
+          <Button type="default" block onClick={() => router.push("/vaults")}>Return to the vaults page</Button>
         </div>
       </div>
     </App>

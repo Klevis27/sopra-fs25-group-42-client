@@ -149,12 +149,12 @@ reason).
 
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
-| **Klevis27**       | 03.05.2025 | [Link to Pull Request 1](https://github.com/Klevis27/sopra-fs25-group-42-client/pull/28) | Merged this pull request | Necessary in preparation for implementing persistence |
-|                    | 30.03.2025 |  |  |  |
-| **AntWarz**        | 30.03.2025 |  |  |  |
-|                    | 30.03.2025 |  |  |  |
-| **elifdenizi**     | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
+| **Klevis27**       | 12.05.2025 | [Link to Pull Request 1](https://github.com/Klevis27/sopra-fs25-group-42-client/pull/28) | Merged this pull request | Necessary in preparation for implementing persistence |
+|                    | 18.05.2025 | [Link to Issue 1](https://github.com/Klevis27/sopra-fs25-group-42-server/issues/37) | Worked on this issue to finally fix persistence | Persistent notes are a core and key functionality of the app |
+| **AntWarz**        | 30.03.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/c7c1b994171829bc355fad52c92f4ee6678ecf07) | Written tests for VaultPermissionsController | Tests are important |
+|                    | 30.03.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/288050c7150775896c604ff4efcc2f0b50bcf148) | Written tests for VaultController | Tests are important |
+| **elifdenizi**     | 14.05.2025 | [Link to commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/2b26d64428f58799bc46b54fbbb1557ef79107d1) | enhance the navigation through the app and make user friendly | for easy usage |
+|                    | 14.05.2025 | [Link to commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/556d3f949262112e58c1ea0de2377721773aeecd) | apply the changes that is advised by the M3 feedback | feedback |
 | **nfcolak**        | 29.03.2025 |  |  |  |
 |                    | 29.03.2025 |  |  |  |
 | **SvenVest**       | 29.03.2025 |  |  |  |

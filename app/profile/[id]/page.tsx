@@ -36,6 +36,14 @@ const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [editable, setEditable] = useState(false);
 
+  useEffect(() => {
+    const originalBg = document.body.style.backgroundColor;
+    document.body.style.backgroundColor = "#faf2b2";
+    return () => {
+      document.body.style.backgroundColor = originalBg;
+    };
+  }, []);
+
   const goToDashboard = () => router.push("/profile");
   const goToEdit = () => router.push(`/profile/${slug}/edit`);
   const goToVaults = () => router.push("/vaults");
@@ -67,10 +75,7 @@ const Profile: React.FC = () => {
           router.push("/profile");
           return;
         }
-        setUser({
-          ...response,
-          birthday: response.birthday || null,
-        });
+        setUser(response);
       } catch (error: unknown) {
         if (error instanceof Error) {
           alert(`Something went wrong during update:\n${error.message}`);
@@ -87,7 +92,7 @@ const Profile: React.FC = () => {
     <div className="m-12 flex justify-center">
       <Card
         className="w-full max-w-3xl shadow-2xl"
-        title={<Title level={3}>Profile</Title>}
+        title={<Title level={3} style={{ color: "white" }}>Profile</Title>}
         extra={
           editable && (
             <Button type="primary" icon={<EditOutlined />} onClick={goToEdit}>
@@ -103,7 +108,6 @@ const Profile: React.FC = () => {
             <Row justify="center">
               <Avatar size={96} icon={<UserOutlined />} />
             </Row>
-
             <Descriptions
   bordered
   column={1}
@@ -112,14 +116,12 @@ const Profile: React.FC = () => {
   labelStyle={{ color: "#ffffff", fontWeight: 500 }}
   contentStyle={{ color: "#ffffff" }}
 >
-
               <Descriptions.Item label="ID">{user.id}</Descriptions.Item>
               <Descriptions.Item label="Username">{user.username}</Descriptions.Item>
               <Descriptions.Item label="Creation Date">{formatDate(user.creationDate)}</Descriptions.Item>
               <Descriptions.Item label="Status">
                 <Tag color={user.status === "ACTIVE" ? "green" : "default"}>{user.status}</Tag>
               </Descriptions.Item>
-              <Descriptions.Item label="Birthday">{formatDate(user.birthday)}</Descriptions.Item>
             </Descriptions>
 
           

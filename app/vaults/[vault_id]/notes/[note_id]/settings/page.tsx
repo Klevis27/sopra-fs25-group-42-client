@@ -1,9 +1,9 @@
 "use client";
 
 import "@ant-design/v5-patch-for-react-19";
-import React, {useState, useEffect} from "react";
-import {useRouter, useParams} from "next/navigation";
-import {useApi} from "@/hooks/useApi";
+import React, { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { useApi } from "@/hooks/useApi";
 import {
     Button,
     Card,
@@ -16,9 +16,9 @@ import {
     Modal,
     Input,
 } from "antd";
-import type {DefaultOptionType} from "antd/es/select";
+import type { DefaultOptionType } from "antd/es/select";
 
-const {Title} = Typography;
+const { Title } = Typography;
 
 type User = {
     id: number;
@@ -34,6 +34,10 @@ type Note = {
     id: number;
     title: string;
 };
+
+function hasStatus(error: unknown): error is { status: number } {
+    return typeof error === "object" && error !== null && "status" in error;
+}
 
 const NoteSettings: React.FC = () => {
     const router = useRouter();
@@ -51,7 +55,15 @@ const NoteSettings: React.FC = () => {
 
     const userOptions: DefaultOptionType[] = users
         .filter((u) => !permissions.some((p) => p.username === u.username))
-        .map((u) => ({label: u.username, value: u.username}));
+        .map((u) => ({ label: u.username, value: u.username }));
+
+    useEffect(() => {
+        const originalBg = document.body.style.backgroundColor;
+        document.body.style.backgroundColor = "#cbe8ae";
+        return () => {
+            document.body.style.backgroundColor = originalBg;
+        };
+    }, []);
 
     useEffect(() => {
         const accessToken = localStorage.getItem("accessToken");
@@ -114,15 +126,16 @@ const NoteSettings: React.FC = () => {
             const myPerm = updated.find(p => p.username === currentUsername);
             if (myPerm) setMyRole(myPerm.role);
         } catch (error: unknown) {
-            // @ts-expect-error - No proper interface
-            if (error?.status === 409) {
-                messageApi.warning("User already has permission to this note.");
-            // @ts-expect-error - No proper interface
-            } else if (error?.status === 404) {
-                messageApi.error("User not found.");
-            // @ts-expect-error - No proper interface
-            } else if (error?.status === 403) {
-                messageApi.error("You are not allowed to do this.");
+            if (hasStatus(error)) {
+                if (error.status === 409) {
+                    messageApi.warning("User already has permission to this note.");
+                } else if (error.status === 404) {
+                    messageApi.error("User not found.");
+                } else if (error.status === 403) {
+                    messageApi.error("You are not allowed to do this.");
+                } else {
+                    messageApi.error("Unexpected error occurred.");
+                }
             } else {
                 messageApi.error("Unexpected error occurred.");
             }
@@ -136,7 +149,7 @@ const NoteSettings: React.FC = () => {
         try {
             await apiService.put(
                 `/notes/${noteId}`,
-                {title: noteTitle},
+                { title: noteTitle },
                 accessToken
             );
             messageApi.success("Note name updated");
@@ -169,7 +182,7 @@ const NoteSettings: React.FC = () => {
     return (
         <App>
             {contextHolder}
-            <div style={{padding: "2rem", maxWidth: 700, margin: "0 auto"}}>
+            <div style={{ padding: "2rem", maxWidth: 700, margin: "0 auto", backgroundColor: "#cbe8ae", minHeight: "100vh" }}>
                 <Card>
                     <Title level={3}>Note Permissions</Title>
 
@@ -182,11 +195,11 @@ const NoteSettings: React.FC = () => {
                             color: "#ffffff",
                         }}
                     >
-                        <Title level={5} style={{color: "#ffffff"}}>
+                        <Title level={5} style={{ color: "#ffffff" }}>
                             Change Note Name
                         </Title>
                         <Form layout="inline" onFinish={handleNameChange}>
-                            <Form.Item style={{flex: 1}}>
+                            <Form.Item style={{ flex: 1 }}>
                                 <Input
                                     style={{
                                         width: 400,
@@ -242,7 +255,44 @@ const NoteSettings: React.FC = () => {
     ]}
   />
 </Form.Item>
+                        <Form.Item
+                            name="username"
+                            rules={[{ required: true, message: "Select a user" }]}
+                        >
+                            <Select
+                                showSearch
+                                placeholder="Select user"
+                                style={{ width: 200 }}
+                                dropdownStyle={{
+                                    backgroundColor: "#141414",
+                                    color: "#ffffff",
+                                }}
+                                options={userOptions}
+                                filterOption={(input, option) =>
+                                    (option?.label as string)
+                                        .toLowerCase()
+                                        .includes(input.toLowerCase())
+                                }
+                            />
+                        </Form.Item>
 
+                        <Form.Item
+                            name="role"
+                            rules={[{ required: true, message: "Select role" }]}
+                        >
+                            <Select
+                                placeholder="Select role"
+                                style={{ width: 150 }}
+                                dropdownStyle={{
+                                    backgroundColor: "#141414",
+                                    color: "#ffffff",
+                                }}
+                                options={[
+                                    { label: "Editor", value: "EDITOR" },
+                                    { label: "Viewer", value: "VIEWER" },
+                                ]}
+                            />
+                        </Form.Item>
 
                         <Form.Item>
                             <Button htmlType="submit" type="primary">
@@ -252,26 +302,26 @@ const NoteSettings: React.FC = () => {
                     </Form>
 
                     <Table
-                        style={{marginTop: "1rem"}}
+                        style={{ marginTop: "1rem" }}
                         dataSource={permissions}
                         rowKey="username"
                         pagination={false}
                         columns={[
-                            {title: "Username", dataIndex: "username"},
-                            {title: "Role", dataIndex: "role"},
+                            { title: "Username", dataIndex: "username" },
+                            { title: "Role", dataIndex: "role" },
                         ]}
                     />
                 </Card>
 
                 {myRole === "OWNER" && (
-                    <div style={{marginTop: "2rem"}}>
+                    <div style={{ marginTop: "2rem" }}>
                         <Button danger block onClick={handleDeleteNote}>
                             Delete Note
                         </Button>
                     </div>
                 )}
 
-                <div style={{marginTop: "1rem"}}>
+                <div style={{ marginTop: "1rem" }}>
                     <Button
                         type="default"
                         block

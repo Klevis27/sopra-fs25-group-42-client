@@ -9,8 +9,8 @@ import {
   Typography,
   List,
   Space,
-  message,
   Tag,
+  message,
 } from "antd";
 import {
   UserOutlined,
@@ -19,6 +19,7 @@ import {
 } from "@ant-design/icons";
 import { Vault } from "@/types/vault";
 import { useApi } from "@/hooks/useApi";
+import MovingBall from "@/components/MovingBall";
 
 const { Title } = Typography;
 
@@ -27,6 +28,18 @@ const Vaults: React.FC = () => {
   const [vaults, setVaults] = useState<Vault[]>([]);
   const [newVaultName, setNewVaultName] = useState("");
   const apiService = useApi();
+  const [messageApi, contextHolder] = message.useMessage();
+
+  useEffect(() => {
+    const originalBackground = document.body.style.backgroundColor;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.backgroundColor = "#cbe8ae";
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.backgroundColor = originalBackground;
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
 
   useEffect(() => {
     const fetchVaults = async () => {
@@ -57,7 +70,7 @@ const Vaults: React.FC = () => {
 
   const handleCreateVault = async () => {
     if (!newVaultName.trim()) {
-      message.warning("Please enter a vault name.");
+      messageApi.warning("Please enter a vault name.");
       return;
     }
   
@@ -125,74 +138,84 @@ const Vaults: React.FC = () => {
   const sharedVaults = vaults.filter((v) => v.role !== "OWNER");
 
   return (
-    <div className="m-12">
-      <div className="flex justify-end gap-4 mb-6">
-        <Button
-          icon={<UserOutlined />}
-          onClick={() => {
-            const id = localStorage.getItem("id");
-            if (id) {
-              router.push(`/profile/${id}`);
-            } else {
-              message.error("User ID not found. Please login again.");
-            }
-          }}
-        >
-          Profile
-        </Button>
+    <>
+      {contextHolder}
+      <div className="h-screen mx-12 relative overflow-hidden">
+        <MovingBall />
 
-        <Button icon={<LogoutOutlined />} danger onClick={handleLogout}>
-          Logout
-        </Button>
-      </div>
+        <div className="flex justify-end gap-4 mb-6 p-8">
+          <Button
+            icon={<UserOutlined />}
+            onClick={() => {
+              const id = localStorage.getItem("id");
+              if (id) {
+                router.push(`/profile/${id}`);
+              } else {
+                messageApi.error("User ID not found. Please login again.");
+              }
+            }}
+          >
+            Profile
+          </Button>
 
-      <div className="flex flex-wrap gap-[2rem] p-[2rem]">
-        <Card style={{ flex: 1 }}>
-          {myVaults.length > 0 && (
-            <>
-              <Title level={3}>My Vaults</Title>
-              <List
-                bordered
-                dataSource={myVaults}
-                renderItem={(vault) => (
-                  <List.Item>
-                    <div className="flex justify-between w-full items-center">
-                      <div className="flex items-center gap-2">
-                        <FolderOpenOutlined style={{ color: "#1677ff" }} />
-                        <span className="font-semibold text-base">{vault.name}</span>
-                        <Tag color="geekblue">Vault ID: {vault.id}</Tag>
+          <Button icon={<LogoutOutlined />} danger onClick={handleLogout}>
+            Logout
+          </Button>
+        </div>
+
+        <div className="flex flex-wrap gap-[2rem] p-[2rem] relative z-10 h-full overflow-auto">
+          <Card style={{ flex: 1, alignSelf: "flex-start" }}>
+            {myVaults.length > 0 && (
+              <>
+                <Title level={3}>My Vaults</Title>
+                <List
+                  bordered
+                  dataSource={myVaults}
+                  renderItem={(vault) => (
+                    <List.Item>
+                      <div className="flex justify-between w-full items-center">
+                        <div className="flex items-center gap-2">
+                          <FolderOpenOutlined style={{ color: "#1677ff" }} />
+                          <span className="font-semibold text-base">{vault.name}</span>
+                          <Tag color="geekblue">Vault ID: {vault.id}</Tag>
+                        </div>
+                        <Space>
+                          <Button size="small" onClick={() => router.push(`/vaults/${vault.id}/notes`)}>
+                            Notes
+                          </Button>
+                          <Button size="small" onClick={() => router.push(`/vaults/${vault.id}/settings`)}>
+                            Settings
+                          </Button>
+                        </Space>
                       </div>
-                      <Space>
-                        <Button size="small" onClick={() => router.push(`/vaults/${vault.id}/notes`)}>
-                          Notes
-                        </Button>
-                        <Button size="small" onClick={() => router.push(`/vaults/${vault.id}/settings`)}>
-                          Settings
-                        </Button>
-                      </Space>
-                    </div>
-                  </List.Item>
-                )}
-              />
-            </>
-          )}
+                    </List.Item>
+                  )}
+                />
+              </>
+            )}
 
-          {sharedVaults.length > 0 && (
-            <>
-              <Title level={3} style={{ marginTop: "2rem" }}>
-                Shared Vaults
-              </Title>
-              <List
-                bordered
-                dataSource={sharedVaults}
-                renderItem={(vault) => (
-                  <List.Item>
-                    <div className="flex justify-between w-full items-center">
-                      <div className="flex items-center gap-2">
-                        <FolderOpenOutlined style={{ color: "#52c41a" }} />
-                        <span className="font-semibold text-base">{vault.name}</span>
-                        <Tag color="purple">Vault ID: {vault.id}</Tag>
-                        <Tag color="orange">{vault.role}</Tag>
+            {sharedVaults.length > 0 && (
+              <>
+                <Title level={3} style={{ marginTop: "2rem" }}>
+                  Shared Vaults
+                </Title>
+                <List
+                  bordered
+                  dataSource={sharedVaults}
+                  renderItem={(vault) => (
+                    <List.Item>
+                      <div className="flex justify-between w-full items-center">
+                        <div className="flex items-center gap-2">
+                          <FolderOpenOutlined style={{ color: "#52c41a" }} />
+                          <span className="font-semibold text-base">{vault.name}</span>
+                          <Tag color="purple">Vault ID: {vault.id}</Tag>
+                          <Tag color="orange">{vault.role}</Tag>
+                        </div>
+                        <Space>
+                          <Button size="small" onClick={() => router.push(`/vaults/${vault.id}/notes`)}>
+                            Notes
+                          </Button>
+                        </Space>
                       </div>
                       <Space>
                         <Button size="small" onClick={() => router.push(`/vaults/${vault.id}/notes`)}>
@@ -226,7 +249,7 @@ const Vaults: React.FC = () => {
           </Space>
         </Card>
       </div>
-    </div>
+    </>
   );
 };
 
