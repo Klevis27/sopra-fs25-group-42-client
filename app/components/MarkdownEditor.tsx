@@ -11,6 +11,7 @@ import hljs from "highlight.js";
 import {LinkParser} from "@/components/LinkParser";
 import {useParams} from "next/navigation";
 import "github-markdown-css";
+import {useApi} from "@/hooks/useApi";
 
 // Create shared Yjs document
 const ydoc = new Y.Doc();
@@ -24,19 +25,20 @@ const useCollaborativeEditor = () => {
     const [users, setUsers] = useState<Array<{ name: string; color: string }>>([]);
     const [isConnected, setIsConnected] = useState(false);
     const [provider, setProvider] = useState<WebsocketProvider | null>(null);
+    const api = useApi();
 
     // Initialize WebSocket provider
     useEffect(() => {
         if (!noteId) return;
-
-        const wsProvider = new WebsocketProvider("ws://localhost:1234", noteId, ydoc);
+        const baseURL = api.getBaseURL();
+        const wsProvider = new WebsocketProvider(`ws://${baseURL}:1234`, noteId, ydoc);
         setProvider(wsProvider);
         ymap.set("noteId", noteId);
 
         return () => {
             wsProvider.destroy();
         };
-    }, [noteId]);
+    }, [api, noteId]);
 
     // Content synchronization
     useEffect(() => {
