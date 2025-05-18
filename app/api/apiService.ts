@@ -14,6 +14,10 @@ export class ApiService {
     };
   }
 
+  public getBaseURL(): string {
+    return this.baseURL;
+  }
+
   private async processResponse<T>(res: Response, errorMessage: string): Promise<T> {
     if (!res.ok) {
       let errorDetail = res.statusText;
