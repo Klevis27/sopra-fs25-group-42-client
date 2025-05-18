@@ -108,8 +108,14 @@ const Profile: React.FC = () => {
             <Row justify="center">
               <Avatar size={96} icon={<UserOutlined />} />
             </Row>
-
-            <Descriptions bordered column={1} size="middle" className="mx-auto w-full md:w-2/3" labelStyle={{ color: "white" }}>
+            <Descriptions
+  bordered
+  column={1}
+  size="middle"
+  className="mx-auto w-full md:w-2/3"
+  labelStyle={{ color: "#ffffff", fontWeight: 500 }}
+  contentStyle={{ color: "#ffffff" }}
+>
               <Descriptions.Item label="ID">{user.id}</Descriptions.Item>
               <Descriptions.Item label="Username">{user.username}</Descriptions.Item>
               <Descriptions.Item label="Creation Date">{formatDate(user.creationDate)}</Descriptions.Item>
@@ -117,6 +123,8 @@ const Profile: React.FC = () => {
                 <Tag color={user.status === "ACTIVE" ? "green" : "default"}>{user.status}</Tag>
               </Descriptions.Item>
             </Descriptions>
+
+          
 
             <Row justify="center" gutter={16}>
               <Space size="middle">

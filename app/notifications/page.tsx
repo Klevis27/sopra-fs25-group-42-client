@@ -151,7 +151,22 @@ const NotificationsPage: React.FC = () => {
             />
           )}
         </Space>
+        <div style={{ marginTop: "2rem", textAlign: "center" }}>
+  <Button
+    type="default"
+    onClick={() => {
+      const id = localStorage.getItem("id");
+      if (id) {
+        router.push(`/profile/${id}`);
+      }
+    }}
+  >
+    ← Back to Profile
+  </Button>
+</div>
+
       </Card>
+      
     </div>
   );
 };

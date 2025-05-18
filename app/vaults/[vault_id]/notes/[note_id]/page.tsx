@@ -22,6 +22,8 @@ export default function Editor() {
 
     const params = useParams();
     const noteId = params.note_id as string;
+    const vaultId = params.vault_id as string;
+
 
 
     useEffect(() => {
@@ -46,7 +48,7 @@ export default function Editor() {
             <header style={{ background: "#f8f9fa", padding: "16px", borderBottom: "1px solid #ddd", display: "flex", justifyContent: "space-between" }}>
                 <div>
                     <span style={{ fontSize: "1.25rem", fontWeight: "bold", color: "black" }}>YOUR VAULT</span>
-                    <a href={"/vaults"} className={"ml-3"}>Back to vaults</a>
+                    <a href={`/vaults/${vaultId}/notes`} className={"ml-3"}>Back to Notes</a>
                 </div>
                 <button style={{ padding: "8px 12px", background: "#007bff", color: "white", borderRadius: "4px", border: "none" }}>Extract as PDF</button>
             </header>

@@ -127,18 +127,56 @@ const VaultSettings: React.FC = () => {
 
         <Card style={{ marginTop: "2rem" }} title="Permissions">
           <Form layout="inline" form={permForm} onFinish={handleAddPermission}>
-            <Form.Item name="userId" rules={[{ required: true, message: "Select a user" }]}> <Select showSearch placeholder={<span style={{ color: "#ffffff" }}>Select user</span>} style={{ width: 200 }} dropdownStyle={{ backgroundColor: "#141414", color: "#ffffff" }} optionFilterProp="children" filterOption={(input, option) => { const child = option?.children as unknown; return typeof child === "string" && child.toLowerCase().includes(input.toLowerCase()); }}>
-                {users.filter(u => !permissions.some(p => p.userId === u.id)).map(u => (
-                  <Select.Option key={u.id} value={u.id}>{u.username}</Select.Option>
-                ))}
+            <Form.Item
+              name="userId"
+              rules={[{ required: true, message: "Select a user" }]}
+            >
+              <Select
+  showSearch
+  placeholder="Select user"
+  style={{ width: 200, color: "white" }}
+  dropdownStyle={{ backgroundColor: "#1f1f1f", color: "#ffffff" }}
+  optionFilterProp="children"
+  filterOption={(input, option) => {
+    const child = option?.children as unknown;
+    return (
+      typeof child === "string" &&
+      child.toLowerCase().includes(input.toLowerCase())
+    );
+  }}
+>
+
+               {users
+  .filter((u) => !permissions.some((p) => p.userId === u.id))
+  .map((u) => (
+    <Select.Option key={u.id} value={u.id}>
+      <span style={{ color: "#ffffff" }}>{u.username}</span>
+    </Select.Option>
+  ))}
+
               </Select>
             </Form.Item>
-            <Form.Item name="role" rules={[{ required: true, message: "Select role" }]}> <Select placeholder={<span style={{ color: "#ffffff" }}>Select role</span>} style={{ width: 150 }} dropdownStyle={{ backgroundColor: "#141414", color: "#ffffff" }}>
-                <Select.Option value="EDITOR">Editor</Select.Option>
-                <Select.Option value="VIEWER">Viewer</Select.Option>
-              </Select>
+
+            <Form.Item
+  name="role"
+  rules={[{ required: true, message: "Select role" }]}
+>
+  <Select
+    placeholder="Select role"
+    style={{ width: 150, color: "white" }}
+    dropdownStyle={{ backgroundColor: "#1f1f1f", color: "#ffffff" }}
+  >
+    <Select.Option value="EDITOR">Editor</Select.Option>
+    <Select.Option value="VIEWER">Viewer</Select.Option>
+  </Select>
+</Form.Item>
+
+
+            <Form.Item>
+              <Button htmlType="submit" type="primary">
+                Add
+              </Button>
             </Form.Item>
-            <Form.Item><Button htmlType="submit" type="primary">Add</Button></Form.Item>
           </Form>
 
           <Table

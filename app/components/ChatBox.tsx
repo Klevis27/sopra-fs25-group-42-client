@@ -9,9 +9,6 @@ import {
   orderBy,
   onSnapshot,
   Timestamp,
-  getDocs,
-  deleteDoc,
-  doc,
 } from "firebase/firestore";
 
 interface ChatMessage {
@@ -59,16 +56,7 @@ export default function ChatBox({ roomId }: { roomId: string }) {
     setInput("");
   };
 
-  const clearMessages = async () => {
-    const messagesRef = collection(db, "chats", roomId, "messages");
-    const snapshot = await getDocs(messagesRef);
-
-    const deletions = snapshot.docs.map((docSnap) =>
-      deleteDoc(doc(db, "chats", roomId, "messages", docSnap.id))
-    );
-
-    await Promise.all(deletions);
-  };
+ 
 
   if (!username) {
     return (
@@ -111,13 +99,7 @@ export default function ChatBox({ roomId }: { roomId: string }) {
         </button>
       </div>
 
-      {/* Clear button */}
-      <button
-        onClick={clearMessages}
-        className="text-xs text-red-500 underline mt-3"
-      >
-        Clear Chat
-      </button>
+      
     </div>
   );
 }
