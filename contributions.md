@@ -158,7 +158,12 @@ reason).
 |                    | 30.03.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/288050c7150775896c604ff4efcc2f0b50bcf148) | Written tests for VaultController | Tests are important |
 | **elifdenizi**     | 14.05.2025 | [Link to commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/2b26d64428f58799bc46b54fbbb1557ef79107d1) | enhance the navigation through the app and make user friendly | for easy usage |
 |                    | 14.05.2025 | [Link to commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/556d3f949262112e58c1ea0de2377721773aeecd) | apply the changes that is advised by the M3 feedback | feedback |
-| **nfcolak**        | 29.03.2025 |  |  |  |
-|                    | 29.03.2025 |  |  |  |
+| **nfcolak**        | 13.05.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/75c8571f0662c3454213bf24039cf76294cde551) | make Select dropdown visible on dark theme | UI Improvement for readability. |
+|                    | 13.05.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/3b4e8f239a744d4a63237cc36fdbd95fc1e38042) | return to the note button route fixed  | UI Improvement for the flow between pages |
+|                    | 13.05.2025 | [Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/f8b6338cb29ba68c04f9b4bb9423fa651b10dea5) | profile page label colors to white | UI Improvement for readability. |
+|                    | 13.05.2025 | [Link to Commit 4](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/0c7ebb57d2dad3c60161331620bca3727d69d3ea) | removal of birthday part from the profile | Removal of unnecessary stuff |
+|                    | 13.05.2025 | [Link to Commit 5](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/d471fa346ec627fbd671ee9dcfde5a64fa5d1a68) | dropdown color issues fixed in vault_Settings page |UI Improvement for readability.|
+|                    | 14.05.2025 | [Link to Commit 6](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/dce6caa5c26b4da456bcfc40fa00b27a0d99e1ad) | physics rule added, ball added to the vault page backgroun, and background color changes | Improvement for UI |
+|                    | 14.05.2025 |[Link to Commit 7](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/e4b4e305a3a4b39f03645472b789f91b8205183c)  |Notes page visual changes, background colour changes, animations added | Animations for make webapp's appearance better. |
 | **SvenVest**       | 29.03.2025 |  |  |  |
 |                    | 30.03.2025 |  |  |  |
