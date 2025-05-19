@@ -33,11 +33,11 @@ const useCollaborativeEditor = () => {
         const rawBaseURL = api.getBaseURL();
         let baseURL:string;
         if (rawBaseURL.startsWith("http://localhost:8080")) {
-            baseURL = rawBaseURL.slice(7, rawBaseURL.length-5);
+            baseURL = "localhost:1234";
         } else {
-            baseURL = rawBaseURL.slice(7);
+            baseURL = "yjs-server-1061772680937.europe-west1.run.app";
         }
-        const wsProvider = new WebsocketProvider(`wss://${baseURL}:1234`, noteId, ydoc);
+        const wsProvider = new WebsocketProvider(`wss://${baseURL}`, noteId, ydoc);
         setProvider(wsProvider);
         ymap.set("noteId", noteId);
 
