@@ -164,21 +164,21 @@ reason).
 |                    | 13.05.2025 | [Link to Commit 4](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/0c7ebb57d2dad3c60161331620bca3727d69d3ea) | removal of birthday part from the profile | Removal of unnecessary stuff |
 |                    | 13.05.2025 | [Link to Commit 5](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/d471fa346ec627fbd671ee9dcfde5a64fa5d1a68) | dropdown color issues fixed in vault_Settings page |UI Improvement for readability.|
 |                    | 14.05.2025 | [Link to Commit 6](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/dce6caa5c26b4da456bcfc40fa00b27a0d99e1ad) | physics rule added, ball added to the vault page backgroun, and background color changes | Improvement for UI |
-|                    | 14.05.2025 |[Link to Commit 7](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/e4b4e305a3a4b39f03645472b789f91b8205183c)  |Notes page visual changes, background colour changes, animations added | Animations for make webapp's appearance better. |
+|                    | 14.05.2025 |[Link to Commit 7](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/e4b4e305a3a4b39f03645472b789f91b8205183c)  | Notes page visual changes, background colour changes, animations added | Animations for make webapp's appearance better. |
 | **SvenVest**       | 29.03.2025 |https://github.com/Klevis27/sopra-fs25-group-42-server/commit/006c73bbff8c5431860b3202f43d91f098c9e7fa  |  |  |
 |                    | 30.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-server/commit/6c6e42f9a14faa0876ca0538c7c42c3c15e46155 |  |  |
 
 ## Contributions Week 8 (Final) - 19.05 to 23.05.
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
-|  **Klevis27**      | 19.05.2025 |  |  |  |
+|  **Klevis27**      | 19.05.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/b664119ce26a57f0554c72cf9c5c447b9671e67b) | Finally got persistence to work this time actually! | After another good 9 hours of thinking and tinkering (look at the commits in main around this one as well) I finally got the whole persistence and simultaneous editing to work. Thank god |
 |                    | 19.05.2025 |  |  |  |
 |  **AntWarz**       | 19.05.2025 |  |  |  |
 |                    | 19.05.2025 |  |  |  |
 |  **elifdenizi**    | 19.05.2025 |  |  |  |
 |                    | 19.05.2025 |  |  |  |
-|  **nfcolak**       | 19.05.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/81e557553a333681aa3007cb56d85396faa9413c)|Fix: handle URL problem in shared vaults | Consistency |
-|                    | 19.05.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/ce54b93875a93ee2bbf017e01599aa029f747e2a)|Fix: handle shared vault URL problem on server | Consistency |
+|  **nfcolak**       | 19.05.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/81e557553a333681aa3007cb56d85396faa9413c)| Fix: handle URL problem in shared vaults | Consistency |
+|                    | 19.05.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/ce54b93875a93ee2bbf017e01599aa029f747e2a)| Fix: handle shared vault URL problem on server | Consistency |
 |                    | 19.05.2025 |  |  |  |
 |                    | 19.05.2025 |  |  |  |
 |  **SvenVest**      | 19.05.2025 |  |  |  |
