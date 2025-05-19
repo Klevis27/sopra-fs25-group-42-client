@@ -165,5 +165,5 @@ reason).
 |                    | 13.05.2025 | [Link to Commit 5](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/d471fa346ec627fbd671ee9dcfde5a64fa5d1a68) | dropdown color issues fixed in vault_Settings page |UI Improvement for readability.|
 |                    | 14.05.2025 | [Link to Commit 6](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/dce6caa5c26b4da456bcfc40fa00b27a0d99e1ad) | physics rule added, ball added to the vault page backgroun, and background color changes | Improvement for UI |
 |                    | 14.05.2025 |[Link to Commit 7](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/e4b4e305a3a4b39f03645472b789f91b8205183c)  |Notes page visual changes, background colour changes, animations added | Animations for make webapp's appearance better. |
-| **SvenVest**       | 29.03.2025 |  |  |  |
-|                    | 30.03.2025 |  |  |  |
+| **SvenVest**       | 29.03.2025 |https://github.com/Klevis27/sopra-fs25-group-42-server/commit/006c73bbff8c5431860b3202f43d91f098c9e7fa  |  |  |
+|                    | 30.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-server/commit/6c6e42f9a14faa0876ca0538c7c42c3c15e46155 |  |  |
