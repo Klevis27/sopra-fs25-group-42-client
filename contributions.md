@@ -168,7 +168,7 @@ reason).
 | **SvenVest**       | 29.03.2025 |https://github.com/Klevis27/sopra-fs25-group-42-server/commit/006c73bbff8c5431860b3202f43d91f098c9e7fa  |  |  |
 |                    | 30.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-server/commit/6c6e42f9a14faa0876ca0538c7c42c3c15e46155 |  |  |
 
-## Contributions Week 8 - 19.05 to 22.05.
+## Contributions Week 8 - 19.05 to 23.05.
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
 |  **Klevis27**      | 19.05.2025 |  |  |  |
