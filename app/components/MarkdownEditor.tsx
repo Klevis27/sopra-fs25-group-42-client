@@ -35,7 +35,7 @@ const useCollaborativeEditor = () => {
         if (rawBaseURL.startsWith("http://localhost:8080")) {
             baseURL = "ws://localhost:1234";
         } else {
-            baseURL = "wss://yjs-server-1061772680937.europe-west1.run.app";
+            baseURL = "wss://yjs-server-1061772680937.europe-west6.run.app";
         }
         const wsProvider = new WebsocketProvider(`${baseURL}`, noteId, ydoc);
         setProvider(wsProvider);
