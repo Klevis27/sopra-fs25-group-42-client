@@ -167,3 +167,19 @@ reason).
 |                    | 14.05.2025 |[Link to Commit 7](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/e4b4e305a3a4b39f03645472b789f91b8205183c)  |Notes page visual changes, background colour changes, animations added | Animations for make webapp's appearance better. |
 | **SvenVest**       | 29.03.2025 |https://github.com/Klevis27/sopra-fs25-group-42-server/commit/006c73bbff8c5431860b3202f43d91f098c9e7fa  |  |  |
 |                    | 30.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-server/commit/6c6e42f9a14faa0876ca0538c7c42c3c15e46155 |  |  |
+
+## Contributions Week 8 (Final) - 19.05 to 23.05.
+| **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
+|--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
+|  **Klevis27**      | 19.05.2025 |  |  |  |
+|                    | 19.05.2025 |  |  |  |
+|  **AntWarz**       | 19.05.2025 |  |  |  |
+|                    | 19.05.2025 |  |  |  |
+|  **elifdenizi**    | 19.05.2025 |  |  |  |
+|                    | 19.05.2025 |  |  |  |
+|  **nfcolak**       | 19.05.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/81e557553a333681aa3007cb56d85396faa9413c)|Fix: handle URL problem in shared vaults | Consistency |
+|                    | 19.05.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/ce54b93875a93ee2bbf017e01599aa029f747e2a)|Fix: handle shared vault URL problem on server | Consistency |
+|                    | 19.05.2025 |  |  |  |
+|                    | 19.05.2025 |  |  |  |
+|  **SvenVest**      | 19.05.2025 |  |  |  |
+|                    | 19.05.2025 |  |  |  |
