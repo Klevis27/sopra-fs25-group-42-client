@@ -175,8 +175,8 @@ reason).
 |                    | 19.05.2025 |  |  |  |
 |  **AntWarz**       | 19.05.2025 |  |  |  |
 |                    | 19.05.2025 |  |  |  |
-|  **elifdenizi**    | 19.05.2025 |  |  |  |
-|                    | 19.05.2025 |  |  |  |
+|  **elifdenizi**    | 19.05.2025 |[Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/fd26be9b92cf7e706171533c8ba51f3b49fcc151)  | fixation of vaults and notes page error and fixation of shared vault issue | In a shared vaults notes were not displayed and this issue is fixed |
+|                    | 19.05.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/b33f5498070e59a1d1a990f8706a4d237befad15) | fixation of uml errors in the frontend | Returning from a shared note occured error and this issue solved. |
 |  **nfcolak**       | 19.05.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/81e557553a333681aa3007cb56d85396faa9413c)| Fix: handle URL problem in shared vaults | Consistency |
 |                    | 19.05.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/ce54b93875a93ee2bbf017e01599aa029f747e2a)| Fix: handle shared vault URL problem on server | Consistency |
 |                    | 19.05.2025 |  |  |  |
