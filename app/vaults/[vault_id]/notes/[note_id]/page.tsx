@@ -142,7 +142,7 @@ export default function Editor() {
                 {isRightSidebarOpen && (
                     <Sidebar isOpen={isRightSidebarOpen} onClose={() => setIsRightSidebarOpen(false)} position="right">
                         <div style={{
-                            width: "100%",
+                            width: "300px",
                             height: "300px",
                             border: "1px solid #ddd",
                             borderRadius: "8px",
