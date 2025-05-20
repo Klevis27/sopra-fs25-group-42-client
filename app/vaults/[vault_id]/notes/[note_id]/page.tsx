@@ -141,7 +141,7 @@ export default function Editor() {
                 {/* Right Sidebar */}
                 {isRightSidebarOpen && (
                     <Sidebar isOpen={isRightSidebarOpen} onClose={() => setIsRightSidebarOpen(false)} position="right">
-                        <div style={{
+                        {/* <div style={{
                             width: "100%",
                             height: "300px",
                             border: "1px solid #ddd",
@@ -151,7 +151,15 @@ export default function Editor() {
                             overflow: "hidden"     // Prevent any overflow
                         }}>
                             <NoteGraph/>
-                        </div>
+                        </div> */}
+                        <div style={{
+    width: "100%",
+    height: "300px", 
+    position: "relative",
+    overflow: "hidden"
+}}>
+    <NoteGraph/>
+</div>
 
                         <div style={{textAlign: "center", padding: "16px"}}>
                             <Button type="primary" onClick={() => setShowSettings(!showSettings)}>Settings</Button>
