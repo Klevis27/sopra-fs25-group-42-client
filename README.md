@@ -1,4 +1,4 @@
-# 📝 not moogle docs
+# Project: not moogle docs
 
 ![Logo](docs/logo.png)
 
