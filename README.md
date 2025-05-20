@@ -160,7 +160,7 @@ docker-compose up --build (BUT GPT ADVISE THIS? docker-compose up)
 - (For further details of editor page please check section X)
 
 #### **6.3-) Notes → Profile:**
-- (It's already mentioned in section 3.)
+- (We already mentioned in section 3.)
 
 ### **7-) Notes Settings page:**
 [screenshot]
