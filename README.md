@@ -104,7 +104,7 @@ docker-compose up --build (BUT GPT ADVISE THIS? docker-compose up)
 
 [screenshot]
 
-- User clicks Login / Register (Enters user_id + password)
+- User clicks Login / Register (Enters username + password)
 
 ### **2-) Vaults Dashboard:**
 
