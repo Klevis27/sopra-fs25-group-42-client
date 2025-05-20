@@ -12,6 +12,8 @@ import {
 } from "antd";
 import { FileTextOutlined } from "@ant-design/icons";
 import { useApi } from "@/hooks/useApi";
+import { ArrowLeftOutlined } from "@ant-design/icons";
+
 
 const { Title } = Typography;
 
@@ -28,31 +30,44 @@ const SharedNotesPage: React.FC = () => {
 
   useEffect(() => {
     const fetchSharedNotes = async () => {
+      if (typeof window === "undefined") return;
+  
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        router.push("/login");
+        return;
+      }
+  
       try {
-        const token = localStorage.getItem("accessToken");
-        if (!token) {
-          router.push("/login");
-          return;
-        }
-
         const response = await apiService.get<SharedNote[]>("/notes/shared", token);
         if (!response) {
           message.info("No shared notes found.");
           return;
         }
-
+  
         setNotes(response);
       } catch (error) {
         console.error(error);
         message.error("Failed to fetch shared notes.");
       }
     };
-
+  
     fetchSharedNotes();
   }, [apiService, router]);
+  
 
   return (
     <div className="m-12">
+      {/* ✅ Back Button */}
+      <Button
+        type="default"
+        icon={<ArrowLeftOutlined />}
+        onClick={() => router.push("/vaults")}
+        style={{ marginBottom: "1rem" }}
+      >
+        Back to Vaults
+      </Button>
+  
       <Card>
         <Title level={3}>Shared Notes</Title>
         {notes.length === 0 ? (
@@ -72,7 +87,9 @@ const SharedNotesPage: React.FC = () => {
                   <Button
                     size="small"
                     onClick={() =>
-                      router.push(`/vaults/${note.vaultId}/notes/${note.id}`)
+                      router.push(
+                        `/vaults/${note.vaultId}/notes/${note.id}?from=shared`
+                      )
                     }
                   >
                     Open
@@ -85,6 +102,7 @@ const SharedNotesPage: React.FC = () => {
       </Card>
     </div>
   );
+  
 };
 
 export default SharedNotesPage;
