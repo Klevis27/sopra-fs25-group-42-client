@@ -1,6 +1,6 @@
 # 📝 not moogle docs
 
-![Not Moogle Docs Logo](/logo.png)
+![Logo](docs/logo.png)
 
 ## 🔴 **Project Overview**
 
