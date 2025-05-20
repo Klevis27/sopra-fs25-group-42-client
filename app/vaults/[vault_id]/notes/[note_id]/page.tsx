@@ -22,11 +22,24 @@ export default function Editor() {
     const router = useRouter();
     const params = useParams();
     const noteId = params.note_id as string;
+    const [cameFromShared, setCameFromShared] = useState(false);
+
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const params = new URLSearchParams(window.location.search);
+    setCameFromShared(params.get("from") === "shared");
+  }
+}, []);
+
     const vaultId = params.vault_id as string;
 
+
     const redirectToNote = (id: string | null) => {
-        router.push(`/vaults/${vaultId}/notes/${id}`)
-    }
+        if (!id) return;
+        const query = cameFromShared ? "?from=shared" : "";
+        router.push(`/vaults/${vaultId}/notes/${id}${query}`);
+    };
+    
 
     useEffect(() => {
         const getCurrentNoteName = async () => {
@@ -44,6 +57,8 @@ export default function Editor() {
 
 
     useEffect(() => {
+        if (cameFromShared) return; // 🚫 don't fetch notes by vault
+    
         const getAllNotes = async () => {
             try {
                 const response = await apiService.get<Note[]>(`/vaults/${vaultId}/notes`);
@@ -52,9 +67,10 @@ export default function Editor() {
                 console.error("Failed to fetch notes:", error);
             }
         };
-
+    
         getAllNotes();
-    }, [apiService, vaultId]);
+    }, [apiService, vaultId, cameFromShared]);
+    
 
 
 
@@ -70,7 +86,13 @@ export default function Editor() {
             }}>
                 <div>
                     <span style={{fontSize: "1.25rem", fontWeight: "bold", color: "black"}}>YOUR VAULT</span>
-                    <a href={`/vaults/${vaultId}/notes`} className={"ml-3"}>Back to Notes</a>
+                    <a
+    href={cameFromShared ? "/shared-notes" : `/vaults/${vaultId}/notes`}
+    className={"ml-3"}
+>
+    Back to Notes
+</a>
+
                 </div>
                 <button style={{
                     padding: "8px 12px",
@@ -86,27 +108,36 @@ export default function Editor() {
             <div style={{display: "flex", flex: 1, overflow: "hidden", font: "black"}}>
                 {/* Left Sidebar */}
                 {isLeftSidebarOpen && (
-                    <Sidebar isOpen={isLeftSidebarOpen} onClose={() => setIsLeftSidebarOpen(false)} position="left">
-                        <h2>Notes</h2>
-                        <ul>
-                            {notes.map((note, index) => (
-                                <li
-                                    key={index}
-                                    onClick={() => redirectToNote(note.id)} // Set current note
-                                    style={{
-                                        cursor: "pointer",
-                                        padding: "4px 0",
-                                        color: note.title === currentNoteTitle ? "#007bff" : "black",
-                                        fontWeight: note.title === currentNoteTitle ? "bold" : "normal",
-                                    }}
-                                >
-                                    - {note.title}
-                                </li>
-                            ))}
-                        </ul>
-                        <p style={{fontSize: "0.75rem", color: "#888", marginTop: "16px"}}>Status: [TBA]</p>
-                    </Sidebar>
-                )}
+    <Sidebar isOpen={isLeftSidebarOpen} onClose={() => setIsLeftSidebarOpen(false)} position="left">
+        <h2>Notes</h2>
+
+        {/* ✅ Only show note list if NOT coming from shared notes */}
+        {!cameFromShared ? (
+            <>
+                <ul>
+                    {notes.map((note, index) => (
+                        <li
+                            key={index}
+                            onClick={() => redirectToNote(note.id)}
+                            style={{
+                                cursor: "pointer",
+                                padding: "4px 0",
+                                color: note.title === currentNoteTitle ? "#007bff" : "black",
+                                fontWeight: note.title === currentNoteTitle ? "bold" : "normal",
+                            }}
+                        >
+                            - {note.title}
+                        </li>
+                    ))}
+                </ul>
+                <p style={{fontSize: "0.75rem", color: "#888", marginTop: "16px"}}>Status: [TBA]</p>
+            </>
+        ) : (
+            <p style={{fontSize: "0.875rem", color: "#666"}}>This is a shared note. Vault notes are not visible.</p>
+        )}
+    </Sidebar>
+)}
+
 
                 {/* Main Content - Markdown Editor */}
                 <main

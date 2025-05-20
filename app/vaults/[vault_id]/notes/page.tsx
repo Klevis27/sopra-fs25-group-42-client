@@ -21,6 +21,8 @@ const Notes: React.FC = () => {
 
     const [notes, setNotes] = useState<Note[]>([]);
     const [vaultName, setVaultName] = useState("");
+    const [vaultOwnerId, setVaultOwnerId] = useState<string | null>(null);
+
     const [newNoteName, setNewNoteName] = useState("");
     const apiService = useApi();
 
@@ -47,12 +49,15 @@ const Notes: React.FC = () => {
                     return;
                 }
 
-                // 1. vault name
-                const vaultInfo = await apiService.get<{ name: string }>(
-                    `/vaults/${vaultId}/name`,
-                    accessToken
-                );
-                setVaultName(vaultInfo.name);
+                
+                // 1. vault name and owner
+const vaultInfo = await apiService.get<{ name: string; ownerId: number }>(
+    `/vaults/${vaultId}`,
+    accessToken
+  );
+  setVaultName(vaultInfo.name);
+  setVaultOwnerId(vaultInfo.ownerId.toString());
+  
 
                 // 2. notes
                 const response = await apiService.get<Note[]>(
@@ -117,6 +122,18 @@ const Notes: React.FC = () => {
         router.push("/");
     };
 
+    const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const id = localStorage.getItem("id");
+    setCurrentUserId(id);
+  }
+}, []);
+const isOwner = currentUserId && vaultOwnerId && currentUserId === vaultOwnerId;
+
+
+
 
     return (
         <div className="m-12">
@@ -172,12 +189,15 @@ const Notes: React.FC = () => {
                                         >
                                             Editor
                                         </Button>
-                                        <Button
-                                            size="small"
-                                            onClick={() => router.push(`/vaults/${vaultId}/notes/${note.id}/settings`)}
-                                        >
-                                            Settings
-                                        </Button>
+                                        {isOwner && (
+  <Button
+    size="small"
+    onClick={() => router.push(`/vaults/${vaultId}/notes/${note.id}/settings`)}
+  >
+    Settings
+  </Button>
+)}
+
                                     </Space>
                                 </div>
                             </List.Item>
@@ -186,20 +206,22 @@ const Notes: React.FC = () => {
                 </Card>
 
                 {/* Right Column: Create Note */}
-                <Card style={{width: 300}}>
-                    <Title level={4}>Create New Note</Title>
-                    <Space direction="vertical" style={{width: "100%"}}>
-                        <Input
-                            placeholder="Note Name"
-                            value={newNoteName}
-                            onChange={(e) => setNewNoteName(e.target.value)}
-                        />
-                        <Button type="primary" block onClick={handleCreateNote}>
-                            Create Note
-                        </Button>
+                {isOwner && (
+  <Card style={{ width: 300 }}>
+    <Title level={4}>Create New Note</Title>
+    <Space direction="vertical" style={{ width: "100%" }}>
+      <Input
+        placeholder="Note Name"
+        value={newNoteName}
+        onChange={(e) => setNewNoteName(e.target.value)}
+      />
+      <Button type="primary" block onClick={handleCreateNote}>
+        Create Note
+      </Button>
+    </Space>
+  </Card>
+)}
 
-                    </Space>
-                </Card>
             </div>
         </div>
     )
