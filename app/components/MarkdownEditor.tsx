@@ -13,45 +13,49 @@ import {useParams} from "next/navigation";
 import "github-markdown-css";
 import {useApi} from "@/hooks/useApi";
 
-// Create shared Yjs document
-const ydoc = new Y.Doc();
-const ytext = ydoc.getText("markdown");
-const ymap = ydoc.getMap("meta");
-
 const useCollaborativeEditor = () => {
     const params = useParams();
     const noteId = params?.note_id as string;
-    const [content, setContent] = useState(ytext.toString());
+    const [content, setContent] = useState("");
     const [users, setUsers] = useState<Array<{ name: string; color: string }>>([]);
     const [isConnected, setIsConnected] = useState(false);
     const [provider, setProvider] = useState<WebsocketProvider | null>(null);
+    const [ytext, setYText] = useState<Y.Text | null>(null);
     const api = useApi();
 
-    // Initialize WebSocket provider
     useEffect(() => {
         if (!noteId) return;
+
+        // Create a new Y.Doc when noteId changes
+        const newYDoc = new Y.Doc();
+        const newYText = newYDoc.getText("markdown");
+        const newYMap = newYDoc.getMap("meta");
+        setYText(newYText);
+        newYMap.set("noteId", noteId);
+
         const rawBaseURL = api.getBaseURL();
-        let baseURL:string;
-        if (rawBaseURL.startsWith("http://localhost:8080")) {
-            baseURL = "ws://localhost:1234";
-        } else {
-            baseURL = "wss://yjs-server-1061772680937.europe-west6.run.app";
-        }
-        const wsProvider = new WebsocketProvider(`${baseURL}`, noteId, ydoc);
+        const baseURL = rawBaseURL.startsWith("http://localhost:8080")
+            ? "ws://localhost:1234"
+            : "wss://yjs-server-1061772680937.europe-west6.run.app";
+
+        const wsProvider = new WebsocketProvider(baseURL, noteId, newYDoc);
         setProvider(wsProvider);
-        ymap.set("noteId", noteId);
 
         return () => {
             wsProvider.destroy();
+            newYDoc.destroy();
         };
     }, [api, noteId]);
 
     // Content synchronization
     useEffect(() => {
+        if (!ytext) return;
+
         const handleUpdate = () => setContent(ytext.toString());
         ytext.observe(handleUpdate);
+        setContent(ytext.toString()); // initial load
         return () => ytext.unobserve(handleUpdate);
-    }, []);
+    }, [ytext]);
 
     // Connection and awareness state
     useEffect(() => {
@@ -72,7 +76,7 @@ const useCollaborativeEditor = () => {
         const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0")}`;
         const randomName = `User ${Math.floor(Math.random() * 1000)}`;
 
-        // NEW: Correct way to set awareness state
+        // Setting awareness state
         provider.awareness.setLocalStateField("user", {
             name: randomName,
             color: randomColor
@@ -86,12 +90,12 @@ const useCollaborativeEditor = () => {
 
     // Bind textarea using y-textarea
     const bindEditor = useCallback((element: HTMLTextAreaElement | null) => {
-        if (!element) return;
+        if (!element || !ytext) return;
         const binding = new TextAreaBinding(ytext, element);
         return () => binding.destroy();
-    }, []);
+    }, [ytext]);
 
-    return {content, bindEditor, users, isConnected};
+    return { content, bindEditor, users, isConnected };
 };
 
 export default function CollaborativeMarkdownEditor() {
