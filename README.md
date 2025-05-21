@@ -31,17 +31,6 @@ CHAT IS MISSING! (FIREBASE API IS MISSING!)
 | Ant Design v5 | A comprehensive UI library offering polished, ready-to-use components for professional interfaces. | [Ant Design](https://ant.design/components/overview/) | 
 | WebSocket | A communication protocol for real-time, bidirectional messaging between the browser and server. Enables features like collaborative note editing. | [WebSocket](github.com/websockets/ws) | 
 
-### **⚙️ Backend:**
-
-| **Technology**        | **Purpose**   | **Source** | 
-|--------------------| ---------- | ------------------ |
-| Spring Boot 2.4 | A Java-based framework that simplifies backend development, particularly for building RESTful APIs. | [SpringBoot](https://docs.spring.io/spring-boot/docs/2.4.0/reference/htmlsingle/)| 
-| JWT | A secure and compact mechanism for transmitting user session information. Enables stateless authentication between client and server. | [JWT](https://jwt.io/introduction) | 
-| MariaDB | A fast and reliable open-source relational database. Stores core application data such as users, vaults, notes, and permission settings. | [MariaDB](https://mariadb.org/documentation/) | 
-| Redis | An in-memory key-value data store. Used for session caching and syncing real-time collaborative editing. | [Redis](https://redis.io/docs/) | 
-| Yjs | A CRDT-based collaboration framework enabling concurrent editing by multiple users. Facilitates real-time synchronization of shared documents. | [Yjs](https://yjs.dev/) | 
-| Docker | A platform for building, shipping, and running applications in isolated containers. Ensures consistent development and deployment environments across systems. | [Docker](https://docs.docker.com/) | 
-
 ## **👨🏼‍💻 Main Components:**
 
 ### **🚀 Frontend:**
@@ -53,16 +42,6 @@ CHAT IS MISSING! (FIREBASE API IS MISSING!)
 | Note Editor (Yjs + WebSocket) | Enables real-time collaborative editing of a note. | [Editor](app/editor/Editor.tsx) | 
 | Vault Settings Page | Used to manage vault permissions and update vault information. | [Vault Settings](app/vaults/[vault_id]/settings/page.tsx) | 
 | Authentication Pages | Handle user authentication (login/register) | [Login](app/login/page.tsx) | 
-
-### **⚙️ Backend:**
-
-| **Component**        | **Purpose**   | **Link** | 
-|--------------------| ---------- | ------------------ |
-| UserController | Handles user authentication and registration. | []()| 
-| Vault Controller | Manages CRUD operations for vaults, including listing and creating. |  | 
-| Note Controller | Handles all note-related endpoints under a vault. | | 
-| Vault Permission Controller | Manages sharing logic by assigning user roles (OWNER, EDITOR) to vaults. | | 
-| JwtFilter & JwtUtil |Extracts and validates the token for secured requests. |  | 
 
 ## **👩🏻‍🚀 Launch & Deployment:**
 
@@ -79,23 +58,6 @@ npm run dev
 3️⃣ **Run frontend tests**
 ```
 npm test
-```
-### **⚙️ Backend:**
-1️⃣ **Build the project**
-```
-./gradlew build
-```
-2️⃣ **Run the application**
-```
-./gradlew bootRun
-```
-3️⃣ **Run backend tests**
-```
-./gradlew test
-```
-4️⃣ **(Optional) Use Docker Compose**
-```
-docker-compose up --build (BUT GPT ADVISE THIS? docker-compose up)
 ```
 ---
 ## 🌊 **Illustrations and Flow of the App:**
