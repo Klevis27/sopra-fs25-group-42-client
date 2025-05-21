@@ -204,7 +204,7 @@ docker-compose up --build (BUT GPT ADVISE THIS? docker-compose up)
 | Klevis Nrecaj |22-725-832| [Klevis](https://github.com/Klevis27) | 
 | Oliver Hostettler |22-717-003| [Oliver](https://github.com/AntWarz) |
 | Sven Vestli |20-916-110| [Sven](https://github.com/SvenVest) |
-| Elif Deniz İsbuga | | [Elif](https://github.com/elifdenizi) |
+| Elif Deniz İsbuga |24-745-911| [Elif](https://github.com/elifdenizi) |
 | Necati Furkan Colak |24-746-323| [Necati](https://github.com/nfcolak) |
 
 
