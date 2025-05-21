@@ -110,40 +110,35 @@ const Edit: React.FC = () => {
   return (
     <div className="card-container">
       <Card
-        title="Edit Profile"
-        loading={!userTableObject}
-        className="dashboard-container"
-      >
-        {userTableObject && (
-          <>
-            <Form
-              form={form}
-              name="edit"
-              size="large"
-              onFinish={handleEdit}
-              layout="vertical"
-            >
-              <Form.Item
-                name="username"
-                label="Username"
-                initialValue={userTableObject[0].username}
-              >
-                <Input placeholder="Enter username" />
-              </Form.Item>
+  title="Edit Profile"
+  className="dashboard-container"
+>
+  <Form
+    form={form}
+    name="edit"
+    size="large"
+    onFinish={handleEdit}
+    layout="vertical"
+  >
+    <Form.Item
+      name="username"
+      label="Username"
+    >
+      <Input placeholder="Enter username" />
+    </Form.Item>
 
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Save
-                </Button>
-              </Form.Item>
-            </Form>
+    <Form.Item>
+      <Button type="primary" htmlType="submit">
+        Save
+      </Button>
+    </Form.Item>
+  </Form>
 
-            <Button onClick={goToProfile} type="primary" style={{ backgroundColor: 'red' }}>
-              Cancel
-            </Button>
-          </>
-        )}
-      </Card>
+  <Button onClick={goToProfile} type="primary" style={{ backgroundColor: 'red' }}>
+    Cancel
+  </Button>
+</Card>
+
     </div>
   );
 };
