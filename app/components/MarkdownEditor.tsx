@@ -211,8 +211,20 @@ export default function CollaborativeMarkdownEditor() {
                 </code>
             );
         },
+        // internallinks
+        internalLink: ({children, pageTitle, ...props}: MarkdownComponentProps & { pageTitle?: string }) => (
+            <span
+                className="text-blue-600 cursor-pointer hover:underline"
+                onClick={() => pageTitle && handleInternalLink(pageTitle)}
+                {...props}
+            >
+                <LinkParser onInternalLinkClick={handleInternalLink}>
+                    {children}
+                </LinkParser>
+            </span>
+        ),
 
-        // Links
+        // wikiLinks
         a: ({ children, href, ...props }: MarkdownComponentProps) => (
             <a
                 href={href}
