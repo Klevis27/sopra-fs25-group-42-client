@@ -43,6 +43,13 @@ export default function CollaborativeMarkdownEditor() {
         ydocRef.current = ydoc;
         ytextRef.current = ytext;
 
+        // Expose for console testing
+        // @ts-expect-error debug
+        window.ydoc = ydoc;
+        console.log("→ assigned window.ydoc");
+        console.log("→ ytext is:", ytext);
+
+
         // 1.b. WS URL (dev vs prod)
         const raw = api.getBaseURL();
         const wsURL = raw.startsWith("http://localhost:8080")
