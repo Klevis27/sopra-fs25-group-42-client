@@ -65,7 +65,7 @@ const MovingBall: React.FC = () => {
     >
       <Image
         //src="/logo.png"
-        src="/palestinaflag.jpeg"
+        src="/logo.png"
         alt="Moving Ball"
         width={190}
         height={190}

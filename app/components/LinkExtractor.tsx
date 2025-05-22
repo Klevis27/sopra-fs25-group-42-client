@@ -153,22 +153,8 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
         setToCreate(toCreate);
 
     }, [text]);
-    //--------------------Don't touch this-----------------------------------//
-
-    //For debugging only 
-    useEffect(() => {
-        console.log("Updated state:", inNoteLinks);
-    }, [inNoteLinks]);
-
-
 
     //Handle the deleting of links
-    useEffect(() => {
-        linksToDelete.forEach(element => {
-            console.log(`Link to ${element.target} will be deleted`);
-        });
-    }, [linksToDelete]);
-
     useEffect(() => {
         const deleteLinks = async () => {
             for (const element of linksToDelete) {
@@ -177,7 +163,6 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
                     getAllNotes();
                     getAllLinks();
                     refreshStore.refresh();
-                    console.log(`Made a call to delete link to ${element.target}`);
                 } catch (err) {
                     console.error("Failed to delete link:", element, err);
                 }
@@ -192,12 +177,6 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
 
     //Handle the posting of new links
     useEffect(() => {
-        linksToCreate.forEach(element => {
-            console.log(`Link to ${element.target} will be created`);
-        });
-    }, [linksToCreate]);
-
-    useEffect(() => {
         const postLinks = async () => {
             for (const element of linksToCreate) {
                 try {
@@ -205,7 +184,6 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
                     getAllNotes();
                     getAllLinks();
                     refreshStore.refresh();
-                    console.log("Posted");
                 } catch (err) {
                     console.error("Failed to post link:", element, err);
                 }

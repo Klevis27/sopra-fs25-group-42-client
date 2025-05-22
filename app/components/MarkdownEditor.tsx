@@ -13,8 +13,6 @@ import { useParams } from "next/navigation";
 import "github-markdown-css";
 import { useApi } from "@/hooks/useApi";
 import { LinkExtractor } from "@/components/LinkExtractor"; // adjust path as needed
-import { LinkDeleter } from "./LinkDeleter";
-import { LinkCreator } from "./LinkCreator";
 
 
 // Create shared Yjs document

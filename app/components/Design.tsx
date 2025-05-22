@@ -25,4 +25,17 @@ export const LogoText = () =>{
             height={100}
         />
     </div>
+
+
+
+}
+export const PlaestinaFlag = () => {
+    return <div>
+        <Image
+        src = "/palestinaflag.jpeg"
+        alt = "Flag"
+        width={100}
+        height={100}
+        />
+    </div>
 }
