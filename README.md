@@ -97,12 +97,12 @@ npm test
 - (For further details of notifications page please check section 5)
 
 ### **4-) Vault Settings Page:**
-![vaultsettings](docs/vaultsettings.png)
+
 - User can change the vault name.
 - User can send invitations to invite new users to work in same vault. (Permissions Card)
 
 ### **5-) Notifications Page:**
-![notifications](docs/notifications.png)
+
 - User can see all invitations that have received.
 
 ### **6-) Notes page:**
