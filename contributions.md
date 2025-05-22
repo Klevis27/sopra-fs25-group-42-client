@@ -169,18 +169,18 @@ reason).
 |                    | 30.03.2025 | https://github.com/Klevis27/sopra-fs25-group-42-server/commit/6c6e42f9a14faa0876ca0538c7c42c3c15e46155 |  |  |
 
 ## Contributions Week 8 (Final) - 19.05 to 23.05.
-| **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
-|--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
-|  **Klevis27**      | 19.05.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/b664119ce26a57f0554c72cf9c5c447b9671e67b) | Finally got persistence to work this time actually! | After another good 9 hours of thinking and tinkering (look at the commits in main around this one as well) I finally got the whole persistence and simultaneous editing to work. Thank god |
-|                    | 22.05.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/a3b3c2e93c1c5cb76bcdf10d2c98064ea48af5af) | Finally got persistence to work actually actually | An additional 21 hours and I got persistence to work for real for real this time. Yeah it's important alright. It better be. i really really really don't know why I didn't think of this solution earlier it would have all been so simple :((((((( |
-|                    | 19.05.2025 |  |  |  |
-|  **AntWarz**       | 19.05.2025 |  |  |  |
-|                    | 19.05.2025 |  |  |  |
+| **Student**        | **Date**   | **Link to Commit** | **Description**                                                            | **Relevance**                       |
+|--------------------| ---------- | ------------------ |----------------------------------------------------------------------------| ----------------------------------- |
+|  **Klevis27**      | 19.05.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/b664119ce26a57f0554c72cf9c5c447b9671e67b) | Finally got persistence to work this time actually!                        | After another good 9 hours of thinking and tinkering (look at the commits in main around this one as well) I finally got the whole persistence and simultaneous editing to work. Thank god |
+|                    | 22.05.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/a3b3c2e93c1c5cb76bcdf10d2c98064ea48af5af) | Finally got persistence to work actually actually                          | An additional 21 hours and I got persistence to work for real for real this time. Yeah it's important alright. It better be. i really really really don't know why I didn't think of this solution earlier it would have all been so simple :((((((( |
+|                    | 19.05.2025 |  |                                                                            |  |
+|  **AntWarz**       | 19.05.2025 |  |                                                                            |  |
+|                    | 19.05.2025 |  |                                                                            |  |
 |  **elifdenizi**    | 19.05.2025 |[Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/fd26be9b92cf7e706171533c8ba51f3b49fcc151)  | fixation of vaults and notes page error and fixation of shared vault issue | In a shared vaults notes were not displayed and this issue is fixed |
-|                    | 19.05.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/b33f5498070e59a1d1a990f8706a4d237befad15) | fixation of uml errors in the frontend | Returning from a shared note occured error and this issue solved. |
-|  **nfcolak**       | 19.05.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/81e557553a333681aa3007cb56d85396faa9413c)| Fix: handle URL problem in shared vaults | Consistency |
-|                    | 19.05.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/ce54b93875a93ee2bbf017e01599aa029f747e2a)| Fix: handle shared vault URL problem on server | Consistency |
-|                    | 19.05.2025 |  |  |  |
-|                    | 19.05.2025 |  |  |  |
-|  **SvenVest**      | 19.05.2025 |  |  |  |
-|                    | 19.05.2025 |  |  |  |
+|                    | 19.05.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/b33f5498070e59a1d1a990f8706a4d237befad15) | fixation of uml errors in the frontend                                     | Returning from a shared note occured error and this issue solved. |
+|  **nfcolak**       | 19.05.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/81e557553a333681aa3007cb56d85396faa9413c)| Fix: handle URL problem in shared vaults                                   | Consistency |
+|                    | 19.05.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/ce54b93875a93ee2bbf017e01599aa029f747e2a)| Fix: handle shared vault URL problem on server                             | Consistency |
+|                    | 19.05.2025 |  |                                                                            |  |
+|                    | 19.05.2025 |  |                                                                            |  |
+|  **SvenVest**      | 19.05.2025 | https://github.com/Klevis27/sopra-fs25-group-42-client/pull/38/commits/4859a2b7b7b60fddf677f07e02b76a39c7e18012 | some fices of the settings button                                          |  |
+|                    | 19.05.2025 |  https://github.com/Klevis27/sopra-fs25-group-42-client/pull/38/commits/8a7b4248016a74b5cbe876e51712c229f40f8990| add new note button on editor pge                                          |  |
