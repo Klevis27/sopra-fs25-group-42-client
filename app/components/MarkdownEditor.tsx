@@ -1,5 +1,5 @@
 "use client";
-import {useState, useEffect, useCallback, PropsWithChildren, JSX} from "react";
+import {useState, useEffect, PropsWithChildren, JSX, useRef} from "react";
 import ReactMarkdown, { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -13,93 +13,100 @@ import {useParams} from "next/navigation";
 import "github-markdown-css";
 import {useApi} from "@/hooks/useApi";
 
-const useCollaborativeEditor = () => {
-    const params = useParams();
-    const noteId = params?.note_id as string;
-    const [content, setContent] = useState("");
-    const [users, setUsers] = useState<Array<{ name: string; color: string }>>([]);
-    const [isConnected, setIsConnected] = useState(false);
-    const [provider, setProvider] = useState<WebsocketProvider | null>(null);
-    const [ytext, setYText] = useState<Y.Text | null>(null);
+interface AwarenessUser {
+    name: string;
+    color: string;
+}
+
+export default function CollaborativeMarkdownEditor() {
+    const { note_id } = useParams();
+    const noteId = note_id as string;
+    const [content, setContent] = useState<string>("");
+    const [users, setUsers] = useState<AwarenessUser[]>([]);
+    const [isConnected, setIsConnected] = useState<boolean>(false);
+
+    // Refs must be initialized to null
+    const ydocRef = useRef<Y.Doc | null>(null);
+    const ytextRef = useRef<Y.Text | null>(null);
+    const providerRef = useRef<WebsocketProvider | null>(null);
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
     const api = useApi();
 
+    // 1) Create Y.Doc + WebsocketProvider + awareness + update listener
     useEffect(() => {
         if (!noteId) return;
 
-        // Create a new Y.Doc when noteId changes
-        const newYDoc = new Y.Doc();
-        const newYText = newYDoc.getText("markdown");
-        const newYMap = newYDoc.getMap("meta");
-        setYText(newYText);
-        newYMap.set("noteId", noteId);
+        // 1.a. Doc + Text
+        const ydoc = new Y.Doc();
+        const ytext = ydoc.getText("markdown");
+        ydocRef.current = ydoc;
+        ytextRef.current = ytext;
 
-        const rawBaseURL = api.getBaseURL();
-        const baseURL = rawBaseURL.startsWith("http://localhost:8080")
-            ? "ws://localhost:1234"
+        // Expose for console testing
+        // @ts-expect-error debug
+        window.ydoc = ydoc;
+        console.log("→ assigned window.ydoc");
+        console.log("→ ytext is:", ytext);
+
+
+        // 1.b. WS URL (dev vs prod)
+        const raw = api.getBaseURL();
+        const wsURL = raw.startsWith("http://localhost:8080")
+            ? "ws://localhost:8080"
             : "wss://yjs-server-1061772680937.europe-west6.run.app";
 
-        const wsProvider = new WebsocketProvider(baseURL, noteId, newYDoc);
-        setProvider(wsProvider);
+        // 1.c. Provider
+        const provider = new WebsocketProvider(wsURL, noteId, ydoc);
+        providerRef.current = provider;
 
-        return () => {
-            wsProvider.destroy();
-            newYDoc.destroy();
-        };
-    }, [api, noteId]);
-
-    // Content synchronization
-    useEffect(() => {
-        if (!ytext) return;
-
-        const handleUpdate = () => setContent(ytext.toString());
-        ytext.observe(handleUpdate);
-        setContent(ytext.toString()); // initial load
-        return () => ytext.unobserve(handleUpdate);
-    }, [ytext]);
-
-    // Connection and awareness state
-    useEffect(() => {
-        if (!provider) return;
-
-        const handleStatus = (event: { status: string }) => {
-            setIsConnected(event.status === "connected");
-        };
-
-        const handleAwareness = () => {
-            const states = Array.from(provider.awareness.getStates().values());
-            setUsers(states.filter(s => s.user).map(s => s.user));
-        };
-
-        provider.on("status", handleStatus);
-        provider.awareness.on("change", handleAwareness);
-
-        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0")}`;
-        const randomName = `User ${Math.floor(Math.random() * 1000)}`;
-
-        // Setting awareness state
-        provider.awareness.setLocalStateField("user", {
-            name: randomName,
-            color: randomColor
+        // 1.d. Connection status
+        provider.on("status", ({ status }) => {
+            console.log("WS status:", status);
+            setIsConnected(status === "connected");
         });
 
-        return () => {
-            provider.off("status", handleStatus);
-            provider.awareness.off("change", handleAwareness);
+        // 1.e. Awareness → users[]
+        const updateAwareness = () => {
+            // We trust that each state.user is AwarenessUser
+            const arr = Array.from(provider.awareness.getStates().values())
+                .map((s) => s.user as AwarenessUser | undefined)
+                .filter((u): u is AwarenessUser => !!u);
+            setUsers(arr);
         };
-    }, [provider]);
+        provider.awareness.on("change", updateAwareness);
 
-    // Bind textarea using y-textarea
-    const bindEditor = useCallback((element: HTMLTextAreaElement | null) => {
-        if (!element || !ytext) return;
-        const binding = new TextAreaBinding(ytext, element);
-        return () => binding.destroy();
-    }, [ytext]);
+        // 1.f. Set our local awareness
+        provider.awareness.setLocalStateField("user", {
+            name: `User${Math.floor(Math.random() * 1000)}`,
+            color: `#${Math.floor(Math.random() * 0xffffff)
+                .toString(16)
+                .padStart(6, "0")}`,
+        });
 
-    return { content, bindEditor, users, isConnected };
-};
+        // 1.g. Content updates
+        const onUpdate = () => setContent(ytext.toString());
+        ytext.observe(onUpdate);
+        setContent(ytext.toString());
 
-export default function CollaborativeMarkdownEditor() {
-    const {content, bindEditor, users, isConnected} = useCollaborativeEditor();
+        // Cleanup
+        return () => {
+            ytext.unobserve(onUpdate);
+            provider.awareness.off("change", updateAwareness);
+            provider.destroy();
+            ydoc.destroy();
+        };
+    }, [noteId, api]);
+
+    // 2) Bind textarea once
+    useEffect(() => {
+        const ytext = ytextRef.current;
+        const ta = textareaRef.current;
+        if (ytext && ta) {
+            const binding = new TextAreaBinding(ytext, ta);
+            return () => binding.destroy();
+        }
+    }, [noteId]); // only re-run when you switch noteId
 
     // Apply syntax highlighting
     useEffect(() => {
@@ -233,7 +240,7 @@ export default function CollaborativeMarkdownEditor() {
             <div className="w-1/2 p-4 border-r border-gray-200">
                 <div className="h-full bg-white rounded-lg shadow-sm">
                     <textarea
-                        ref={bindEditor}
+                        ref={textareaRef}
                         className="w-full h-full p-4 resize-none focus:outline-none font-mono"
                         placeholder="Collaborate in real-time..."
                         defaultValue={content}

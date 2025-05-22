@@ -172,6 +172,7 @@ reason).
 | **Student**        | **Date**   | **Link to Commit** | **Description**                 | **Relevance**                       |
 |--------------------| ---------- | ------------------ | ------------------------------- | ----------------------------------- |
 |  **Klevis27**      | 19.05.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/b664119ce26a57f0554c72cf9c5c447b9671e67b) | Finally got persistence to work this time actually! | After another good 9 hours of thinking and tinkering (look at the commits in main around this one as well) I finally got the whole persistence and simultaneous editing to work. Thank god |
+|                    | 22.05.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/a3b3c2e93c1c5cb76bcdf10d2c98064ea48af5af) | Finally got persistence to work actually actually | An additional 21 hours and I got persistence to work for real for real this time. Yeah it's important alright. It better be. i really really really don't know why I didn't think of this solution earlier it would have all been so simple :((((((( |
 |                    | 19.05.2025 |  |  |  |
 |  **AntWarz**       | 19.05.2025 |  |  |  |
 |                    | 19.05.2025 |  |  |  |
