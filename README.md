@@ -67,7 +67,7 @@ npm test
 - User clicks Login / Register (Enters username + password)
 
 ### **2-) Vaults Dashboard:**
-
+![vaultcontainer](docs/vaultcontainer.png)
 - User sees my vaults list.
 - User sees shared vaults.
 - User can create new vaults.
