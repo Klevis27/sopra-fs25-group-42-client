@@ -78,7 +78,7 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ }: NoteGraphProps) => {
         if (notesArray.length > 0) {
             getAllLinks();
         }
-    }, [notesArray, apiService, existsLink]);
+    }, [notesArray, apiService, existsLink, getAllLinks]);
 
     const getAllNotes = async () => {
         const response = await apiService.get<Note[]>(`/vaults/${vaultId}/notes`);
@@ -97,7 +97,7 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ }: NoteGraphProps) => {
 
     useEffect(() => {
         getAllNotes();
-    }, [apiService]);
+    }, [apiService, getAllNotes]);
 
 
 
@@ -109,7 +109,7 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ }: NoteGraphProps) => {
         const unsubscribe = refreshStore.subscribe(onRefresh);
 
         return () => unsubscribe();
-    }, []);
+    }, [getAllLinks, getAllNotes]);
 
 
     useEffect(() => {

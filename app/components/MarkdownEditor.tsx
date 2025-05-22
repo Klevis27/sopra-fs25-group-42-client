@@ -13,6 +13,7 @@ import {useParams, useRouter} from "next/navigation";
 import "github-markdown-css";
 import {useApi} from "@/hooks/useApi";
 import {Note} from "@/types/note";
+import {LinkExtractor} from "@/components/LinkExtractor";
 
 interface AwarenessUser {
     name: string;

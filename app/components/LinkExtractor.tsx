@@ -57,7 +57,7 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
     };
     useEffect(() => {
         getAllNotes();
-    }, [apiService]);
+    }, [apiService, getAllNotes]);
 
     const getAllLinks = async () => {
         const response = await apiService.get<NoteLink[]>(`/vaults/${vaultId}/note_links`);
@@ -93,7 +93,7 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
         if (notesArray.length > 0) {
             getAllLinks();
         }
-    }, [notesArray, apiService, existsLink]);
+    }, [notesArray, apiService, existsLink, getAllLinks]);
 
 
 
@@ -149,7 +149,7 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
         });
         setToCreate(toCreate);
 
-    }, [text]);
+    }, [linksArray, noteId, notesArray, text]);
 
     //Handle the deleting of links
     useEffect(() => {
@@ -190,7 +190,7 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
         if (linksToCreate.length > 0) {
             postLinks();
         }
-    }, [linksToCreate, apiService])
+    }, [linksToCreate, apiService, vaultId, getAllNotes, getAllLinks])
 
 
 
