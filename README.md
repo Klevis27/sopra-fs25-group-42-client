@@ -70,7 +70,7 @@ npm test
 
 ### **2-) Vaults Dashboard:**
 
-[screenshot]
+![Landing Page](docs/landing)
 
 - User sees my vaults list.
 - User sees shared vaults.
