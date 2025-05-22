@@ -44,7 +44,11 @@ The goal of this project is to combine the powerful note-taking and linking feat
 
 ## **👩🏻‍🚀 Launch & Deployment:**
 
-### **🚀 Frontend:**
+### **🤖 Deployment:**
+
+This project is automatically deployed onto vercel with every change pushed onto the main branch. Make sure to run ```npm run build``` before pushing changes to make sure vercel doesn't run into issues building the project.
+
+### **👾 Development:**
 
 1️⃣ **Install dependencies**
 ```
@@ -58,6 +62,7 @@ npm run dev
 ```
 npm test
 ```
+
 ## 🌊 **Illustrations and Flow of the App:**
 
 ### **1-) Landing → Auth:**
