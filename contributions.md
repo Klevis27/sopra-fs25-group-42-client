@@ -180,8 +180,7 @@ reason).
 |  **nfcolak**       | 19.05.2025 | [Link to Commit 1](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/81e557553a333681aa3007cb56d85396faa9413c)| Fix: handle URL problem in shared vaults                                   | Consistency |
 |                    | 19.05.2025 | [Link to Commit 2](https://github.com/Klevis27/sopra-fs25-group-42-server/commit/ce54b93875a93ee2bbf017e01599aa029f747e2a)| Fix: handle shared vault URL problem on server                             | Consistency |
 |                    | 13.05.2025 | [Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/f8b6338cb29ba68c04f9b4bb9423fa651b10dea5) | profile page label colors to white | UI Improvement for readability. |
-
-                     | 22.05.2025 | [Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/8f4adeb64c6c835b5b15d6dedd800b9bce8d6d2b)| Readme of both client and server | Project Requirement |
+|                    | 13.05.2025 | [Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/f8b6338cb29ba68c04f9b4bb9423fa651b10dea5) | profile page label colors to white | UI Improvement for readability. |
 |  **SvenVest**      | 19.05.2025 | https://github.com/Klevis27/sopra-fs25-group-42-client/pull/38/commits/4859a2b7b7b60fddf677f07e02b76a39c7e18012 | some fices of the settings button                                          |  |
 |                    | 19.05.2025 |  https://github.com/Klevis27/sopra-fs25-group-42-client/pull/38/commits/8a7b4248016a74b5cbe876e51712c229f40f8990| add new note button on editor pge                                          |  |
 
