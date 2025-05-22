@@ -131,7 +131,7 @@ npm test
 ![profile](docs/sidebar2.png)
 
 #### **The commands in markdown editor:**
-![all_in_one](docs/allinone.png)
+![profile](docs/markdowneditor.png)
 
 ## 🤝 **Want to Contribute?**
 
