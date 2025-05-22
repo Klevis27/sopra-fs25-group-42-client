@@ -128,7 +128,7 @@ npm test
 ### **8-) Editor page:**
 - User will see the basic markdown editor panel when they enter the editor page.
 - In the left sliding window (green square), other notes in that spesific vault can be seen.
-![profile](docs/sidebar.png)
+![profile](docs/sidebar2.png)
 
 #### **The commands in markdown editor:**
 ![all_in_one](docs/allinone.png)
