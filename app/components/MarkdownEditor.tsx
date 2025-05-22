@@ -47,7 +47,7 @@ export default function CollaborativeMarkdownEditor() {
         const raw = api.getBaseURL();
         const wsURL = raw.startsWith("http://localhost:8080")
             ? "ws://localhost:8080"
-            : "wss://sopra-fs25-group-42-server.oa.r.appspot.com";
+            : "wss://yjs-server-1061772680937.europe-west6.run.app";
 
         // 1.c. Provider
         const provider = new WebsocketProvider(wsURL, noteId, ydoc);
