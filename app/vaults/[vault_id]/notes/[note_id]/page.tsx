@@ -11,7 +11,7 @@ import ChatBox from "@/components/ChatBox";
 import {useParams, useRouter} from "next/navigation";
 
 export default function Editor() {
-    const [showSettings, setShowSettings] = useState(false);
+    //const [showSettings, setShowSettings] = useState(false);
     const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
     const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
     const [notes, setNotes] = useState<Note[]>([]);
@@ -22,7 +22,7 @@ export default function Editor() {
     const router = useRouter();
     const params = useParams();
     const noteId = params.note_id as string;
-    const vaultId = params.vault_id as string;
+    //const vaultId = params.vault_id as string;
     const [cameFromShared, setCameFromShared] = useState(false);
 
 useEffect(() => {
