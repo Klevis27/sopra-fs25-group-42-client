@@ -63,7 +63,7 @@ npm test
 ## 🌊 **Illustrations and Flow of the App:**
 
 ### **1-) Landing → Auth:**
-
+![Landing](docs/landing.png)
 - User clicks Login / Register (Enters username + password)
 
 ### **2-) Vaults Dashboard:**
