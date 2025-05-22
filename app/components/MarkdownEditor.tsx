@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback, PropsWithChildren, JSX } from "react";
+import {useState, useEffect, PropsWithChildren, JSX, useRef} from "react";
 import ReactMarkdown, { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -8,106 +8,143 @@ import { WebsocketProvider } from "y-websocket";
 import { TextAreaBinding } from "y-textarea";
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js";
-import { LinkParser } from "@/components/LinkParser";
-import { useParams } from "next/navigation";
+import {LinkParser} from "@/components/LinkParser";
+import {useParams, useRouter} from "next/navigation";
 import "github-markdown-css";
-import { useApi } from "@/hooks/useApi";
-import { LinkExtractor } from "@/components/LinkExtractor"; // adjust path as needed
+import {useApi} from "@/hooks/useApi";
+import {Note} from "@/types/note";
 
-
-// Create shared Yjs document
-const ydoc = new Y.Doc();
-const ytext = ydoc.getText("markdown");
-const ymap = ydoc.getMap("meta");
-
-const useCollaborativeEditor = () => {
-    const params = useParams();
-    const noteId = params?.note_id as string;
-    const [content, setContent] = useState(ytext.toString());
-    const [users, setUsers] = useState<Array<{ name: string; color: string }>>([]);
-    const [isConnected, setIsConnected] = useState(false);
-    const [provider, setProvider] = useState<WebsocketProvider | null>(null);
-    const api = useApi();
-
-    // Initialize WebSocket provider
-    useEffect(() => {
-        if (!noteId) return;
-        const rawBaseURL = api.getBaseURL();
-        let baseURL: string;
-        if (rawBaseURL.startsWith("http://localhost:8080")) {
-            baseURL = "ws://localhost:1234";
-        } else {
-            baseURL = "wss://yjs-server-1061772680937.europe-west6.run.app";
-        }
-        const wsProvider = new WebsocketProvider(`${baseURL}`, noteId, ydoc);
-        setProvider(wsProvider);
-        ymap.set("noteId", noteId);
-
-        return () => {
-            wsProvider.destroy();
-        };
-    }, [api, noteId]);
-
-    // Content synchronization
-    useEffect(() => {
-        const handleUpdate = () => setContent(ytext.toString());
-        ytext.observe(handleUpdate);
-        return () => ytext.unobserve(handleUpdate);
-    }, []);
-
-    // Connection and awareness state
-    useEffect(() => {
-        if (!provider) return;
-
-        const handleStatus = (event: { status: string }) => {
-            setIsConnected(event.status === "connected");
-        };
-
-        const handleAwareness = () => {
-            const states = Array.from(provider.awareness.getStates().values());
-            setUsers(states.filter(s => s.user).map(s => s.user));
-        };
-
-        provider.on("status", handleStatus);
-        provider.awareness.on("change", handleAwareness);
-
-        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0")}`;
-        const randomName = `User ${Math.floor(Math.random() * 1000)}`;
-
-        // NEW: Correct way to set awareness state
-        provider.awareness.setLocalStateField("user", {
-            name: randomName,
-            color: randomColor
-        });
-
-        return () => {
-            provider.off("status", handleStatus);
-            provider.awareness.off("change", handleAwareness);
-        };
-    }, [provider]);
-
-    // Bind textarea using y-textarea
-    const bindEditor = useCallback((element: HTMLTextAreaElement | null) => {
-        if (!element) return;
-        const binding = new TextAreaBinding(ytext, element);
-        return () => binding.destroy();
-    }, []);
-
-    return { content, bindEditor, users, isConnected };
-};
+interface AwarenessUser {
+    name: string;
+    color: string;
+}
 
 export default function CollaborativeMarkdownEditor() {
-    const { content, bindEditor, users, isConnected } = useCollaborativeEditor();
+    const router = useRouter();
+    const params = useParams();
+    const vaultId = params.vault_id as string;
+    const noteId = params.note_id as string;
+    const [content, setContent] = useState<string>("");
+    const [users, setUsers] = useState<AwarenessUser[]>([]);
+    const [isConnected, setIsConnected] = useState<boolean>(false);
+
+    // Add state for notes list
+    const [notes, setNotes] = useState<Note[]>([]);
+    //const api = useApi();
+
+    // Refs must be initialized to null
+    const ydocRef = useRef<Y.Doc | null>(null);
+    const ytextRef = useRef<Y.Text | null>(null);
+    const providerRef = useRef<WebsocketProvider | null>(null);
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+    const api = useApi();
+
+    // 1) Create Y.Doc + WebsocketProvider + awareness + update listener
+    useEffect(() => {
+        if (!noteId) return;
+
+        // 1.a. Doc + Text
+        const ydoc = new Y.Doc();
+        const ytext = ydoc.getText("markdown");
+        ydocRef.current = ydoc;
+        ytextRef.current = ytext;
+
+        // Expose for console testing
+        // @ts-expect-error debug
+        window.ydoc = ydoc;
+        console.log("→ assigned window.ydoc");
+        console.log("→ ytext is:", ytext);
+
+
+        // 1.b. WS URL (dev vs prod)
+        const raw = api.getBaseURL();
+        const wsURL = raw.startsWith("http://localhost:8080")
+            ? "ws://localhost:8080"
+            : "wss://yjs-server-1061772680937.europe-west6.run.app";
+
+        // 1.c. Provider
+        const provider = new WebsocketProvider(wsURL, noteId, ydoc);
+        providerRef.current = provider;
+
+        // 1.d. Connection status
+        provider.on("status", ({ status }) => {
+            console.log("WS status:", status);
+            setIsConnected(status === "connected");
+        });
+
+        // 1.e. Awareness → users[]
+        const updateAwareness = () => {
+            // We trust that each state.user is AwarenessUser
+            const arr = Array.from(provider.awareness.getStates().values())
+                .map((s) => s.user as AwarenessUser | undefined)
+                .filter((u): u is AwarenessUser => !!u);
+            setUsers(arr);
+        };
+        provider.awareness.on("change", updateAwareness);
+
+        // 1.f. Set our local awareness
+        provider.awareness.setLocalStateField("user", {
+            name: `User${Math.floor(Math.random() * 1000)}`,
+            color: `#${Math.floor(Math.random() * 0xffffff)
+                .toString(16)
+                .padStart(6, "0")}`,
+        });
+
+        // 1.g. Content updates
+        const onUpdate = () => setContent(ytext.toString());
+        ytext.observe(onUpdate);
+        setContent(ytext.toString());
+
+        // Cleanup
+        return () => {
+            ytext.unobserve(onUpdate);
+            provider.awareness.off("change", updateAwareness);
+            provider.destroy();
+            ydoc.destroy();
+        };
+    }, [noteId, api]);
+
+    // 2) Bind textarea once
+    useEffect(() => {
+        const ytext = ytextRef.current;
+        const ta = textareaRef.current;
+        if (ytext && ta) {
+            const binding = new TextAreaBinding(ytext, ta);
+            return () => binding.destroy();
+        }
+    }, [noteId]); // only re-run when you switch noteId
 
     // Apply syntax highlighting
     useEffect(() => {
         hljs.highlightAll();
     }, [content]);
+    // Add useEffect to fetch notes
+    useEffect(() => {
+        const fetchNotes = async () => {
+            try {
+                const response = await api.get<Note[]>(`/vaults/${vaultId}/notes`);
+                setNotes(response);
+            } catch (error) {
+                console.error("Failed to fetch notes:", error);
+            }
+        };
+        if (vaultId) fetchNotes();
+    }, [vaultId, api]);
 
+    // Modify handleInternalLink function
     const handleInternalLink = (pageTitle: string) => {
-        console.log("Internal link clicked:", pageTitle);
-    };
+        // Find note by title
+        const targetNote = notes.find(n => n.title === pageTitle);
 
+        if (targetNote) {
+            const query = window.location.search; // Preserve existing query params
+            router.push(`/vaults/${vaultId}/notes/${targetNote.id}${query}`);
+        } else {
+            console.warn(`Note "${pageTitle}" not found in current vault`);
+            // Optional: Add UI feedback here
+        }
+    };
     const components: Components = {
         // Plain text
         p: ({ children, ...props }: PropsWithChildren<JSX.IntrinsicElements['p']>) => (
@@ -208,6 +245,7 @@ export default function CollaborativeMarkdownEditor() {
                 </code>
             );
         })
+
     };
 
     
@@ -237,7 +275,7 @@ export default function CollaborativeMarkdownEditor() {
             <div className="w-1/2 p-4 border-r border-gray-200">
                 <div className="h-full bg-white rounded-lg shadow-sm">
                     <textarea
-                        ref={bindEditor}
+                        ref={textareaRef}
                         className="w-full h-full p-4 resize-none focus:outline-none font-mono"
                         placeholder="Collaborate in real-time..."
                         defaultValue={content}

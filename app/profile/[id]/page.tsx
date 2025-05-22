@@ -48,6 +48,8 @@ const Profile: React.FC = () => {
   const goToEdit = () => router.push(`/profile/${slug}/edit`);
   const goToVaults = () => router.push("/vaults");
   const goToNotifications = () => router.push("/notifications");
+  const [isLoading, setIsLoading] = useState(true);
+
 
   const formatDate = (value?: string | Date | Dayjs | null): string => {
     if (!value) return "N/A";
@@ -58,6 +60,7 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
+      setIsLoading(true); // 🔄 start loading
       try {
         const id = localStorage.getItem("id");
         const accessToken = localStorage.getItem("accessToken");
@@ -68,7 +71,7 @@ const Profile: React.FC = () => {
         if (id === slug) {
           setEditable(true);
         }
-
+  
         const response = await apiService.get<User>(`/users/${slug}`, accessToken);
         if (!response) {
           message.error("No such user exists");
@@ -83,10 +86,13 @@ const Profile: React.FC = () => {
           console.error("An unknown error occurred during update.");
         }
         router.push("/profile");
+      } finally {
+        setIsLoading(false); // ✅ end loading
       }
     };
     fetchUser();
   }, [apiService, router, slug]);
+  
 
   return (
     <div className="m-12 flex justify-center">
@@ -102,7 +108,10 @@ const Profile: React.FC = () => {
         }
       >
         {!user ? (
-          <Spin tip="Loading..." size="large" className="flex justify-center" />
+          <Spin tip="Loading..." spinning={isLoading}>
+          <div>Your content here</div>
+        </Spin>
+        
         ) : (
           <Space direction="vertical" size="large" className="w-full">
             <Row justify="center">
@@ -113,9 +122,12 @@ const Profile: React.FC = () => {
   column={1}
   size="middle"
   className="mx-auto w-full md:w-2/3"
-  labelStyle={{ color: "#ffffff", fontWeight: 500 }}
-  contentStyle={{ color: "#ffffff" }}
+  styles={{
+    label: { color: "#ffffff", fontWeight: 500 },
+    content: { color: "#ffffff" }
+  }}
 >
+
               <Descriptions.Item label="ID">{user.id}</Descriptions.Item>
               <Descriptions.Item label="Username">{user.username}</Descriptions.Item>
               <Descriptions.Item label="Creation Date">{formatDate(user.creationDate)}</Descriptions.Item>
