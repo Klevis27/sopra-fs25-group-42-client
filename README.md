@@ -61,10 +61,6 @@ npm run dev
 ```
 npm test
 ```
-
-### **🕸️ Deployment for Websocket:**
-* Details of the websocket deployment can be seen in this page: [deployment_websocket](https://github.com/yjs/y-websocket)
----
 ## 🌊 **Illustrations and Flow of the App:**
 
 ### **1-) Landing → Auth:**
