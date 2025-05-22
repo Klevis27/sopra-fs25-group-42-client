@@ -136,14 +136,6 @@ useEffect(() => {
         ) : (
             <p style={{fontSize: "0.875rem", color: "#666"}}>This is a shared note. Vault notes are not visible.</p>
         )}
-        <div style={{textAlign: "center", padding: "16px"}}>
-            <Button
-                type="primary"
-                onClick={() => router.push(`/vaults/${vaultId}/notes/${noteId}/settings${cameFromShared ? "?from=shared" : ""}`)}
-            >
-                New Note
-            </Button>
-        </div>
     </Sidebar>
 )}
 
