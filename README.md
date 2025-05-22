@@ -97,16 +97,16 @@ npm test
 - (For further details of notifications page please check section 5)
 
 ### **4-) Vault Settings Page:**
-
+![profile](docs/vaultsettings.png)
 - User can change the vault name.
 - User can send invitations to invite new users to work in same vault. (Permissions Card)
 
 ### **5-) Notifications Page:**
-
+![profile](docs/notifications.png)
 - User can see all invitations that have received.
 
 ### **6-) Notes page:**
-[screenshot]
+![profile](docs/notecontainer.png)
 - User can create new notes.
 
 #### **6.1-) Notes → Note_Settings:**
@@ -121,19 +121,16 @@ npm test
 - (We already mentioned in section 3.)
 
 ### **7-) Notes Settings page:**
-[screenshot]
-
+![profile](docs/notesettings.png)
 - User can change the note name.
 - User can give a another user a role directly (without invitation, it's different than vault settings page)
 
 ### **8-) Editor page:**
-[screenshot]
-
 - User will see the basic markdown editor panel when they enter the editor page.
 - In the left sliding window (green square), other notes in that spesific vault can be seen.
+![profile](docs/sidebar.png)
 
 #### **The commands in markdown editor:**
-
 ![all_in_one](docs/allinone.png)
 
 ## 🤝 **Want to Contribute?**
