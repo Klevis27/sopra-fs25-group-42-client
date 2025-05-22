@@ -39,6 +39,8 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ }: NoteGraphProps) => {
     const [linksArray, setLinks] = useState<Link[]>([]);
     const params = useParams<{ [key: string]: string }>();
     const vaultId = params.vault_id;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fgRef = useRef<any>(null);
 
     const existsLink = false;
@@ -113,6 +115,7 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ }: NoteGraphProps) => {
     useEffect(() => {
         if (notesArray.length > 0) {
             setTimeout(() => {
+                if (!fgRef.current) return;
                 fgRef.current.zoomToFit(100, 100);
             }, 1000);
         }

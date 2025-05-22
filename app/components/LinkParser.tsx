@@ -1,10 +1,5 @@
 "use client";
-
-import { useApi } from '@/hooks/useApi';
-import { Note } from '@/types/note';
-import { useParams } from 'next/navigation';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ReactNode } from "react";
 
 interface LinkParserProps {

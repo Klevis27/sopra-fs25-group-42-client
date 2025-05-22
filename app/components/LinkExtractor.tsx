@@ -2,10 +2,9 @@
 import { useApi } from "@/hooks/useApi";
 import { Note } from "@/types/note";
 import { NoteLink } from "@/types/noteLink";
-import { link } from "fs";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { refreshStore } from "@/stores/refreshStore";
 
 interface LinkExtractorProps {
@@ -30,15 +29,14 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
     const noteId = params.note_id as string;
 
     const [notesArray, setNotes] = useState<Node[]>([]);
-    const [referencedTitles, setRef] = useState<Node[]>([]);
+    const [, setRef] = useState<Node[]>([]);
     const [linksArray, setLinks] = useState<Link[]>([]);
-    const [inNoteLinks, setInNoteLinks] = useState<string[]>([]);
+    const [, setInNoteLinks] = useState<string[]>([]);
 
     const [linksToDelete, setToDelete] = useState<Link[]>([]);
     const [linksToCreate, setToCreate] = useState<Link[]>([]);
 
     const existsLink = false;
-    const [notesLoaded, setNotesLoaded] = useState(false);
 
 
 
@@ -63,7 +61,6 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
 
     const getAllLinks = async () => {
         const response = await apiService.get<NoteLink[]>(`/vaults/${vaultId}/note_links`);
-        const newLinks: Link[] = [];
         setLinks(() => []);
 
         response.forEach(element => {
