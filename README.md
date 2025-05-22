@@ -41,7 +41,7 @@ CHAT IS MISSING! (FIREBASE API IS MISSING!)
 |--------------------| ---------- | ------------------ |
 | Vaults Page  | Displays the list of vaults owned by or shared with the user. | [Vaults](app/vaults/page.tsx)| 
 | Notes Page | Allows users to view and manage notes under a specific vault. | [Notes](app/vaults/[vault_id]/notes/page.tsx) | 
-| Note Editor (Yjs + WebSocket) | Enables real-time collaborative editing of a note. | [Editor](app/editor/Editor.tsx) | 
+| Markdown Editor (Yjs + WebSocket) | Enables real-time collaborative editing of a note. | [Editor](app/editor/Editor.tsx) | 
 | Vault Settings Page | Used to manage vault permissions and update vault information. | [Vault Settings](app/vaults/[vault_id]/settings/page.tsx) | 
 | Authentication Pages | Handle user authentication (login/register) | [Login](app/login/page.tsx) | 
 
