@@ -30,7 +30,7 @@ export default function CollaborativeMarkdownEditor() {
 
     // Add state for notes list
     const [notes, setNotes] = useState<Note[]>([]);
-    const api = useApi();
+    //const api = useApi();
 
     // Refs must be initialized to null
     const ydocRef = useRef<Y.Doc | null>(null);
