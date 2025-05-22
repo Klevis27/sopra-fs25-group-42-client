@@ -183,20 +183,13 @@ useEffect(() => {
                         }}>
                             <NoteGraph/>
                         </div>
-
                         <div style={{textAlign: "center", padding: "16px"}}>
-                            <Button type="primary" onClick={() => setShowSettings(!showSettings)}>Settings</Button>
-                            {showSettings && (
-                                <div style={{
-                                    marginTop: "10px",
-                                    padding: "16px",
-                                    border: "1px solid #ddd",
-                                    borderRadius: "8px",
-                                    background: "#f8f9fa"
-                                }}>
-                                    <p>Settings Panel (Placeholder)</p>
-                                </div>
-                            )}
+                            <Button
+                                type="primary"
+                                onClick={() => router.push(`/vaults/${vaultId}/notes/${noteId}/settings${cameFromShared ? "?from=shared" : ""}`)}
+                            >
+                                Settings
+                            </Button>
                         </div>
 
                         {/* ✅ Add ChatBox here */}
