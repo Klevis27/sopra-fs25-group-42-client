@@ -184,3 +184,10 @@ reason).
                      | 22.05.2025 | [Link to Commit 3](https://github.com/Klevis27/sopra-fs25-group-42-client/commit/8f4adeb64c6c835b5b15d6dedd800b9bce8d6d2b)| Readme of both client and server | Project Requirement |
 |  **SvenVest**      | 19.05.2025 | https://github.com/Klevis27/sopra-fs25-group-42-client/pull/38/commits/4859a2b7b7b60fddf677f07e02b76a39c7e18012 | some fices of the settings button                                          |  |
 |                    | 19.05.2025 |  https://github.com/Klevis27/sopra-fs25-group-42-client/pull/38/commits/8a7b4248016a74b5cbe876e51712c229f40f8990| add new note button on editor pge                                          |  |
+
+
+
+
+
+
+
