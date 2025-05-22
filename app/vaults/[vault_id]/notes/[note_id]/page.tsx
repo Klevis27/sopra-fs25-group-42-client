@@ -150,8 +150,8 @@ useEffect(() => {
                         boxShadow: "2px 2px 8px rgba(0, 0, 0, 0.1)",
                         height: "90vh",
                         transition: "margin 0.3s ease-in-out",
-                        marginLeft: isLeftSidebarOpen ? "290px" : "0px",
-                        marginRight: isRightSidebarOpen ? "290px" : "0px",
+                        marginLeft: isLeftSidebarOpen ? "310px" : "0px",
+                        marginRight: isRightSidebarOpen ? "310px" : "0px",
                     }}
                     className={"overflow-auto"}
                 >
