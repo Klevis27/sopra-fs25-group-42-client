@@ -133,6 +133,10 @@ npm test
 #### **The commands in markdown editor:**
 ![profile](docs/markdowneditor.png)
 
+#### **Graph Linkage:**
+* By using "[[note_name]]", you can link the notes between each other in graph linkage part.
+![profile](docs/graphlinkage.png)
+
 ## 🤝 **Want to Contribute?**
 
 - We welcome contributions from the community! If you'd like to add new features, fix bugs, or improve documentation, follow the steps below:
