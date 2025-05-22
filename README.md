@@ -70,8 +70,6 @@ npm test
 
 ### **2-) Vaults Dashboard:**
 
-
-
 - User sees my vaults list.
 - User sees shared vaults.
 - User can create new vaults.
@@ -135,7 +133,10 @@ npm test
 
 - User will see the basic markdown editor panel when they enter the editor page.
 - In the left sliding window (green square), other notes in that spesific vault can be seen.
-- In the right sliding window (blue square), idea linkage graph and chat can be seen.
+
+#### **The commands in markdown editor:**
+
+![all_in_one](docs/allinone.png)
 
 ## 🤝 **Want to Contribute?**
 
