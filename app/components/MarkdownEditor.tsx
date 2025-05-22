@@ -13,13 +13,19 @@ import {useParams} from "next/navigation";
 import "github-markdown-css";
 import {useApi} from "@/hooks/useApi";
 
-export default function CollaborativeMarkdownEditor() {
-    const params = useParams();
-    const noteId = params?.note_id as string;
-    const [content, setContent] = useState("");
-    const [users, setUsers] = useState<{ name: string; color: string }[]>([]);
-    const [isConnected, setIsConnected] = useState(false);
+interface AwarenessUser {
+    name: string;
+    color: string;
+}
 
+export default function CollaborativeMarkdownEditor() {
+    const { note_id } = useParams();
+    const noteId = note_id as string;
+    const [content, setContent] = useState<string>("");
+    const [users, setUsers] = useState<AwarenessUser[]>([]);
+    const [isConnected, setIsConnected] = useState<boolean>(false);
+
+    // Refs must be initialized to null
     const ydocRef = useRef<Y.Doc | null>(null);
     const ytextRef = useRef<Y.Text | null>(null);
     const providerRef = useRef<WebsocketProvider | null>(null);
@@ -27,56 +33,65 @@ export default function CollaborativeMarkdownEditor() {
 
     const api = useApi();
 
-    // Setup Y.Doc, WS provider, awareness and content observer
+    // 1) Create Y.Doc + WebsocketProvider + awareness + update listener
     useEffect(() => {
         if (!noteId) return;
 
+        // 1.a. Doc + Text
         const ydoc = new Y.Doc();
         const ytext = ydoc.getText("markdown");
         ydocRef.current = ydoc;
         ytextRef.current = ytext;
 
-        // expose for quick console testing:
-        // @ts-expect-error debugging
-        window.ydoc = ydoc;
-
-        ydoc.getMap("meta").set("noteId", noteId);
-
+        // 1.b. WS URL (dev vs prod)
         const raw = api.getBaseURL();
         const wsURL = raw.startsWith("http://localhost:8080")
             ? "ws://localhost:8080"
             : "wss://sopra-fs25-group-42-server.oa.r.appspot.com";
 
+        // 1.c. Provider
         const provider = new WebsocketProvider(wsURL, noteId, ydoc);
         providerRef.current = provider;
 
-        provider.on("status", ({ status }) => setIsConnected(status === "connected"));
-        provider.on("sync", (synced: boolean) => console.log("synced:", synced));
-
-        const awarenessChange = () => {
-            const states = Array.from(provider.awareness.getStates().values());
-            setUsers(states.filter(s => s.user).map(s => s.user as { name: string; color: string }));
-        };
-        provider.awareness.on("change", awarenessChange);
-
-        provider.awareness.setLocalStateField("user", {
-            name: `User ${Math.floor(Math.random() * 1000)}`,
-            color: `#${Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, "0")}`,
+        // 1.d. Connection status
+        provider.on("status", ({ status }) => {
+            console.log("WS status:", status);
+            setIsConnected(status === "connected");
         });
 
-        const updateContent = () => setContent(ytext.toString());
-        ytext.observe(updateContent);
+        // 1.e. Awareness → users[]
+        const updateAwareness = () => {
+            // We trust that each state.user is AwarenessUser
+            const arr = Array.from(provider.awareness.getStates().values())
+                .map((s) => s.user as AwarenessUser | undefined)
+                .filter((u): u is AwarenessUser => !!u);
+            setUsers(arr);
+        };
+        provider.awareness.on("change", updateAwareness);
+
+        // 1.f. Set our local awareness
+        provider.awareness.setLocalStateField("user", {
+            name: `User${Math.floor(Math.random() * 1000)}`,
+            color: `#${Math.floor(Math.random() * 0xffffff)
+                .toString(16)
+                .padStart(6, "0")}`,
+        });
+
+        // 1.g. Content updates
+        const onUpdate = () => setContent(ytext.toString());
+        ytext.observe(onUpdate);
         setContent(ytext.toString());
 
+        // Cleanup
         return () => {
-            ytext.unobserve(updateContent);
-            provider.awareness.off("change", awarenessChange);
+            ytext.unobserve(onUpdate);
+            provider.awareness.off("change", updateAwareness);
             provider.destroy();
             ydoc.destroy();
         };
     }, [noteId, api]);
 
-    // Bind the textarea _once_ after we've created ytext + got the DOM node
+    // 2) Bind textarea once
     useEffect(() => {
         const ytext = ytextRef.current;
         const ta = textareaRef.current;
@@ -84,7 +99,7 @@ export default function CollaborativeMarkdownEditor() {
             const binding = new TextAreaBinding(ytext, ta);
             return () => binding.destroy();
         }
-    }, [noteId]); // only re-run if we switch documents
+    }, [noteId]); // only re-run when you switch noteId
 
     // Apply syntax highlighting
     useEffect(() => {
