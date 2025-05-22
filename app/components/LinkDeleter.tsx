@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-interface LinkCreatorProps {
+interface LinkDeleterProps {
     text: string;
 }
 
@@ -21,7 +21,7 @@ interface Node {
     title: string;
 }
 
-export const LinkCreator = ({ text }: LinkCreatorProps) => {
+export const LinkDeleter = ({ text }: LinkDeleterProps) => {
     const apiService = useApi();
 
     const params = useParams<{ [key: string]: string }>();
@@ -37,8 +37,6 @@ export const LinkCreator = ({ text }: LinkCreatorProps) => {
     const [linksToCreate, setToCreate] = useState<Link[]>([]);
 
     const existsLink = false;
-
-    let counter = 0;
     const [notesLoaded, setNotesLoaded] = useState(false);
     useEffect(() => {
         const getAllNotes = async () => {
@@ -59,10 +57,9 @@ export const LinkCreator = ({ text }: LinkCreatorProps) => {
         getAllNotes();
     }, [apiService]);
 
+
     const getAllLinks = async () => {
         const response = await apiService.get<NoteLink[]>(`/vaults/${vaultId}/note_links`);
-        counter += 1;
-        console.log(`Pulled links from the db ${counter} times`)
         const newLinks: Link[] = [];
         setLinks(() => []);
 
@@ -106,12 +103,13 @@ export const LinkCreator = ({ text }: LinkCreatorProps) => {
         const links = Array.from(matches, (m) => m[1]);
         setInNoteLinks(links);
 
-
-
+        
+        
+        
         //Filter fetched links so only those which go out from this note are left
         const filteredLinks = linksArray.filter(l => l.source.toString() == noteId);
-
-        console.log("Creator; Links in the DB:");
+        
+        console.log("Deleter; Links in the DB:");
         filteredLinks.forEach(element => {
             console.log(`Link from ${element.source} to ${element.target}`);
         });
@@ -129,24 +127,20 @@ export const LinkCreator = ({ text }: LinkCreatorProps) => {
 
 
 
-        //Find all links that are referenced in the note but do not exist in the db yet
-        const toCreate: Link[] = []
-        referencedNotes.forEach(element => {
-            const isInDb = filteredLinks.some(l => l.target == element.id);
+        //Find all links to delete; They are not in referencedTitles and they are in filteredLinks
+        const toDelete: Link[] = [];
+        filteredLinks.forEach(element => {
+            const isReferenced = referencedNotes.some(t => t.id == element.target);
 
-            const newLink = {
-                source: noteId,
-                target: element.id
-            }
-
-            if (!isInDb) {
-                toCreate.push(newLink);
+            if (!isReferenced) {
+                toDelete.push(element);
             }
         });
-        setToCreate(toCreate);
+        setToDelete(toDelete);
 
+        getAllLinks();
 
-    }, [text, linksArray, notesArray]);
+    }, [text, notesArray]);
     //--------------------Don't touch this-----------------------------------//
 
 
@@ -159,29 +153,29 @@ export const LinkCreator = ({ text }: LinkCreatorProps) => {
     }, [inNoteLinks]);
 
 
-    //Handle the posting of new links
+    //Handle the deleting of links
     useEffect(() => {
-        linksToCreate.forEach(element => {
-            console.log(`Link to ${element.target} will be created`);
+        linksToDelete.forEach(element => {
+            console.log(`Link to ${element.target} will be deleted`);
         });
-    }, [linksToCreate]);
+    }, [linksToDelete]);
 
     useEffect(() => {
-        const postLinks = async () => {
-            for (const element of linksToCreate) {
+        const deleteLinks = async () => {
+            for (const element of linksToDelete) {
                 try {
-                    await apiService.post(`/vaults/${vaultId}/note_links`, element);
-                    console.log("Posted");
+                    await apiService.delete(`/vaults/${vaultId}/${element.source}/${element.target}/note_links`);
+                    console.log(`Made a call to delete link to ${element.target}`);
                 } catch (err) {
-                    console.error(`Failed to post link: ${err}`, element, err);
+                    console.error("Failed to delete link:", element, err);
                 }
             }
         };
 
-        if (linksToCreate.length > 0) {
-            postLinks();
+        if (linksToDelete.length > 0) {
+            deleteLinks();
         }
-    }, [linksToCreate, apiService])
+    }, [linksToDelete, apiService]);
 
 
 

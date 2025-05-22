@@ -13,6 +13,8 @@ import { useParams } from "next/navigation";
 import "github-markdown-css";
 import { useApi } from "@/hooks/useApi";
 import { LinkExtractor } from "@/components/LinkExtractor"; // adjust path as needed
+import { LinkDeleter } from "./LinkDeleter";
+import { LinkCreator } from "./LinkCreator";
 
 
 // Create shared Yjs document
@@ -210,7 +212,13 @@ export default function CollaborativeMarkdownEditor() {
         })
     };
 
+    
     return (
+        
+        <>
+        <LinkExtractor text={content}/>
+
+
         <div className="w-full flex h-full">
             {/* Connection Status */}
             <div className="absolute top-4 left-1/2 transform -translate-x-1/2 flex items-center gap-2">
@@ -252,29 +260,10 @@ export default function CollaborativeMarkdownEditor() {
                         </ReactMarkdown>
                     </div>
                 </div>
-            </div>
+            </div>            
 
-            {/* Preview */}
-            <div className="w-1/2 p-4">
-                <div className="h-full bg-white rounded-lg shadow-sm overflow-auto markdown-body">
-                    <div className="p-4">
-
-                        {/* 🔍 Extract links from full markdown content */}
-                        <LinkExtractor text={content} />
-
-                        <ReactMarkdown
-                            remarkPlugins={[remarkGfm]}
-                            rehypePlugins={[rehypeRaw]}
-                            components={components}
-                        >
-                            {content}
-                        </ReactMarkdown>
-                    </div>
-                </div>
-            </div>
-
-            
 
         </div>
+        </>
     );
 }

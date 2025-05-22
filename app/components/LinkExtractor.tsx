@@ -57,38 +57,38 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
         getAllNotes();
     }, [apiService]);
 
+    const getAllLinks = async () => {
+        const response = await apiService.get<NoteLink[]>(`/vaults/${vaultId}/note_links`);
+        const newLinks: Link[] = [];
+        setLinks(() => []);
+
+        response.forEach(element => {
+
+            const sourceNoteId = element.sourceNoteId;
+            const targetNoteId = element.targetNoteId;
+
+            const sourceExists = notesArray.some(note => note.id === sourceNoteId);
+            const targetExists = notesArray.some(note => note.id === targetNoteId);
+
+
+            if (!sourceExists || !targetExists) {
+                return;
+            }
+
+            if (existsLink) {
+                return;
+            }
+
+            if (element.sourceNoteId != null && element.targetNoteId != null) {
+                const link: Link = { source: element.sourceNoteId, target: element.targetNoteId }
+
+
+                setLinks((prevLinks) => [...prevLinks, link]);
+            }
+        });
+
+    }
     useEffect(() => {
-        const getAllLinks = async () => {
-            const response = await apiService.get<NoteLink[]>(`/vaults/${vaultId}/note_links`);
-            const newLinks: Link[] = [];
-            setLinks(() => []);
-
-            response.forEach(element => {
-
-                const sourceNoteId = element.sourceNoteId;
-                const targetNoteId = element.targetNoteId;
-
-                const sourceExists = notesArray.some(note => note.id === sourceNoteId);
-                const targetExists = notesArray.some(note => note.id === targetNoteId);
-
-
-                if (!sourceExists || !targetExists) {
-                    return;
-                }
-
-                if (existsLink) {
-                    return;
-                }
-
-                if (element.sourceNoteId != null && element.targetNoteId != null) {
-                    const link: Link = { source: element.sourceNoteId, target: element.targetNoteId }
-
-
-                    setLinks((prevLinks) => [...prevLinks, link]);
-                }
-            });
-
-        }
         if (notesArray.length > 0) {
             getAllLinks();
         }
@@ -148,7 +148,9 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
         });
         setToCreate(toCreate);
 
-    }, [text, linksArray, notesArray]);
+        getAllLinks();
+
+    }, [text, notesArray]);
     //--------------------Don't touch this-----------------------------------//
 
     /* useEffect(() => {
@@ -221,7 +223,7 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
         });
     }, [linksToDelete]);
 
-    /* useEffect(() => {
+    useEffect(() => {
         const deleteLinks = async () => {
             for (const element of linksToDelete) {
                 try {
@@ -236,7 +238,7 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
         if (linksToDelete.length > 0) {
             deleteLinks();
         }
-    }, [linksToDelete, apiService]); */
+    }, [linksToDelete, apiService]);
 
 
     //Handle the posting of new links
