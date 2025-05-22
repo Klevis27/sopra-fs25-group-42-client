@@ -9,9 +9,10 @@ import {TextAreaBinding} from "y-textarea";
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js";
 import {LinkParser} from "@/components/LinkParser";
-import {useParams} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import "github-markdown-css";
 import {useApi} from "@/hooks/useApi";
+import {Note} from "@/types/note";
 
 interface AwarenessUser {
     name: string;
@@ -19,11 +20,17 @@ interface AwarenessUser {
 }
 
 export default function CollaborativeMarkdownEditor() {
-    const { note_id } = useParams();
-    const noteId = note_id as string;
+    const router = useRouter();
+    const params = useParams();
+    const vaultId = params.vault_id as string;
+    const noteId = params.note_id as string;
     const [content, setContent] = useState<string>("");
     const [users, setUsers] = useState<AwarenessUser[]>([]);
     const [isConnected, setIsConnected] = useState<boolean>(false);
+
+    // Add state for notes list
+    const [notes, setNotes] = useState<Note[]>([]);
+    const api = useApi();
 
     // Refs must be initialized to null
     const ydocRef = useRef<Y.Doc | null>(null);
@@ -112,11 +119,32 @@ export default function CollaborativeMarkdownEditor() {
     useEffect(() => {
         hljs.highlightAll();
     }, [content]);
+    // Add useEffect to fetch notes
+    useEffect(() => {
+        const fetchNotes = async () => {
+            try {
+                const response = await api.get<Note[]>(`/vaults/${vaultId}/notes`);
+                setNotes(response);
+            } catch (error) {
+                console.error("Failed to fetch notes:", error);
+            }
+        };
+        if (vaultId) fetchNotes();
+    }, [vaultId, api]);
 
+    // Modify handleInternalLink function
     const handleInternalLink = (pageTitle: string) => {
-        console.log("Internal link clicked:", pageTitle);
-    };
+        // Find note by title
+        const targetNote = notes.find(n => n.title === pageTitle);
 
+        if (targetNote) {
+            const query = window.location.search; // Preserve existing query params
+            router.push(`/vaults/${vaultId}/notes/${targetNote.id}${query}`);
+        } else {
+            console.warn(`Note "${pageTitle}" not found in current vault`);
+            // Optional: Add UI feedback here
+        }
+    };
     const components: Components = {
         // Plain text
         p: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['p']>) => (
@@ -217,6 +245,7 @@ export default function CollaborativeMarkdownEditor() {
                 </code>
             );
         })
+
     };
 
     return (
