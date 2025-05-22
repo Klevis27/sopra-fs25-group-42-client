@@ -1,14 +1,11 @@
 "use client"
 import "@ant-design/v5-patch-for-react-19";
 import {useRouter} from "next/navigation";
-import {Button, Form, Input} from "antd";
-import {LogoText, SpinningLogo} from "@/components/Design";
+import {Button} from "antd";
+import {LogoText, PlaestinaFlag, SpinningLogo} from "@/components/Design";
 
 export default function Home() {
     const router = useRouter();
-    const validate = () => {
-        alert("(Potentially) Good Job")
-    }
     return (
         <div
             className="flex flex-col justify-center items-center min-h-screen gap-8 px-5 overflow-x-hidden bg-[#c5eba2] text-black">
@@ -49,47 +46,9 @@ export default function Home() {
 
             {/* Footer */}
             <footer className="flex justify-center gap-6">
-                <Form
-                    name="validate"
-                    size="large"
-                    layout="vertical"
-                    requiredMark={false}
-                    onFinish={validate}
-                    className="w-full"
-                >
-                    <div className="flex flex-row gap-6">
-                        <Form.Item
-                            name="solution"
-                            rules={[
-                                {required: true, message: "Please fill out the form!"},
-                                {
-                                    validator: (_, value) =>
-                                        ["Free", "free"].includes(value?.trim())
-                                            ? Promise.reject(new Error("No! Too political..."))
-                                            : Promise.resolve(),
-                                },
-                            ]}
-                            className="w-32"
-                        >
-                            <Input
-                                placeholder="Guess!"
-                                className="bg-[#1A1A1A] text-white rounded-md w-6"
-                            />
-                        </Form.Item>
-                        <div className="text-black">
-                            Palestine
-                        </div>
-                        <Form.Item>
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                                className="w-full bg-black text-white text-lg hover:bg-gray-800"
-                            >
-                                Submit!
-                            </Button>
-                        </Form.Item>
-                    </div>
-                </Form>
+                <div className="flex flex-row gap-6">
+                    <PlaestinaFlag/>
+                </div>
             </footer>
         </div>
     );

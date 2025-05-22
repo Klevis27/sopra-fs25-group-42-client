@@ -174,8 +174,8 @@ useEffect(() => {
                 {isRightSidebarOpen && (
                     <Sidebar isOpen={isRightSidebarOpen} onClose={() => setIsRightSidebarOpen(false)} position="right">
                         <div style={{
-                            width: "100%",
-                            height: "310px",
+                            width: "300px",
+                            height: "300px",
                             border: "1px solid #ddd",
                             borderRadius: "8px",
                             background: "#e9ecef",

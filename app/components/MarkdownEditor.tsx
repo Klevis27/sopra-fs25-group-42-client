@@ -4,8 +4,8 @@ import ReactMarkdown, { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import * as Y from "yjs";
-import {WebsocketProvider} from "y-websocket";
-import {TextAreaBinding} from "y-textarea";
+import { WebsocketProvider } from "y-websocket";
+import { TextAreaBinding } from "y-textarea";
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js";
 import {LinkParser} from "@/components/LinkParser";
@@ -13,6 +13,7 @@ import {useParams, useRouter} from "next/navigation";
 import "github-markdown-css";
 import {useApi} from "@/hooks/useApi";
 import {Note} from "@/types/note";
+import {LinkExtractor} from "@/components/LinkExtractor";
 
 interface AwarenessUser {
     name: string;
@@ -147,7 +148,7 @@ export default function CollaborativeMarkdownEditor() {
     };
     const components: Components = {
         // Plain text
-        p: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['p']>) => (
+        p: ({ children, ...props }: PropsWithChildren<JSX.IntrinsicElements['p']>) => (
             <p className="my-2" {...props}>
                 <LinkParser onInternalLinkClick={handleInternalLink}>
                     {children}
@@ -156,21 +157,21 @@ export default function CollaborativeMarkdownEditor() {
         ),
 
         // Headers
-        h1: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['h1']>) => (
+        h1: ({ children, ...props }: PropsWithChildren<JSX.IntrinsicElements['h1']>) => (
             <h1 className="text-3xl font-bold my-4 border-b pb-2" {...props}>
                 <LinkParser onInternalLinkClick={handleInternalLink}>
                     {children}
                 </LinkParser>
             </h1>
         ),
-        h2: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['h2']>) => (
+        h2: ({ children, ...props }: PropsWithChildren<JSX.IntrinsicElements['h2']>) => (
             <h2 className="text-2xl font-bold my-3 border-b pb-1" {...props}>
                 <LinkParser onInternalLinkClick={handleInternalLink}>
                     {children}
                 </LinkParser>
             </h2>
         ),
-        h3: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['h3']>) => (
+        h3: ({ children, ...props }: PropsWithChildren<JSX.IntrinsicElements['h3']>) => (
             <h3 className="text-xl font-semibold my-2" {...props}>
                 <LinkParser onInternalLinkClick={handleInternalLink}>
                     {children}
@@ -179,14 +180,14 @@ export default function CollaborativeMarkdownEditor() {
         ),
 
         // Text formatting
-        em: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['em']>) => (
+        em: ({ children, ...props }: PropsWithChildren<JSX.IntrinsicElements['em']>) => (
             <em className="italic" {...props}>
                 <LinkParser onInternalLinkClick={handleInternalLink}>
                     {children}
                 </LinkParser>
             </em>
         ),
-        strong: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['strong']>) => (
+        strong: ({ children, ...props }: PropsWithChildren<JSX.IntrinsicElements['strong']>) => (
             <strong className="font-bold" {...props}>
                 <LinkParser onInternalLinkClick={handleInternalLink}>
                     {children}
@@ -195,21 +196,21 @@ export default function CollaborativeMarkdownEditor() {
         ),
 
         // Lists
-        ol: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['ol']>) => (
+        ol: ({ children, ...props }: PropsWithChildren<JSX.IntrinsicElements['ol']>) => (
             <ol className="list-decimal pl-8 my-2" {...props}>
                 <LinkParser onInternalLinkClick={handleInternalLink}>
                     {children}
                 </LinkParser>
             </ol>
         ),
-        ul: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['ul']>) => (
+        ul: ({ children, ...props }: PropsWithChildren<JSX.IntrinsicElements['ul']>) => (
             <ul className="list-disc pl-8 my-2" {...props}>
                 <LinkParser onInternalLinkClick={handleInternalLink}>
                     {children}
                 </LinkParser>
             </ul>
         ),
-        li: ({children, ...props}: PropsWithChildren<JSX.IntrinsicElements['li']>) => (
+        li: ({ children, ...props }: PropsWithChildren<JSX.IntrinsicElements['li']>) => (
             <li className="my-1 pl-2" {...props}>
                 <LinkParser onInternalLinkClick={handleInternalLink}>
                     {children}
@@ -218,7 +219,7 @@ export default function CollaborativeMarkdownEditor() {
         ),
 
         // Links
-        a: ({children, href, ...props}: PropsWithChildren<JSX.IntrinsicElements['a']> & { href?: string }) => (
+        a: ({ children, href, ...props }: PropsWithChildren<JSX.IntrinsicElements['a']> & { href?: string }) => (
             <a
                 href={href}
                 className="text-blue-600 hover:underline"
@@ -248,17 +249,23 @@ export default function CollaborativeMarkdownEditor() {
 
     };
 
+    
     return (
+        
+        <>
+        <LinkExtractor text={content}/>
+
+
         <div className="w-full flex h-full">
             {/* Connection Status */}
             <div className="absolute top-4 left-1/2 transform -translate-x-1/2 flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"}`}/>
+                <div className={`w-3 h-3 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"}`} />
                 <div className="flex -space-x-2">
                     {users.map((user, i) => (
                         <div
                             key={i}
                             className="w-4 h-4 rounded-full border-2 border-white"
-                            style={{backgroundColor: user.color}}
+                            style={{ backgroundColor: user.color }}
                             title={user.name}
                         />
                     ))}
@@ -290,7 +297,10 @@ export default function CollaborativeMarkdownEditor() {
                         </ReactMarkdown>
                     </div>
                 </div>
-            </div>
+            </div>            
+
+
         </div>
+        </>
     );
 }

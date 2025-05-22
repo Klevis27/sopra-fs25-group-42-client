@@ -1,5 +1,4 @@
 "use client";
-
 import React from 'react';
 import { ReactNode } from "react";
 
@@ -32,6 +31,7 @@ export const LinkParser = ({ children, onInternalLinkClick }: LinkParserProps) =
         });
     };
 
+
     const processChildren = (child: ReactNode): ReactNode => {
         if (typeof child === "string") {
             return processText(child);
@@ -44,3 +44,5 @@ export const LinkParser = ({ children, onInternalLinkClick }: LinkParserProps) =
 
     return <>{React.Children.map(children, processChildren)}</>;
 };
+
+
