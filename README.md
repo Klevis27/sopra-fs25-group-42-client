@@ -29,7 +29,6 @@ CHAT IS MISSING! (FIREBASE API IS MISSING!)
 | React 19 | A component-based JavaScript library for building fast and responsive user interfaces. | [React](https://react.dev) | 
 | TypeScript 5 | A statically typed superset of JavaScript that improves code safety and developer experience. | [TypeScript](https://www.typescriptlang.org/docs) | 
 | Ant Design v5 | A comprehensive UI library offering polished, ready-to-use components for professional interfaces. | [Ant Design](https://ant.design/components/overview/) | 
-| WebSocket | A communication protocol for real-time, bidirectional messaging between the browser and server. Enables features like collaborative note editing. | [WebSocket](github.com/websockets/ws) | 
 | Firebase | Our external API, enable users to chat simultaneously while they edit the editor page. | [Firebase](https://firebase.google.com/docs/reference/kotlin/com/google/firebase/firestore/Source) | 
 | Tailwind CSS |Tailwind CSS is a utility-first CSS framework that helps developers build custom user interfaces quickly by applying pre-defined classes directly in the HTML. | [Tailwind CSS](https://tailwindcss.com) | 
 
