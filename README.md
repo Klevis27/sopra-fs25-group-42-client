@@ -19,8 +19,6 @@ The goal of this project is to combine the powerful note-taking and linking feat
 
 ## 👨🏾‍🔧 **Technologies Used:**
 
-CHAT IS MISSING! (FIREBASE API IS MISSING!)
-
 ### **🚀 Frontend:**
 
 | **Technology**        | **Purpose**   | **Source** | 
