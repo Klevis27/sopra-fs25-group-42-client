@@ -134,7 +134,9 @@ npm test
 #### **Graph Linkage:**
 * By using "[[note_name]]", you can link the notes between each other in graph linkage part.
 ![profile](docs/graphlinkage.png)
-
+#### **Chat:**
+* Editor page also allow users to chat on the same screen
+![profile](docs/chat.png)
 ## 🤝 **Want to Contribute?**
 
 - We welcome contributions from the community! If you'd like to add new features, fix bugs, or improve documentation, follow the steps below:
