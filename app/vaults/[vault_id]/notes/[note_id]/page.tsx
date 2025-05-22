@@ -202,7 +202,7 @@ useEffect(() => {
                         </div>
 
                         {/* ✅ Add ChatBox here */}
-                        <div style={{marginTop: "24px"}}>
+                        <div style={{marginTop: "24px", overflow: "hidden"}}>
                             <ChatBox roomId={noteId}/>
                         </div>
 
