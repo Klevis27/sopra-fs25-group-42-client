@@ -156,6 +156,9 @@ npm test
 #### **Role Change Notifications:**
 - Instead of instantly updating roles on the notes settings page, show a user-friendly notification when someone’s permission level is changed.
 
+#### **Version Control of History:**
+- A potential improvement for the project is implementing version control of history, allowing users to track, revert, or compare changes made over time for better collaboration and error recovery.
+
 ## 🏆 **Authors and Acknowledgement:**
 
 - This project was developed as part of the FS25 Software Engineering Lab at the University of Zurich.
