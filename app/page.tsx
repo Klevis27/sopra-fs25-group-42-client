@@ -1,7 +1,7 @@
 "use client"
 import "@ant-design/v5-patch-for-react-19";
 import {useRouter} from "next/navigation";
-import {Button, Form} from "antd";
+import {Button} from "antd";
 import {LogoText, PlaestinaFlag, SpinningLogo} from "@/components/Design";
 
 export default function Home() {
