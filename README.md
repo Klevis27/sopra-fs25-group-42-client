@@ -64,13 +64,13 @@ npm test
 
 ### **1-) Landing → Auth:**
 
-[screenshot]
+![Landing Page](docs/landing.png)
 
 - User clicks Login / Register (Enters username + password)
 
 ### **2-) Vaults Dashboard:**
 
-![Landing Page](docs/landing)
+
 
 - User sees my vaults list.
 - User sees shared vaults.
