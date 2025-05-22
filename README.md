@@ -64,7 +64,7 @@ npm test
 
 ### **1-) Landing → Auth:**
 
-![Landing Page](docs/landing.png)
+
 
 - User clicks Login / Register (Enters username + password)
 
