@@ -47,7 +47,6 @@ export default function Home() {
             {/* Footer */}
             <footer className="flex justify-center gap-6">
                 <div className="flex flex-row gap-6">
-
                     <PlaestinaFlag/>
                 </div>
             </footer>
