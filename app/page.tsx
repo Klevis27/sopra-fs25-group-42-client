@@ -6,9 +6,6 @@ import {LogoText, PlaestinaFlag, SpinningLogo} from "@/components/Design";
 
 export default function Home() {
     const router = useRouter();
-    const validate = () => {
-        alert("(Potentially) Good Job")
-    }
     return (
         <div
             className="flex flex-col justify-center items-center min-h-screen gap-8 px-5 overflow-x-hidden bg-[#c5eba2] text-black">
@@ -49,19 +46,10 @@ export default function Home() {
 
             {/* Footer */}
             <footer className="flex justify-center gap-6">
-                <Form
-                    name="validate"
-                    size="large"
-                    layout="vertical"
-                    requiredMark={false}
-                    onFinish={validate}
-                    className="w-full"
-                >
-                    <div className="flex flex-row gap-6">
-                        
-                        <PlaestinaFlag/>
-                    </div>
-                </Form>
+                <div className="flex flex-row gap-6">
+
+                    <PlaestinaFlag/>
+                </div>
             </footer>
         </div>
     );
