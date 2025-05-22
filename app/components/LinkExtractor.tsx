@@ -4,7 +4,7 @@ import { Note } from "@/types/note";
 import { NoteLink } from "@/types/noteLink";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import {useCallback, useEffect, useState} from "react";
 import { refreshStore } from "@/stores/refreshStore";
 
 interface LinkExtractorProps {
@@ -38,9 +38,7 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
 
     const existsLink = false;
 
-
-
-    const getAllNotes = async () => {
+    const getAllNotes = useCallback(async () => {
         const response = await apiService.get<Note[]>(`/vaults/${vaultId}/notes`);
         const uniqueNotes = response.reduce((acc, element) => {
             if (element.id && element.title) {
@@ -53,24 +51,18 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
         }, [] as Node[]);
 
         setNotes(uniqueNotes);
+    }, [apiService, vaultId]);
 
-    };
-    useEffect(() => {
-        getAllNotes();
-    }, [apiService, getAllNotes]);
-
-    const getAllLinks = async () => {
+    const getAllLinks = useCallback(async () => {
         const response = await apiService.get<NoteLink[]>(`/vaults/${vaultId}/note_links`);
         setLinks(() => []);
 
         response.forEach(element => {
-
             const sourceNoteId = element.sourceNoteId;
             const targetNoteId = element.targetNoteId;
 
             const sourceExists = notesArray.some(note => note.id === sourceNoteId);
             const targetExists = notesArray.some(note => note.id === targetNoteId);
-
 
             if (!sourceExists || !targetExists) {
                 return;
@@ -80,22 +72,12 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
                 return;
             }
 
-            if (element.sourceNoteId != null && element.targetNoteId != null) {
-                const link: Link = { source: element.sourceNoteId, target: element.targetNoteId }
-
-
-                setLinks((prevLinks) => [...prevLinks, link]);
+            if (sourceNoteId != null && targetNoteId != null) {
+                const link: Link = { source: sourceNoteId, target: targetNoteId };
+                setLinks(prevLinks => [...prevLinks, link]);
             }
         });
-
-    }
-    useEffect(() => {
-        if (notesArray.length > 0) {
-            getAllLinks();
-        }
-    }, [notesArray, apiService, existsLink, getAllLinks]);
-
-
+    }, [apiService, vaultId, notesArray, existsLink]);
 
     //--------------------Don't touch this-----------------------------------//
     useEffect(() => {
@@ -169,7 +151,7 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
         if (linksToDelete.length > 0) {
             deleteLinks();
         }
-    }, [linksToDelete, apiService]);
+    }, [linksToDelete, apiService, vaultId, getAllNotes, getAllLinks]);
 
 
     //Handle the posting of new links
