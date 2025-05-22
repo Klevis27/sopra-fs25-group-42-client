@@ -6,6 +6,7 @@ import { link } from "fs";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { refreshStore } from "@/stores/refreshStore";
 
 interface LinkExtractorProps {
     text: string;
@@ -38,22 +39,25 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
 
     const existsLink = false;
     const [notesLoaded, setNotesLoaded] = useState(false);
-    useEffect(() => {
-        const getAllNotes = async () => {
-            const response = await apiService.get<Note[]>(`/vaults/${vaultId}/notes`);
-            const uniqueNotes = response.reduce((acc, element) => {
-                if (element.id && element.title) {
-                    const noteExists = acc.some(n => n.id === element.id);
-                    if (!noteExists) {
-                        acc.push({ id: element.id, title: element.title });
-                    }
+
+
+
+    const getAllNotes = async () => {
+        const response = await apiService.get<Note[]>(`/vaults/${vaultId}/notes`);
+        const uniqueNotes = response.reduce((acc, element) => {
+            if (element.id && element.title) {
+                const noteExists = acc.some(n => n.id === element.id);
+                if (!noteExists) {
+                    acc.push({ id: element.id, title: element.title });
                 }
-                return acc;
-            }, [] as Node[]);
+            }
+            return acc;
+        }, [] as Node[]);
 
-            setNotes(uniqueNotes);
+        setNotes(uniqueNotes);
 
-        };
+    };
+    useEffect(() => {
         getAllNotes();
     }, [apiService]);
 
@@ -148,66 +152,8 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
         });
         setToCreate(toCreate);
 
-        getAllLinks();
-
-    }, [text, notesArray]);
-    //--------------------Don't touch this-----------------------------------//
-
-    /* useEffect(() => {
-        const matches = text.matchAll(/\[\[(.*?)\]\]/g);
-        const links = Array.from(matches, (m) => m[1]);
-        setInNoteLinks(links);
     }, [text]);
-
-    useEffect(() => {
-
-
-        //From all the notes in the vault, filter out the ones that are referenced here
-        const referencedNotes: Node[] = []
-        inNoteLinks.forEach(element => {
-            const reference = notesArray.find(n => n.title == element);
-            if (reference) {
-                referencedNotes.push(reference);
-            }
-        });
-        setRef(referencedNotes);
-    }, [inNoteLinks, notesArray]);
-
-    useEffect(() => {
-        //Filter fetched links so only those which go out from this note are left
-        const filteredLinks = linksArray.filter(l => l.source.toString() == noteId);
-
-        //Find all links to delete; They are not in referencedTitles and they are in filteredLinks
-        const toDelete: Link[] = [];
-        filteredLinks.forEach(element => {
-            const isReferenced = referencedTitles.some(t => t.id == element.target);
-
-            if (!isReferenced) {
-                toDelete.push(element);
-            }
-        });
-        setToDelete(toDelete);
-
-
-
-        //Find all links that are referenced in the note but do not exist in the db yet
-        const toCreate: Link[] = []
-        referencedTitles.forEach(element => {
-            const isInDb = filteredLinks.some(l => l.target == element.id);
-
-            const newLink = {
-                source: noteId,
-                target: element.id
-            }
-
-            if (!isInDb) {
-                toCreate.push(newLink);
-            }
-        });
-        setToCreate(toCreate);
-    }, [linksArray, referencedTitles, noteId]); */
-
-
+    //--------------------Don't touch this-----------------------------------//
 
     //For debugging only 
     useEffect(() => {
@@ -228,6 +174,9 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
             for (const element of linksToDelete) {
                 try {
                     await apiService.delete(`/vaults/${vaultId}/${element.source}/${element.target}/note_links`);
+                    getAllNotes();
+                    getAllLinks();
+                    refreshStore.refresh();
                     console.log(`Made a call to delete link to ${element.target}`);
                 } catch (err) {
                     console.error("Failed to delete link:", element, err);
@@ -253,6 +202,9 @@ export const LinkExtractor = ({ text }: LinkExtractorProps) => {
             for (const element of linksToCreate) {
                 try {
                     await apiService.post(`/vaults/${vaultId}/note_links`, element);
+                    getAllNotes();
+                    getAllLinks();
+                    refreshStore.refresh();
                     console.log("Posted");
                 } catch (err) {
                     console.error("Failed to post link:", element, err);
