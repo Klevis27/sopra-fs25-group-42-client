@@ -1,5 +1,5 @@
 "use client";
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { NoteLink } from "@/types/noteLink";
 import { Note } from "@/types/note";
@@ -45,16 +45,18 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ }: NoteGraphProps) => {
 
     const existsLink = false;
 
-    const getAllLinks = useCallback(async () => {
+    const getAllLinks = async () => {
         const response = await apiService.get<NoteLink[]>(`/vaults/${vaultId}/note_links`);
         setLinks(() => []);
 
         response.forEach(element => {
+
             const sourceNoteId = element.sourceNoteId;
             const targetNoteId = element.targetNoteId;
 
             const sourceExists = notesArray.some(note => note.id === sourceNoteId);
             const targetExists = notesArray.some(note => note.id === targetNoteId);
+
 
             if (!sourceExists || !targetExists) {
                 return;
@@ -64,14 +66,21 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ }: NoteGraphProps) => {
                 return;
             }
 
-            if (sourceNoteId != null && targetNoteId != null) {
-                const link: Link = { source: sourceNoteId, target: targetNoteId };
-                setLinks(prevLinks => [...prevLinks, link]);
+            if (element.sourceNoteId != null && element.targetNoteId != null) {
+                const link: Link = { source: element.sourceNoteId, target: element.targetNoteId }
+
+
+                setLinks((prevLinks) => [...prevLinks, link]);
             }
         });
-    }, [apiService, vaultId, notesArray, existsLink]);
+    }
+    useEffect(() => {
+        if (notesArray.length > 0) {
+            getAllLinks();
+        }
+    }, [notesArray, apiService, existsLink]);
 
-    const getAllNotes = useCallback(async () => {
+    const getAllNotes = async () => {
         const response = await apiService.get<Note[]>(`/vaults/${vaultId}/notes`);
         const uniqueNotes = response.reduce((acc, element) => {
             if (element.id && element.title) {
@@ -84,7 +93,13 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ }: NoteGraphProps) => {
         }, [] as Node[]);
 
         setNotes(uniqueNotes);
-    }, [apiService, vaultId]);
+    };
+
+    useEffect(() => {
+        getAllNotes();
+    }, [apiService]);
+
+
 
     useEffect(() => {
         const onRefresh = () => {
@@ -94,7 +109,7 @@ const NoteGraph: React.FC<NoteGraphProps> = ({ }: NoteGraphProps) => {
         const unsubscribe = refreshStore.subscribe(onRefresh);
 
         return () => unsubscribe();
-    }, [getAllLinks, getAllNotes]);
+    }, []);
 
 
     useEffect(() => {
